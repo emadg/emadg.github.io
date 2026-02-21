@@ -2,7 +2,7 @@
 title: "Building Robust ML Pipelines"
 description: "A practical look at designing machine learning pipelines that scale from experimentation to production without turning into spaghetti."
 pubDate: 2026-02-15
-tags: ["machine-learning", "mlops", "python"]
+tags: ["Machine Learning", "MLOps", "Python"]
 ---
 
 One of the most underrated skills in machine learning isn't model architecture — it's pipeline design. A model that can't be reliably retrained, validated, and deployed is a model that will rot.

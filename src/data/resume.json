@@ -1,39 +1,123 @@
 {
   "experience": [
     {
-      "company": "Tech Innovators Inc.",
-      "role": "Senior Machine Learning Engineer",
-      "period": "2021 - Present",
-      "description": "Led the development of scalable ML pipelines. Designed and deployed natural language processing models that improved customer service automation by 40%."
+      "company": "Thomson Reuters",
+      "location": "Toronto, Canada",
+      "role": "Senior Research Engineer",
+      "period": "Jul 2021 - Present",
+      "description": "Delivering software components and ML Pipelines for experimentation & deployment of AI Models (ML/DL/LLM-based models) to improve customers' flagship products, and add new AI features related to NLP, search, knowledge graph, and recommendation problems."
     },
     {
-      "company": "Data Dynamics",
-      "role": "Machine Learning Developer",
-      "period": "2018 - 2021",
-      "description": "Developed predictive models for financial forecasting. Optimized existing algorithms to reduce processing time by 30%."
+      "company": "INAGO INC.",
+      "location": "Toronto, Canada",
+      "role": "NLP & Machine Learning Engineer",
+      "period": "Jul 2018 - Jun 2021",
+      "description": "Deep neural network development, managing datasets, training, and deployment for Language Understanding Engines and Automated Text Generation Models. [Python, PyTorch, Word Embedding, AWS EC2, SpaCy, NLTK, BERT, T5 models]. Managing collaborative research projects with universities related to Automated Text Generation and Linguistics."
     }
   ],
   "education": [
     {
-      "institution": "University of Technology",
-      "degree": "M.S. in Computer Science (Specialization in AI)",
-      "period": "2016 - 2018"
+      "institution": "York University",
+      "location": "Toronto, Canada",
+      "degree": "M.Sc. in Computer Science",
+      "grade": "8.17 / 9",
+      "period": "2014 - 2018",
+      "note": "Thesis: Interactive Question Answering Using Frame-based Knowledge Representation"
     },
     {
-      "institution": "State University",
-      "degree": "B.S. in Computer Science",
-      "period": "2012 - 2016"
+      "institution": "Amirkabir University of Technology",
+      "location": "Tehran, Iran",
+      "degree": "B.Sc. in Computer Engineering",
+      "grade": "17.18 / 20",
+      "period": "2010 - 2014",
+      "note": null
     }
   ],
   "skills": [
     "Python",
     "PyTorch",
-    "TensorFlow",
-    "Scikit-learn",
-    "SQL",
-    "Docker",
-    "Kubernetes",
+    "Scikit-Learn",
+    "Numpy",
+    "Pandas",
+    "SpaCy",
+    "NLTK",
+    "Transformers",
+    "Large Language Models",
+    "NLP",
+    "Machine Learning",
+    "Deep Learning",
     "AWS",
-    "Git"
+    "Docker",
+    "PostgreSQL",
+    "Elasticsearch",
+    "Opensearch",
+    "Java",
+    "Scala",
+    "Bash",
+    "Agile Development"
+  ],
+  "projects": [
+    {
+      "name": "GenAI Summary for Business Entity Reports",
+      "year": "2024",
+      "description": "Using LLMs prompting to generate summaries with customer-focused insights to facilitate the use of long business reports. Improving the current data extraction pipeline from reports.",
+      "tech": ["Python", "OpenAI GPT-4", "Claude Sonnet"]
+    },
+    {
+      "name": "Design and Building New Entity Matching System",
+      "year": "2022 - 2024",
+      "description": "Worked on new generation of flagship product for Due Diligence and Risk Management.",
+      "tech": ["Spark", "Python", "Java", "Scikit-Learn", "AWS RDS", "Opensearch", "EMR", "SageMaker"]
+    },
+    {
+      "name": "New Search Improvement Feature to Promote More Relevant Documents",
+      "year": "2021",
+      "description": "Delivered new search functionality to detect more general type of queries and questions and promoting the more suitable content for these queries for a Tax Research web application (in-production).",
+      "tech": ["Python", "Java", "NLTK", "Sentence Embedding", "Elasticsearch", "AWS"]
+    },
+    {
+      "name": "Improving Automated Question Generation from Documents",
+      "year": "2020",
+      "description": "Fine-tuning T5 Transformer Language Model, experimenting for improving model input, using BLEURT evaluation. Auto-generated questions resulted in 40% reduction in manual data curation efforts.",
+      "tech": ["PyTorch", "SpaCy", "HuggingFace Transformers", "Python"]
+    },
+    {
+      "name": "Improved Language Understanding Engine Models",
+      "year": "2019",
+      "description": "Training domain-specific Word2Vec word embeddings and adding detailed model testing for LSTMs to improve NLU model interpretability.",
+      "tech": ["PyTorch", "Python", "Word2Vec", "LSTM"]
+    },
+    {
+      "name": "Conversational Question Answering",
+      "year": "2018",
+      "description": "Creating a question answering dialogue system powered by syntactic and semantic analysis of documents and ontology generation. Domain-specific question answering using a dialogue interface. Part of a collaborative project with an industrial partner.",
+      "tech": ["SpaCy", "Python"]
+    }
+  ],
+  "publications": [
+    {
+      "title": "Question-worthy sentence selection for question generation",
+      "venue": "Canadian AI 2020",
+      "year": "2020",
+      "note": "co-authored"
+    },
+    {
+      "title": "Interactive Question Answering Using Frame-based Knowledge Representation",
+      "venue": "York University M.Sc. Thesis",
+      "year": "2018",
+      "note": ""
+    },
+    {
+      "title": "Time aware topic based recommender system",
+      "venue": "Big Data & Information Analytics",
+      "year": "2016",
+      "note": "co-authored"
+    },
+    {
+      "title": "A study on prediction of user's tendency toward purchases in websites based on behavior models",
+      "venue": "Information and Knowledge Technology (IKT), 6th Conference, IEEE",
+      "year": "2014",
+      "note": "co-authored"
+    }
   ]
 }
