@@ -39,7 +39,7 @@ src/
     config.ts               # Astro content collection schema (blog)
     blog/                   # Future blog posts go here as .md files
   data/
-    resume.json             # All resume data (experience, education, skills)
+    resume.json             # All resume data (experience, education, skills, projects, publications)
   layouts/
     Layout.astro            # Shared page shell: head, frosted panel, footer
   pages/
@@ -51,21 +51,87 @@ public/
     favicon.svg             # Site favicon
 ```
 
-## Updating Your Resume
+## Updating Content
 
-Edit `src/data/resume.json`. The file has three top-level keys:
+All resume content lives in **`src/data/resume.json`**. Edit the JSON and the site rebuilds automatically (no component changes needed).
 
-- **experience** - Array of `{ company, role, period, description }` objects.
-- **education** - Array of `{ institution, degree, period }` objects.
-- **skills** - Array of skill name strings.
+### Experience
 
-No HTML or component code needs to change. Just save the JSON file and rebuild.
+Each entry appears as a flip card on the timeline (front: summary, back: description).
 
-## Replacing the PDF Resume
+```json
+{
+  "company": "Company Name",
+  "location": "City, Country",
+  "role": "Your Title",
+  "period": "Jan 2020 - Present",
+  "description": "What you did and the impact you made."
+}
+```
 
-Drop your real PDF into `public/resume.pdf`. The download button will serve it as `EmadGohari_MLE_CV_2026.pdf` regardless of the source filename.
+### Education
 
-## Adding a Blog Post (Future)
+Each entry appears on the timeline below experience (no flip, single-sided card).
+
+```json
+{
+  "institution": "University Name",
+  "location": "City, Country",
+  "degree": "M.Sc. in Computer Science",
+  "grade": "3.9 / 4.0",
+  "period": "2016 - 2020",
+  "note": "Thesis title or other note (set to null to omit)"
+}
+```
+
+### Skills
+
+A flat array of strings displayed as tags.
+
+```json
+"skills": ["Python", "PyTorch", "Docker"]
+```
+
+### Projects
+
+Each entry appears as a card in a two-column grid.
+
+```json
+{
+  "name": "Project Name",
+  "year": "2024",
+  "description": "Brief description of the project.",
+  "tech": ["Python", "AWS"]
+}
+```
+
+### Publications
+
+Each entry appears in a list with a left accent border.
+
+```json
+{
+  "title": "Paper Title",
+  "venue": "Conference or Journal Name",
+  "year": "2020",
+  "note": "co-authored"
+}
+```
+
+### Links (Hero & Footer)
+
+Social links (GitHub, LinkedIn, email) are hardcoded in two files:
+
+- **`src/components/Hero.astro`** — hero section links
+- **`src/layouts/Layout.astro`** — footer links
+
+Search for `href=` to find and update the URLs.
+
+### PDF Resume
+
+Drop your file into `public/resume.pdf`. The download button serves it as `EmadGohari_MLE_CV_2026.pdf` regardless of the source filename. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+
+## Adding a Blog Post
 
 Create a Markdown file in `src/content/blog/`, e.g. `src/content/blog/my-first-post.md`:
 

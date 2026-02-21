@@ -104,4 +104,11 @@
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
+
+  .card-inner {
+    display: grid;
+  }
+  .card-inner > div {
+    grid-area: 1 / 1;
+  }
 }
