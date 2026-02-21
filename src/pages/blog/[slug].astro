@@ -1,0 +1,66 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+	const posts = await getCollection('blog');
+	return posts.map((post) => ({
+		params: { slug: post.id.replace(/\.md$/, '') },
+		props: { post },
+	}));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+
+function formatDate(date: Date): string {
+	return date.toLocaleDateString('en-US', {
+		year: 'numeric',
+		month: 'long',
+		day: 'numeric',
+	});
+}
+---
+
+<Layout title={`${post.data.title} | Emad Gohari`} description={post.data.description}>
+	<article class="py-16 fade-in-up w-full">
+		<!-- Back link -->
+		<a
+			href="/blog"
+			class="inline-flex items-center text-sm text-slate-400 hover:text-cyan-400 transition-colors mb-10 group"
+		>
+			<svg class="w-4 h-4 mr-1.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+				<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+			</svg>
+			Back to blog
+		</a>
+
+		<!-- Post header -->
+		<header class="mb-10 border-b border-slate-800/50 pb-8">
+			<h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
+				{post.data.title}
+			</h1>
+
+			<div class="flex flex-wrap items-center gap-4 text-sm">
+				<time class="font-mono text-cyan-400/80" datetime={post.data.pubDate.toISOString()}>
+					{formatDate(post.data.pubDate)}
+				</time>
+
+				{post.data.tags && post.data.tags.length > 0 && (
+					<div class="flex flex-wrap gap-2">
+						{post.data.tags.map((tag: string) => (
+							<span class="px-2.5 py-0.5 text-xs font-medium rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/60">
+								{tag}
+							</span>
+						))}
+					</div>
+				)}
+			</div>
+		</header>
+
+		<!-- Post content -->
+		<div class="prose">
+			<Content />
+		</div>
+	</article>
+</Layout>

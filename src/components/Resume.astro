@@ -1,0 +1,153 @@
+---
+import resumeData from '../data/resume.json';
+---
+
+<section class="py-16 fade-in-up delay-300 w-full relative">
+	<div class="flex flex-col sm:flex-row items-center justify-between mb-16 gap-6">
+		<h2 class="text-3xl font-semibold tracking-tight text-white">Experience</h2>
+		
+		<!-- Download PDF Button -->
+		<a 
+			href="/resume.pdf" 
+			download="EmadGohari_MLE_CV_2026.pdf"
+			class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-slate-800/80 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700 hover:border-cyan-500/50 shadow-lg hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] backdrop-blur-sm"
+		>
+			<svg class="w-4 h-4 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
+			</svg>
+			Download Resume PDF
+		</a>
+	</div>
+
+	<!-- Central Timeline with Flip Cards -->
+	<div class="relative w-full max-w-3xl mx-auto pb-12">
+		<!-- Central Timeline Vertical Line -->
+		<div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-cyan-900/60 to-transparent -translate-x-1/2"></div>
+
+		{resumeData.experience.map((job, index) => {
+			const isLeft = index % 2 === 0;
+			return (
+				<div class="relative w-full flex items-center justify-between mb-32 md:mb-40 group flip-container" style="scroll-snap-align: center;">
+					
+					<!-- Central Dot on the line -->
+					<div class="absolute left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
+					
+					<!-- Card Container -->
+					<div class={`w-[calc(50%-2rem)] perspective-1000 ${isLeft ? 'mr-auto text-right pr-4 md:pr-0' : 'ml-auto text-left pl-4 md:pl-0'}`}>
+						
+						<!-- The Flipping Element -->
+						<div class="card-inner relative w-full h-48 md:h-56 transition-transform duration-700 transform-style-3d cursor-pointer">
+							
+							<!-- Front Side of Card -->
+							<div class="absolute inset-0 backface-hidden rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
+								<span class="text-cyan-400 text-xs md:text-sm font-mono mb-2 block">{job.period}</span>
+								<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{job.role}</h3>
+								<p class="text-slate-400 font-medium mt-1">{job.company}</p>
+							</div>
+							
+							<!-- Back Side of Card -->
+							<div class="absolute inset-0 backface-hidden rotate-y-180 rounded-2xl border border-cyan-500/40 bg-slate-900/95 p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_rgba(34,211,238,0.1)] overflow-y-auto text-left">
+								<h4 class="text-cyan-300 font-semibold mb-2 text-sm uppercase tracking-wider">Details & Impact</h4>
+								<p class="text-slate-300 text-sm leading-relaxed">{job.description}</p>
+							</div>
+							
+						</div>
+					</div>
+				</div>
+			)
+		})}
+	</div>
+
+	<!-- Education & Skills section below the timeline -->
+	<div class="mt-20 pt-16 border-t border-slate-800/50 grid grid-cols-1 md:grid-cols-2 gap-16 w-full max-w-3xl mx-auto">
+		<!-- Education -->
+		<div class="fade-in-up delay-200">
+			<h2 class="text-2xl font-semibold tracking-tight text-white mb-8">Education</h2>
+			<div class="space-y-8">
+				{resumeData.education.map((edu) => (
+					<div class="group relative pl-4 border-l-2 border-slate-700 hover:border-cyan-500 transition-colors">
+						<div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-slate-700 group-hover:bg-cyan-400 transition-colors"></div>
+						<h3 class="font-medium text-white">{edu.degree}</h3>
+						<div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-1 gap-1">
+							<span class="text-slate-400 text-sm">{edu.institution}</span>
+							<span class="font-mono text-cyan-400/80 text-xs">{edu.period}</span>
+						</div>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<!-- Skills -->
+		<div class="fade-in-up delay-300">
+			<h2 class="text-2xl font-semibold tracking-tight text-white mb-8">Technical Skills</h2>
+			<div class="flex flex-wrap gap-3">
+				{resumeData.skills.map((skill) => (
+					<span class="px-3 py-1.5 text-sm font-medium rounded-lg bg-slate-800/60 text-slate-300 border border-slate-700 hover:border-cyan-500/50 hover:text-white hover:bg-slate-700/80 transition-all cursor-default shadow-sm backdrop-blur-sm">
+						{skill}
+					</span>
+				))}
+			</div>
+		</div>
+	</div>
+
+	<!-- Back to Top Button -->
+	<div class="mt-20 flex justify-center">
+		<button
+			id="back-to-top"
+			class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700 hover:border-cyan-500/50 shadow-lg hover:shadow-[0_0_15px_rgba(34,211,238,0.15)] backdrop-blur-sm cursor-pointer"
+		>
+			<svg class="w-4 h-4 transition-transform group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
+			</svg>
+			Back to Top
+		</button>
+	</div>
+</section>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const flipContainers = document.querySelectorAll('.flip-container');
+
+		// Back to Top button
+		document.getElementById('back-to-top')?.addEventListener('click', () => {
+			window.scrollTo({ top: 0, behavior: 'smooth' });
+		});
+		
+		// 1. Intersection Observer for flipping when entering the center of the screen
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach(entry => {
+				const cardInner = entry.target.querySelector('.card-inner');
+				if (entry.isIntersecting) {
+					// We add a specific class so we don't interfere with hover state
+					cardInner?.classList.add('rotate-y-180');
+				} else {
+					cardInner?.classList.remove('rotate-y-180');
+				}
+			});
+		}, {
+			// Trigger when the element crosses the very middle of the viewport
+			rootMargin: '-45% 0px -45% 0px' 
+		});
+
+		flipContainers.forEach(container => {
+			observer.observe(container);
+
+			// 2. Mouse hover overriding (makes it flip on hover too)
+			container.addEventListener('mouseenter', () => {
+				const cardInner = container.querySelector('.card-inner');
+				cardInner?.classList.add('rotate-y-180');
+			});
+			
+			container.addEventListener('mouseleave', () => {
+				const cardInner = container.querySelector('.card-inner');
+				const rect = container.getBoundingClientRect();
+				const centerY = window.innerHeight / 2;
+				
+				// Only flip back if it's NOT currently in the center intersection zone
+				if (rect.top > centerY + 50 || rect.bottom < centerY - 50) {
+					cardInner?.classList.remove('rotate-y-180');
+				}
+			});
+		});
+	});
+</script>

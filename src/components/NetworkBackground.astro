@@ -1,0 +1,100 @@
+---
+// NetworkBackground.astro
+---
+
+<canvas id="network-canvas" class="fixed inset-0 w-full h-full -z-20 opacity-80"></canvas>
+<!-- Adding a subtle texture overlay -->
+<div class="fixed inset-0 w-full h-full -z-10 opacity-[0.03] pointer-events-none" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E');"></div>
+
+<script>
+  // Canvas Setup
+  const canvas = document.getElementById('network-canvas') as HTMLCanvasElement;
+  const ctx = canvas.getContext('2d');
+  
+  let width = canvas.width = window.innerWidth;
+  let height = canvas.height = window.innerHeight;
+
+  window.addEventListener('resize', () => {
+    width = canvas.width = window.innerWidth;
+    height = canvas.height = window.innerHeight;
+    initParticles();
+  });
+
+  // Particle Settings
+  const particleCount = Math.min(Math.floor(window.innerWidth / 8), 250); // Increased density significantly
+  const particles: Particle[] = [];
+  const connectionDistance = 180; // Slightly larger connection distance since there are more particles
+  const particleSpeed = 0.3;
+
+  class Particle {
+    x: number;
+    y: number;
+    vx: number;
+    vy: number;
+    radius: number;
+
+    constructor() {
+      this.x = Math.random() * width;
+      this.y = Math.random() * height;
+      this.vx = (Math.random() - 0.5) * particleSpeed;
+      this.vy = (Math.random() - 0.5) * particleSpeed;
+      this.radius = Math.random() * 2.5 + 1.5; // Increased base dot size (from 0.5-2.0 to 1.5-4.0)
+    }
+
+    update() {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      if (this.x < 0 || this.x > width) this.vx *= -1;
+      if (this.y < 0 || this.y > height) this.vy *= -1;
+    }
+
+    draw() {
+      if(!ctx) return;
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(100, 149, 237, 0.6)'; // Cornflower blue/cyan-ish
+      ctx.fill();
+    }
+  }
+
+  function initParticles() {
+    particles.length = 0;
+    for (let i = 0; i < particleCount; i++) {
+      particles.push(new Particle());
+    }
+  }
+
+  function animate() {
+    if(!ctx) return;
+    ctx.clearRect(0, 0, width, height);
+
+    for (let i = 0; i < particles.length; i++) {
+      particles[i].update();
+      particles[i].draw();
+
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+
+        if (distance < connectionDistance) {
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          
+          // Opacity based on distance
+          const opacity = 1 - (distance / connectionDistance);
+          ctx.strokeStyle = `rgba(100, 149, 237, ${opacity * 0.2})`;
+          ctx.lineWidth = 1;
+          ctx.stroke();
+        }
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  initParticles();
+  animate();
+</script>

@@ -1,0 +1,39 @@
+{
+  "experience": [
+    {
+      "company": "Tech Innovators Inc.",
+      "role": "Senior Machine Learning Engineer",
+      "period": "2021 - Present",
+      "description": "Led the development of scalable ML pipelines. Designed and deployed natural language processing models that improved customer service automation by 40%."
+    },
+    {
+      "company": "Data Dynamics",
+      "role": "Machine Learning Developer",
+      "period": "2018 - 2021",
+      "description": "Developed predictive models for financial forecasting. Optimized existing algorithms to reduce processing time by 30%."
+    }
+  ],
+  "education": [
+    {
+      "institution": "University of Technology",
+      "degree": "M.S. in Computer Science (Specialization in AI)",
+      "period": "2016 - 2018"
+    },
+    {
+      "institution": "State University",
+      "degree": "B.S. in Computer Science",
+      "period": "2012 - 2016"
+    }
+  ],
+  "skills": [
+    "Python",
+    "PyTorch",
+    "TensorFlow",
+    "Scikit-learn",
+    "SQL",
+    "Docker",
+    "Kubernetes",
+    "AWS",
+    "Git"
+  ]
+}
