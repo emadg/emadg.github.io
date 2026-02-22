@@ -200,9 +200,9 @@ A GitHub Actions workflow (`.github/workflows/deploy.yml`) handles this automati
 **One-time setup in GitHub:**
 1. Go to your repo → **Settings** → **Pages**
 2. Under "Build and deployment", set **Source** to **GitHub Actions**
-3. That's it — the next push to `main` will deploy to `https://emadg.github.io/<repo-name>`
+3. That's it — the next push to `main` will deploy to `https://emadgohari.github.io`
 
-To deploy to `https://emadg.github.io` (root domain, no repo name in URL), name the repo `emadg.github.io`.
+The repo is named `emadgohari.github.io`, so the site is served at `https://emadgohari.github.io`.
 
 ### Cloudflare Pages (automatic)
 
@@ -221,7 +221,7 @@ Cloudflare will auto-deploy on every push to `main`. Your site will be available
 Both hosts support custom domains for free:
 
 - **Cloudflare Pages**: Project settings → Custom domains → Add domain → update your DNS nameservers to Cloudflare
-- **GitHub Pages**: Repo settings → Pages → Custom domain → add a `CNAME` DNS record pointing to `emadg.github.io`
+- **GitHub Pages**: Repo settings → Pages → Custom domain → add a `CNAME` DNS record pointing to `emadgohari.github.io`
 
 ### Other hosts
 
