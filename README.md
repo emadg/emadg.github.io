@@ -171,7 +171,7 @@ The site auto-deploys to **GitHub Pages** and **Cloudflare Pages** on every push
 
 | Host | URL | Setup |
 |------|-----|-------|
-| GitHub Pages | `emadgohari.github.io` | Repo → Settings → Pages → Source: **GitHub Actions** |
+| GitHub Pages | `emadg.github.io` | Repo → Settings → Pages → Source: **GitHub Actions** |
 | Cloudflare Pages | `<project>.pages.dev` | Connect repo in Cloudflare dashboard, build cmd: `npm run build`, output: `dist` |
 
 See DEVELOPER.md for detailed setup instructions and custom domain configuration.
