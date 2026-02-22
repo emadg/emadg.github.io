@@ -1,0 +1,193 @@
+---
+import resumeData from '../data/resume.json';
+
+const contact = {
+	name: "Emad Gohari",
+	title: "Senior Research Engineer — NLP & Machine Learning",
+	email: "E.Gohari.B@gmail.com",
+	github: "github.com/emadg",
+	linkedin: "linkedin.com/in/emad-gohari",
+};
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>{contact.name} — Resume</title>
+	<style>
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+		@page {
+			size: Letter;
+			margin: 0.45in 0.5in;
+		}
+
+		html {
+			font-family: 'Inter', system-ui, -apple-system, sans-serif;
+			font-size: 10.5px;
+			line-height: 1.45;
+			color: #1a1a1a;
+			-webkit-print-color-adjust: exact;
+			print-color-adjust: exact;
+		}
+
+		a { color: #1a1a1a; text-decoration: none; }
+
+		/* ---- Header ---- */
+		header { margin-bottom: 14px; border-bottom: 2px solid #111; padding-bottom: 10px; }
+		header .name-row {
+			display: flex; justify-content: space-between; align-items: baseline;
+		}
+		header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+		header .name-row .title { font-size: 12px; font-weight: 400; color: #444; }
+		header .contact-row {
+			display: flex; gap: 16px; margin-top: 6px;
+			font-size: 9.5px; color: #555;
+		}
+		header .contact-row a { color: #555; }
+
+		/* ---- Sections ---- */
+		section { margin-bottom: 12px; }
+		section h2 {
+			font-size: 11.5px; font-weight: 700; text-transform: uppercase;
+			letter-spacing: 1.2px; color: #111;
+			border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 7px;
+		}
+
+		/* ---- Experience / Education entries ---- */
+		.entry { margin-bottom: 9px; }
+		.entry-header {
+			display: flex; justify-content: space-between; align-items: baseline;
+		}
+		.entry-header h3 { font-size: 11px; font-weight: 600; }
+		.entry-header .period { font-size: 9.5px; color: #555; white-space: nowrap; }
+		.entry-sub {
+			font-size: 9.5px; color: #555; margin-top: 0px;
+		}
+		.entry-desc {
+			margin-top: 3px; font-size: 10px; color: #333; line-height: 1.5;
+		}
+		.entry-note {
+			font-size: 9.5px; color: #555; font-style: italic; margin-top: 2px;
+		}
+
+		/* ---- Projects ---- */
+		.project { margin-bottom: 7px; }
+		.project-header {
+			display: flex; justify-content: space-between; align-items: baseline;
+		}
+		.project-header h3 { font-size: 10.5px; font-weight: 600; }
+		.project-header .year { font-size: 9.5px; color: #555; white-space: nowrap; }
+		.project-desc { font-size: 10px; color: #333; margin-top: 1px; line-height: 1.5; }
+		.project-tech { font-size: 9px; color: #666; margin-top: 2px; }
+
+		/* ---- Skills ---- */
+		.skills-list {
+			display: flex; flex-wrap: wrap; gap: 2px 6px;
+			font-size: 9.5px; color: #333;
+		}
+		.skills-list span::after { content: "·"; margin-left: 6px; color: #bbb; }
+		.skills-list span:last-child::after { content: ""; margin-left: 0; }
+
+		/* ---- Publications ---- */
+		.pub { margin-bottom: 5px; }
+		.pub-title { font-size: 10px; font-weight: 500; }
+		.pub-meta { font-size: 9px; color: #555; }
+
+		/* ---- Two-column layout for bottom sections ---- */
+		.two-col {
+			display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px;
+		}
+
+		/* Avoid page breaks inside entries */
+		.entry, .project, .pub { break-inside: avoid; }
+	</style>
+</head>
+<body>
+
+	<!-- Header -->
+	<header>
+		<div class="name-row">
+			<h1>{contact.name}</h1>
+			<span class="title">{contact.title}</span>
+		</div>
+		<div class="contact-row">
+			<span>{contact.email}</span>
+			<span>{contact.github}</span>
+			<span>{contact.linkedin}</span>
+		</div>
+	</header>
+
+	<!-- Experience -->
+	<section>
+		<h2>Experience</h2>
+		{resumeData.experience.map((job) => (
+			<div class="entry">
+				<div class="entry-header">
+					<h3>{job.role} — {job.company}</h3>
+					<span class="period">{job.period}</span>
+				</div>
+				<div class="entry-sub">{job.location}</div>
+				<div class="entry-desc">{job.description}</div>
+			</div>
+		))}
+	</section>
+
+	<!-- Education -->
+	<section>
+		<h2>Education</h2>
+		{resumeData.education.map((edu) => (
+			<div class="entry">
+				<div class="entry-header">
+					<h3>{edu.degree} — {edu.institution}</h3>
+					<span class="period">{edu.period}</span>
+				</div>
+				<div class="entry-sub">{edu.location}{edu.grade ? ` · GPA: ${edu.grade}` : ''}</div>
+				{edu.note && <div class="entry-note">{edu.note}</div>}
+			</div>
+		))}
+	</section>
+
+	<!-- Projects -->
+	<section>
+		<h2>Projects</h2>
+		<div class="two-col">
+			{resumeData.projects.map((project) => (
+				<div class="project">
+					<div class="project-header">
+						<h3>{project.name}</h3>
+						<span class="year">{project.year}</span>
+					</div>
+					<div class="project-desc">{project.description}</div>
+					<div class="project-tech">{project.tech.join(' · ')}</div>
+				</div>
+			))}
+		</div>
+	</section>
+
+	<!-- Publications -->
+	<section>
+		<h2>Publications</h2>
+		{resumeData.publications.map((pub) => (
+			<div class="pub">
+				<div class="pub-title">{pub.title}</div>
+				<div class="pub-meta">{pub.venue}, {pub.year}{pub.note ? ` · ${pub.note}` : ''}</div>
+			</div>
+		))}
+	</section>
+
+	<!-- Skills -->
+	<section>
+		<h2>Technical Skills</h2>
+		<div class="skills-list">
+			{resumeData.skills.map((skill) => (
+				<span>{skill}</span>
+			))}
+		</div>
+	</section>
+
+</body>
+</html>

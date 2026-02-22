@@ -4,27 +4,31 @@ Use this document as a starting prompt when resuming development on this project
 
 ## What This Project Is
 
-A personal website and portfolio for Emad Gohari, a professional Machine Learning developer. It is a static site built with **Astro 5.x** and **TailwindCSS 4.x** using TypeScript in strict mode. The site has a dark, blue-gray aesthetic with a frosted-glass central panel over an animated particle-network canvas background.
+A personal website and portfolio for Emad Gohari, a Senior Research Engineer specializing in NLP & Machine Learning. It is a static site built with **Astro 5.x** and **TailwindCSS 4.x** using TypeScript in strict mode. The site has a dark, blue-gray aesthetic with a frosted-glass central panel over an animated particle-network canvas background.
 
 ## Current State (as of Feb 2026)
 
 **Implemented:**
 - Animated particle-network canvas background (`src/components/NetworkBackground.astro`)
-- Frosted-glass central content panel in the layout (`src/layouts/Layout.astro`)
+- Frosted-glass central content panel in the layout (`src/layouts/Layout.astro`, `max-w-5xl`)
 - Hero / intro section with fade-in animations (`src/components/Hero.astro`)
 - Resume section with a centered vertical timeline using 3D flip cards (`src/components/Resume.astro`)
-- Resume data externalized to JSON (`src/data/resume.json`)
+- Dynamic-height flip cards using CSS grid stacking (no fixed height, no scrolling)
+- Education entries on the timeline (single-sided, no flip) below experience entries
+- Skills, projects, and publications sections below the timeline
+- Resume data externalized to JSON (`src/data/resume.json`) — single source of truth
+- Print-optimized resume page (`src/pages/resume.astro`) for PDF generation
+- PDF generation script using `puppeteer-core` + system Chrome (`scripts/generate-pdf.mjs`, `npm run pdf`)
 - Downloadable PDF resume button (downloads as `EmadGohari_MLE_CV_2026.pdf`)
-- Education and skills sections below the timeline
 - Blog content collection schema defined (`src/content/config.ts`)
 - Navigation header with conditional blog link (`src/components/Nav.astro`)
 - Blog listing page at `/blog` (`src/pages/blog/index.astro`)
 - Blog post pages with dynamic routing at `/blog/[slug]` (`src/pages/blog/[slug].astro`)
 - Prose/typography styles for rendered Markdown blog content (`global.css`)
 - Sample blog post (`src/content/blog/building-ml-pipelines.md`)
+- Custom "EG" monogram favicon with cyan-to-blue gradient (`public/favicon.svg`)
 
 **Not yet implemented:**
-- Projects section
 - SEO meta tags (Open Graph, Twitter cards)
 - Dark/light mode toggle (currently dark-only)
 - Mobile-optimized timeline (cards currently use 50% width which is narrow on phones)
@@ -34,40 +38,44 @@ A personal website and portfolio for Emad Gohari, a professional Machine Learnin
 ```
 astro.config.mjs            # Astro config, only enables @tailwindcss/vite plugin
 tsconfig.json                # Extends astro/tsconfigs/strict
-package.json                 # Deps: astro, tailwindcss, @tailwindcss/vite
+package.json                 # Deps: astro, tailwindcss, @tailwindcss/vite; devDeps: puppeteer-core
 
 src/
-  styles/global.css          # TailwindCSS imports, @theme (fonts), base styles, animation keyframes, 3D flip utilities, prose typography
-  layouts/Layout.astro       # Page shell: <head>, NetworkBackground, Nav, frosted panel (bg-slate-900/20, backdrop-blur-[6px]), footer
+  styles/global.css          # TailwindCSS imports, @theme (fonts), base styles, animation keyframes, 3D flip utilities, card-inner grid, prose typography
+  layouts/Layout.astro       # Page shell: <head>, NetworkBackground, Nav, frosted panel (bg-slate-900/20, backdrop-blur-[6px], max-w-5xl), footer
   components/
     NetworkBackground.astro  # Fixed <canvas> with particle animation + SVG noise texture overlay
     Nav.astro                # Top navigation bar; conditionally shows Blog link when blog posts exist
-    Hero.astro               # Landing section: badge, headline with gradient text, summary, social links
-    Resume.astro             # Timeline with 3D flip cards (IntersectionObserver + hover), education list, skills tags, PDF download button
+    Hero.astro               # Landing section: badge, headline with gradient text, summary, social links (email, GitHub, LinkedIn)
+    Resume.astro             # Timeline with 3D flip cards (experience) and single-sided cards (education), skills tags, projects grid, publications list, PDF download button
   data/
-    resume.json              # { experience: [...], education: [...], skills: [...] }
+    resume.json              # { experience, education, skills, projects, publications }
   content/
     config.ts                # Astro content collection: blog (title, description, pubDate, tags)
     blog/                    # Markdown blog posts (add .md files here to populate the blog)
   pages/
     index.astro              # Composes Layout > Hero > Resume
+    resume.astro             # Print-optimized HTML resume for PDF generation (not linked from nav)
     blog/
       index.astro            # Blog listing page, sorted by date descending
       [slug].astro           # Individual blog post page with prose-styled Markdown rendering
 
+scripts/
+    generate-pdf.mjs         # Puppeteer script: starts dev server, renders /resume → public/resume.pdf via system Chrome
+
 public/
-    resume.pdf               # Placeholder PDF (owner should replace with real resume)
-    favicon.svg              # Default Astro favicon
+    resume.pdf               # Generated PDF resume (run `npm run pdf` to regenerate)
+    favicon.svg              # "EG" monogram favicon with cyan-to-blue gradient on dark slate background
 ```
 
 ## Design Language
 
 - **Background**: `bg-slate-950` with an animated canvas of cornflower-blue particles (`rgba(100, 149, 237, 0.6)`) connected by fading lines.
-- **Central panel**: `bg-slate-900/20`, `backdrop-blur-[6px]`, bordered on left/right by `border-slate-700/30`. Max width `max-w-4xl`.
+- **Central panel**: `bg-slate-900/20`, `backdrop-blur-[6px]`, bordered on left/right by `border-slate-700/30`. Max width `max-w-5xl`.
 - **Accent color**: Cyan (`cyan-400`, `cyan-500`) used for badges, glows, hover states, timeline dots.
 - **Typography**: Inter (sans-serif, body text), JetBrains Mono (monospace, dates/code). Loaded via Google Fonts CDN.
 - **Animations**: CSS `fade-in-up` keyframes with staggered delays. Canvas animation runs via `requestAnimationFrame`.
-- **Resume cards**: 3D CSS transforms (`perspective`, `transform-style: preserve-3d`, `backface-visibility: hidden`, `rotateY(180deg)`). Flip triggers: hover and IntersectionObserver when card enters center 10% of viewport.
+- **Resume cards**: CSS grid stacking (`.card-inner` uses `display: grid` with both sides in `grid-area: 1/1`) for dynamic height. 3D CSS transforms (`perspective`, `transform-style: preserve-3d`, `backface-visibility: hidden`, `rotateY(180deg)`). Flip triggers: hover and IntersectionObserver when card enters center 10% of viewport.
 
 ## Key Technical Details
 
@@ -77,12 +85,13 @@ public/
 - The blog content collection uses Astro's legacy `type: 'content'` API. `post.id` includes the `.md` extension and must be stripped for clean URLs.
 - The `Nav.astro` component fetches the blog collection at build time; the "Blog" link only appears when at least one post exists in `src/content/blog/`.
 - Astro's built-in Shiki handles code syntax highlighting in blog posts.
+- PDF generation uses `puppeteer-core` (dev dependency, no bundled browser) with the system's Chrome. Auto-detects on macOS/Linux/Windows; overridable via `CHROME_PATH` env var.
 
 ## Owner Preferences
 
 - **Aesthetic**: Dark, minimal, clean. Not crammed. Easy to read. Subtle animations only where they feel natural, not everywhere.
 - **Maintenance**: The owner has limited JS/frontend experience. Content changes (resume, blog) should not require touching component code. JSON and Markdown are the primary content formats.
-- **PDF Resume**: Must be downloadable. File served from `public/resume.pdf`, downloaded as `EmadGohari_MLE_CV_2026.pdf`.
+- **PDF Resume**: Auto-generated from `resume.json` via `npm run pdf`. Single source of truth — both the website and PDF read from the same JSON file.
 
 ## When Continuing Development
 

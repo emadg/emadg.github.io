@@ -37,17 +37,20 @@ src/
     Resume.astro            # Timeline resume with 3D flip cards
   content/
     config.ts               # Astro content collection schema (blog)
-    blog/                   # Future blog posts go here as .md files
+    blog/                   # Blog posts go here as .md files
   data/
-    resume.json             # All resume data (experience, education, skills, projects, publications)
+    resume.json             # All resume data (single source of truth)
   layouts/
     Layout.astro            # Shared page shell: head, frosted panel, footer
   pages/
     index.astro             # Home page (Hero + Resume)
+    resume.astro            # Print-optimized resume (used for PDF generation)
   styles/
     global.css              # Tailwind imports, fonts, animations, utilities
+scripts/
+    generate-pdf.mjs        # Puppeteer script: renders /resume → public/resume.pdf
 public/
-    resume.pdf              # Downloadable PDF resume (replace with real file)
+    resume.pdf              # Generated PDF resume (npm run pdf)
     favicon.svg             # Site favicon
 ```
 
@@ -129,7 +132,21 @@ Search for `href=` to find and update the URLs.
 
 ### PDF Resume
 
-Drop your file into `public/resume.pdf`. The download button serves it as `EmadGohari_MLE_CV_2026.pdf` regardless of the source filename. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+The PDF is auto-generated from `resume.json` via a print-optimized Astro page (`src/pages/resume.astro`) and Puppeteer.
+
+**Prerequisite:** Google Chrome (or Chromium) must be installed on your system. The script auto-detects common install locations on macOS, Linux, and Windows. You can also set `CHROME_PATH` to a custom location:
+
+```bash
+# Uses system Chrome automatically
+npm run pdf
+
+# Or specify a custom Chrome path
+CHROME_PATH="/path/to/chrome" npm run pdf
+```
+
+This starts the dev server, renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf`, and shuts down. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+
+You can also preview the print layout in your browser at `http://localhost:4321/resume` while the dev server is running.
 
 ## Adding a Blog Post
 
@@ -146,7 +163,7 @@ tags: ["ml", "python"]
 Your content here. Code blocks with syntax highlighting work out of the box.
 ```
 
-A blog listing page and post layout still need to be built (see DEVELOPER.md).
+The blog listing page (`/blog`) and post layout are already built. Posts appear automatically.
 
 ## License
 

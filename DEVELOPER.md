@@ -21,6 +21,7 @@ Browser Request
 - **No React / Vue / Svelte dependency.** All components are `.astro` files (server-rendered HTML templates). The two `<script>` tags in `NetworkBackground.astro` and `Resume.astro` are vanilla TypeScript. This keeps the bundle tiny and avoids framework lock-in.
 - **Content separated from presentation.** Resume data lives in `src/data/resume.json`. Blog posts will live in `src/content/blog/` as Markdown files. The owner never needs to touch `.astro` or `.css` files to update content.
 - **TailwindCSS v4** is used via the Vite plugin (`@tailwindcss/vite`). There is no `tailwind.config.js`; configuration is done inline in `src/styles/global.css` using the `@theme` directive.
+- **Single-source PDF generation.** `src/pages/resume.astro` renders a print-optimized HTML page from `resume.json`. The `scripts/generate-pdf.mjs` script uses `puppeteer-core` (lightweight, no bundled browser) to print it to `public/resume.pdf` via the system's Chrome installation.
 
 ## File-by-File Reference
 
@@ -31,6 +32,7 @@ Browser Request
 - Sets base body styles: `bg-slate-950`, white text, antialiased.
 - Defines the `fade-in-up` animation and sequential delay classes.
 - Defines 3D flip-card utilities: `perspective-1000`, `transform-style-3d`, `backface-hidden`, `rotate-y-180`.
+- Defines `.card-inner` grid stacking (both front/back sides in `grid-area: 1/1`) for dynamic card height.
 
 ### `src/layouts/Layout.astro`
 
@@ -39,7 +41,7 @@ Browser Request
 - Wraps the page content in a central frosted-glass panel:
   - `bg-slate-900/20` (low opacity dark background)
   - `backdrop-blur-[6px]` (light blur so the particle animation is subtly visible through it)
-  - `max-w-4xl` (constrains width)
+  - `max-w-5xl` (constrains width)
   - Full-height with `min-h-screen`
 - Contains a minimal footer at the bottom of the panel.
 
@@ -76,12 +78,13 @@ The `<script>` block:
 
 - Imports data from `src/data/resume.json` at build time.
 - Renders a "Download Resume PDF" button linking to `/resume.pdf`.
-- Builds a centered vertical timeline:
+- Builds a centered vertical timeline (`max-w-4xl`):
   - A thin gradient line runs down the center of the page.
-  - Glowing cyan dots sit on the line for each experience entry.
+  - Glowing cyan dots sit on the line for each entry.
   - Cards alternate left and right (`index % 2`).
-  - Each card is a 3D flip card: front shows role/company/period, back shows detailed description.
-- Below the timeline: Education (with a left-border accent list) and Skills (tag pills).
+  - Experience cards are 3D flip cards (dynamic height via CSS grid): front shows role/company/period/location, back shows detailed description.
+  - Education cards appear after experience on the timeline (single-sided, no flip).
+- Below the timeline: Skills (tag pills), Projects (two-column card grid), Publications (accent-border list).
 
 **3D Flip Logic** (in the `<script>` block):
 - An `IntersectionObserver` with `rootMargin: '-45% 0px -45% 0px'` fires when a card enters the middle 10% band of the viewport, toggling `rotate-y-180` on the `.card-inner` element.
@@ -103,6 +106,22 @@ Defines an Astro content collection called `blog` with a Zod schema:
 - `description` (string, required)
 - `pubDate` (date, required)
 - `tags` (string array, optional)
+
+### `src/pages/resume.astro`
+
+- Print-optimized HTML resume page that reads all data from `resume.json`.
+- Uses vanilla CSS (no Tailwind) for precise print control: Inter font, Letter-size `@page` rule, proper margins.
+- Sections: header (name + title), experience, education, projects (two-column grid), publications, skills.
+- Accessible at `/resume` during development for previewing before PDF generation.
+- **Not linked from the main site navigation** — it exists solely as a PDF source.
+
+### `scripts/generate-pdf.mjs`
+
+- Node.js script that generates `public/resume.pdf` from the `/resume` page.
+- Uses `puppeteer-core` (dev dependency) with the system's Chrome/Chromium — no bundled browser download.
+- Auto-detects Chrome on macOS, Linux, and Windows. Override with `CHROME_PATH` env var.
+- Workflow: starts Astro dev server → waits for it → opens headless Chrome → prints to PDF → shuts down.
+- Run via `npm run pdf`.
 
 ### `src/pages/blog/index.astro`
 
