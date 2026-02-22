@@ -10,7 +10,7 @@
 
 @layer base {
   html {
-    scroll-snap-type: y proximity;
+    /* scroll-snap-type removed here, applied conditionally in Layout.astro */
   }
 
   body {
