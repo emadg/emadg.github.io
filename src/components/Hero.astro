@@ -1,5 +1,7 @@
 ---
 // Hero.astro - Minimal introduction component optimized for dark theme
+// Email is fragmented across multiple data attributes to prevent scraping
+const ep = { a: "E", b: ".Go", c: "hari", d: ".B", e: "gm", f: "ail.com" };
 ---
 
 <section class="py-20 fade-in-up flex flex-col items-center text-center sm:items-start sm:text-left">
@@ -25,7 +27,7 @@
 
 		<!-- Minimal Links -->
 		<div class="flex flex-wrap items-center justify-center sm:justify-start gap-6 pt-6 fade-in-up delay-300">
-			<a href="mailto:E.Gohari.B@gmail.com" target="_blank" rel="noopener noreferrer" class="group flex items-center text-sm font-medium text-white hover:text-cyan-400 transition-colors">
+			<a id="email-link" href="#" data-a={ep.a} data-b={ep.b} data-c={ep.c} data-d={ep.d} data-e={ep.e} data-f={ep.f} class="group flex items-center text-sm font-medium text-white hover:text-cyan-400 transition-colors">
 				<svg class="w-5 h-5 mr-2 text-slate-400 group-hover:text-cyan-400 transition-colors" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
 					<path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
 				</svg>
@@ -48,3 +50,14 @@
 		</div>
 	</div>
 </section>
+
+<script>
+	const el = document.getElementById('email-link');
+	if (el) {
+		const d = el.dataset;
+		const addr = `${d.a}${d.b}${d.c}${d.d}@${d.e}${d.f}`;
+		el.setAttribute('href', `mailto:${addr}`);
+		el.setAttribute('target', '_blank');
+		el.setAttribute('rel', 'noopener noreferrer');
+	}
+</script>

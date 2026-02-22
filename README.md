@@ -165,6 +165,17 @@ Your content here. Code blocks with syntax highlighting work out of the box.
 
 The blog listing page (`/blog`) and post layout are already built. Posts appear automatically.
 
+## Deployment
+
+The site auto-deploys to **GitHub Pages** and **Cloudflare Pages** on every push to `main`.
+
+| Host | URL | Setup |
+|------|-----|-------|
+| GitHub Pages | `emadg.github.io/<repo>` | Repo → Settings → Pages → Source: **GitHub Actions** |
+| Cloudflare Pages | `<project>.pages.dev` | Connect repo in Cloudflare dashboard, build cmd: `npm run build`, output: `dist` |
+
+See DEVELOPER.md for detailed setup instructions and custom domain configuration.
+
 ## License
 
 Private. All rights reserved.
