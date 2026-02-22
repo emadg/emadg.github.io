@@ -30,7 +30,7 @@ const { title, description = "Machine Learning Developer Portfolio & Resume", sc
 		<!-- Reduced bg opacity from slate-900/40 to slate-900/20, reduced blur from md to sm -->
 		<div class="w-full max-w-5xl min-h-screen flex flex-col items-center bg-slate-900/20 backdrop-blur-[6px] border-x border-slate-700/30 shadow-2xl relative z-10">
 			
-			<Nav />
+			<Nav scrollSnap={scrollSnap} />
 
 			<main class="w-full px-8 sm:px-12 py-12 md:py-24 flex-grow flex flex-col">
 				<slot />

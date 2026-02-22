@@ -3,7 +3,7 @@ import resumeData from '../data/resume.json';
 ---
 
 <section class="py-16 fade-in-up delay-300 w-full relative">
-	<div class="flex flex-col sm:flex-row items-center justify-between mb-16 gap-6">
+	<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-16 gap-6">
 		<h2 class="text-3xl font-semibold tracking-tight text-white">Experience</h2>
 		
 		<!-- Download PDF Button -->
@@ -19,72 +19,76 @@ import resumeData from '../data/resume.json';
 		</a>
 	</div>
 
-	<!-- Central Timeline with Flip Cards -->
-	<div class="relative w-full max-w-4xl mx-auto pb-12">
-		<!-- Timeline Vertical Line (Left on mobile, Center on desktop) -->
+	<!-- Combined Timeline -->
+	<div class="relative">
+		<!-- Single continuous timeline line -->
 		<div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-cyan-900/60 to-transparent -translate-x-1/2"></div>
 
-		{resumeData.experience.map((job, index) => {
-			const isLeft = index % 2 === 0;
-			return (
-				<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group flip-container" style="scroll-snap-align: center;">
-					
-					<!-- Dot on the line -->
-					<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
-					
-					<!-- Card Container -->
-					<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] perspective-1000 text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
+		<div class="w-full max-w-4xl mx-auto">
+			{resumeData.experience.map((job, index) => {
+				const isLeft = index % 2 === 0;
+				return (
+					<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group flip-container" style="scroll-snap-align: center;">
 						
-					<!-- The Flipping Element -->
-					<div class="card-inner relative w-full min-h-48 md:min-h-56 transition-transform duration-700 transform-style-3d cursor-pointer">
+						<!-- Dot on the line -->
+						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
 						
-						<!-- Front Side of Card -->
-						<div class="backface-hidden rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
-						<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{job.period}</span>
-						<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{job.role}</h3>
-						<p class="text-slate-400 font-medium mt-1 text-base">{job.company}</p>
-						<p class="text-slate-500 text-sm mt-0.5">{job.location}</p>
-						</div>
-						
-						<!-- Back Side of Card -->
-						<div class="backface-hidden rotate-y-180 rounded-2xl border border-cyan-500/40 bg-slate-900/95 p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_rgba(34,211,238,0.1)] text-left">
-							<h4 class="text-cyan-300 font-semibold mb-2 text-base uppercase tracking-wider">Details & Impact</h4>
-							<p class="text-slate-300 text-base leading-relaxed">{job.description}</p>
-						</div>
+						<!-- Card Container -->
+						<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] perspective-1000 text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
 							
+						<!-- The Flipping Element -->
+						<div class="card-inner relative w-full min-h-48 md:min-h-56 transition-transform duration-700 transform-style-3d cursor-pointer">
+							
+							<!-- Front Side of Card -->
+							<div class="backface-hidden rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
+							<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{job.period}</span>
+							<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{job.role}</h3>
+							<p class="text-slate-400 font-medium mt-1 text-base">{job.company}</p>
+							<p class="text-slate-500 text-sm mt-0.5">{job.location}</p>
+							</div>
+							
+							<!-- Back Side of Card -->
+							<div class="backface-hidden rotate-y-180 rounded-2xl border border-cyan-500/40 bg-slate-900/95 p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_rgba(34,211,238,0.1)] text-left">
+								<h4 class="text-cyan-300 font-semibold mb-2 text-base uppercase tracking-wider">Details & Impact</h4>
+								<p class="text-slate-300 text-base leading-relaxed">{job.description}</p>
+							</div>
+								
+							</div>
 						</div>
 					</div>
-				</div>
-			)
-		})}
+				)
+			})}
+		</div>
 
-		<!-- Education Section Label on Timeline -->
-		<div class="relative w-full mt-8 mb-16 pl-12 md:pl-0 md:text-center">
+		<!-- Education Section Header -->
+		<div class="my-8">
 			<h2 class="text-3xl font-semibold tracking-tight text-white">Education</h2>
 		</div>
 
-		{resumeData.education.map((edu, index) => {
-			const isLeft = (index + resumeData.experience.length) % 2 === 0;
-			return (
-				<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group" style="scroll-snap-align: center;">
-					
-					<!-- Dot on the line -->
-					<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
-					
-					<!-- Education Card -->
-					<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
-						<div class="rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
-							<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{edu.period}</span>
-							<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{edu.degree}</h3>
-							<p class="text-slate-400 font-medium mt-1 text-base">{edu.institution}</p>
-							<p class="text-slate-500 text-sm mt-0.5">{edu.location}</p>
-							{edu.grade && <p class="text-slate-400 text-sm mt-2">GPA: {edu.grade}</p>}
-							{edu.note && <p class="text-slate-300 text-sm mt-2 italic leading-relaxed">{edu.note}</p>}
+		<div class="w-full max-w-4xl mx-auto pb-12">
+			{resumeData.education.map((edu, index) => {
+				const isLeft = (index + resumeData.experience.length) % 2 === 0;
+				return (
+					<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group" style="scroll-snap-align: center;">
+						
+						<!-- Dot on the line -->
+						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
+						
+						<!-- Education Card -->
+						<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
+							<div class="rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
+								<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{edu.period}</span>
+								<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{edu.degree}</h3>
+								<p class="text-slate-400 font-medium mt-1 text-base">{edu.institution}</p>
+								<p class="text-slate-500 text-sm mt-0.5">{edu.location}</p>
+								{edu.grade && <p class="text-slate-400 text-sm mt-2">GPA: {edu.grade}</p>}
+								{edu.note && <p class="text-slate-300 text-sm mt-2 italic leading-relaxed">{edu.note}</p>}
+							</div>
 						</div>
 					</div>
-				</div>
-			)
-		})}
+				)
+			})}
+		</div>
 	</div>
 
 	<!-- Skills Section -->
