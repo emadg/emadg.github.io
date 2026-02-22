@@ -187,9 +187,45 @@ The post will appear automatically on the `/blog` page and at `/blog/your-file-n
 
 ## Deployment
 
-The site builds to a `dist/` folder of pure static files. It can be deployed to any static host:
+The site builds to a `dist/` folder of pure static files. It is currently configured to deploy to **GitHub Pages** and **Cloudflare Pages** simultaneously from the same repo.
+
+### GitHub Pages (automatic)
+
+A GitHub Actions workflow (`.github/workflows/deploy.yml`) handles this automatically:
+
+1. Push to `main` → workflow triggers
+2. Installs deps, runs `npm run build`
+3. Deploys `dist/` to GitHub Pages
+
+**One-time setup in GitHub:**
+1. Go to your repo → **Settings** → **Pages**
+2. Under "Build and deployment", set **Source** to **GitHub Actions**
+3. That's it — the next push to `main` will deploy to `https://emadg.github.io/<repo-name>`
+
+To deploy to `https://emadg.github.io` (root domain, no repo name in URL), name the repo `emadg.github.io`.
+
+### Cloudflare Pages (automatic)
+
+1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create**
+2. Connect your GitHub account and select this repo
+3. Configure the build:
+   - **Build command**: `npm run build`
+   - **Build output directory**: `dist`
+   - **Node.js version**: Set env var `NODE_VERSION` = `20`
+4. Click **Save and Deploy**
+
+Cloudflare will auto-deploy on every push to `main`. Your site will be available at `<project-name>.pages.dev`.
+
+### Custom domain
+
+Both hosts support custom domains for free:
+
+- **Cloudflare Pages**: Project settings → Custom domains → Add domain → update your DNS nameservers to Cloudflare
+- **GitHub Pages**: Repo settings → Pages → Custom domain → add a `CNAME` DNS record pointing to `emadg.github.io`
+
+### Other hosts
+
+The `dist/` folder works with any static host:
 
 - **Vercel**: `npx vercel` (auto-detects Astro)
 - **Netlify**: Set build command to `npm run build`, publish directory to `dist`
-- **GitHub Pages**: Use the `@astrojs/starlight` or a GitHub Action to build and deploy `dist/`
-- **Cloudflare Pages**: Connect your repo, set build command `npm run build`, output `dist`
