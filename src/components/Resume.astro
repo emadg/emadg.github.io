@@ -21,19 +21,19 @@ import resumeData from '../data/resume.json';
 
 	<!-- Central Timeline with Flip Cards -->
 	<div class="relative w-full max-w-4xl mx-auto pb-12">
-		<!-- Central Timeline Vertical Line -->
-		<div class="absolute left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-cyan-900/60 to-transparent -translate-x-1/2"></div>
+		<!-- Timeline Vertical Line (Left on mobile, Center on desktop) -->
+		<div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-cyan-900/60 to-transparent -translate-x-1/2"></div>
 
 		{resumeData.experience.map((job, index) => {
 			const isLeft = index % 2 === 0;
 			return (
-				<div class="relative w-full flex items-center justify-between mb-32 md:mb-40 group flip-container" style="scroll-snap-align: center;">
+				<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group flip-container" style="scroll-snap-align: center;">
 					
-					<!-- Central Dot on the line -->
-					<div class="absolute left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
+					<!-- Dot on the line -->
+					<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
 					
 					<!-- Card Container -->
-					<div class={`w-[calc(50%-2rem)] perspective-1000 ${isLeft ? 'mr-auto text-right pr-4 md:pr-0' : 'ml-auto text-left pl-4 md:pl-0'}`}>
+					<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] perspective-1000 text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
 						
 					<!-- The Flipping Element -->
 					<div class="card-inner relative w-full min-h-48 md:min-h-56 transition-transform duration-700 transform-style-3d cursor-pointer">
@@ -59,20 +59,20 @@ import resumeData from '../data/resume.json';
 		})}
 
 		<!-- Education Section Label on Timeline -->
-		<div class="relative w-full mt-8 mb-16">
+		<div class="relative w-full mt-8 mb-16 pl-12 md:pl-0 md:text-center">
 			<h2 class="text-3xl font-semibold tracking-tight text-white">Education</h2>
 		</div>
 
 		{resumeData.education.map((edu, index) => {
 			const isLeft = (index + resumeData.experience.length) % 2 === 0;
 			return (
-				<div class="relative w-full flex items-center justify-between mb-32 md:mb-40 group" style="scroll-snap-align: center;">
+				<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group" style="scroll-snap-align: center;">
 					
-					<!-- Central Dot on the line -->
-					<div class="absolute left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
+					<!-- Dot on the line -->
+					<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
 					
-					<!-- Education Card (no flip) -->
-					<div class={`w-[calc(50%-2rem)] ${isLeft ? 'mr-auto text-right pr-4 md:pr-0' : 'ml-auto text-left pl-4 md:pl-0'}`}>
+					<!-- Education Card -->
+					<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
 						<div class="rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
 							<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{edu.period}</span>
 							<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{edu.degree}</h3>
