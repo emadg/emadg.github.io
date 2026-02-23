@@ -178,4 +178,6 @@ See DEVELOPER.md for detailed setup instructions and custom domain configuration
 
 ## License
 
-Private. All rights reserved.
+Copyright (c) 2026 Emad Gohari. All rights reserved.
+
+This project is proprietary. Unauthorized copying, modification, distribution, or use is strictly prohibited.
