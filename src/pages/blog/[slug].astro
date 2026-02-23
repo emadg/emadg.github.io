@@ -27,7 +27,7 @@ function formatDate(date: Date): string {
 		<!-- Back link -->
 		<a
 			href="/blog"
-			class="inline-flex items-center text-sm text-slate-400 hover:text-cyan-400 transition-colors mb-10 group"
+			class="inline-flex items-center text-sm text-text-muted hover:text-accent transition-colors mb-10 group"
 		>
 			<svg class="w-4 h-4 mr-1.5 group-hover:-translate-x-0.5 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
 				<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
@@ -36,20 +36,20 @@ function formatDate(date: Date): string {
 		</a>
 
 		<!-- Post header -->
-		<header class="mb-10 border-b border-slate-800/50 pb-8">
-			<h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-4">
+		<header class="mb-10 border-b border-border-subtle pb-8">
+			<h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-4">
 				{post.data.title}
 			</h1>
 
 			<div class="flex flex-wrap items-center gap-4 text-sm">
-				<time class="font-mono text-cyan-400/80" datetime={post.data.pubDate.toISOString()}>
+				<time class="font-mono text-accent/80" datetime={post.data.pubDate.toISOString()}>
 					{formatDate(post.data.pubDate)}
 				</time>
 
 				{post.data.tags && post.data.tags.length > 0 && (
 					<div class="flex flex-wrap gap-2">
 						{post.data.tags.map((tag: string) => (
-							<span class="px-2.5 py-0.5 text-xs font-medium rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/60">
+							<span class="px-2.5 py-0.5 text-xs font-medium rounded-md bg-bg-card text-text-muted border border-border-subtle">
 								{tag}
 							</span>
 						))}

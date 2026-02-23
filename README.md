@@ -1,6 +1,6 @@
 # Emad Gohari - Personal Website & Portfolio
 
-A modern, minimal personal website for an ML developer. Built with Astro and TailwindCSS, featuring an animated network particle background, a frosted-glass central panel, and a 3D-flipping timeline resume.
+A modern, minimal personal website for an ML developer. Built with Astro and TailwindCSS, featuring an animated network particle background, a frosted-glass central panel, a 3D-flipping timeline resume, and **Dark/Light mode support**.
 
 ## Quick Start
 

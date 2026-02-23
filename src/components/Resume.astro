@@ -4,15 +4,15 @@ import resumeData from '../data/resume.json';
 
 <section class="py-16 fade-in-up delay-300 w-full relative">
 	<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-16 gap-6">
-		<h2 class="text-3xl font-semibold tracking-tight text-white">Experience</h2>
+		<h2 class="text-3xl font-semibold tracking-tight text-text-primary">Experience</h2>
 		
 		<!-- Download PDF Button -->
 		<a 
 			href="/resume.pdf" 
 			download="EmadGohari_MLE_CV_2026.pdf"
-			class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-white bg-slate-800/80 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700 hover:border-cyan-500/50 shadow-lg hover:shadow-[0_0_15px_rgba(34,211,238,0.2)] backdrop-blur-sm"
+			class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-text-primary bg-bg-card hover:bg-bg-card-hover rounded-xl transition-all border border-border-subtle hover:border-accent/50 shadow-lg hover:shadow-[0_0_15px_var(--color-accent-bg)] backdrop-blur-sm"
 		>
-			<svg class="w-4 h-4 mr-2 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+			<svg class="w-4 h-4 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
 			</svg>
 			Download Resume PDF
@@ -22,7 +22,7 @@ import resumeData from '../data/resume.json';
 	<!-- Combined Timeline -->
 	<div class="relative">
 		<!-- Single continuous timeline line -->
-		<div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-cyan-900/60 to-transparent -translate-x-1/2"></div>
+		<div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-accent/20 to-transparent -translate-x-1/2"></div>
 
 		<div class="w-full max-w-4xl mx-auto">
 			{resumeData.experience.map((job, index) => {
@@ -31,7 +31,7 @@ import resumeData from '../data/resume.json';
 					<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group flip-container" style="scroll-snap-align: center;">
 						
 						<!-- Dot on the line -->
-						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
+						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-accent rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-bg-body shadow-[0_0_12px_var(--color-accent)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
 						
 						<!-- Card Container -->
 						<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] perspective-1000 text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
@@ -40,17 +40,17 @@ import resumeData from '../data/resume.json';
 						<div class="card-inner relative w-full min-h-48 md:min-h-56 transition-transform duration-700 transform-style-3d cursor-pointer">
 							
 							<!-- Front Side of Card -->
-							<div class="backface-hidden rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
-							<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{job.period}</span>
-							<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{job.role}</h3>
-							<p class="text-slate-400 font-medium mt-1 text-base">{job.company}</p>
-							<p class="text-slate-500 text-sm mt-0.5">{job.location}</p>
+							<div class="backface-hidden rounded-2xl border border-border-subtle bg-bg-card p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-accent/50">
+							<span class="text-accent text-sm md:text-base font-mono mb-2 block">{job.period}</span>
+							<h3 class="text-lg md:text-xl font-bold text-text-primary leading-tight">{job.role}</h3>
+							<p class="text-text-muted font-medium mt-1 text-base">{job.company}</p>
+							<p class="text-text-muted text-sm mt-0.5">{job.location}</p>
 							</div>
 							
 							<!-- Back Side of Card -->
-							<div class="backface-hidden rotate-y-180 rounded-2xl border border-cyan-500/40 bg-slate-900/95 p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_rgba(34,211,238,0.1)] text-left">
-								<h4 class="text-cyan-300 font-semibold mb-2 text-base uppercase tracking-wider">Details & Impact</h4>
-								<p class="text-slate-300 text-base leading-relaxed">{job.description}</p>
+							<div class="backface-hidden rotate-y-180 rounded-2xl border border-accent/40 bg-bg-card-hover p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_var(--color-accent-bg)] text-left">
+								<h4 class="text-accent font-semibold mb-2 text-base uppercase tracking-wider">Details & Impact</h4>
+								<p class="text-text-secondary text-base leading-relaxed">{job.description}</p>
 							</div>
 								
 							</div>
@@ -62,7 +62,7 @@ import resumeData from '../data/resume.json';
 
 		<!-- Education Section Header -->
 		<div class="my-8">
-			<h2 class="text-3xl font-semibold tracking-tight text-white">Education</h2>
+			<h2 class="text-3xl font-semibold tracking-tight text-text-primary">Education</h2>
 		</div>
 
 		<div class="w-full max-w-4xl mx-auto pb-12">
@@ -72,17 +72,17 @@ import resumeData from '../data/resume.json';
 					<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group" style="scroll-snap-align: center;">
 						
 						<!-- Dot on the line -->
-						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-cyan-400 rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-slate-900 shadow-[0_0_12px_rgba(34,211,238,0.8)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
+						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-accent rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-bg-body shadow-[0_0_12px_var(--color-accent)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
 						
 						<!-- Education Card -->
 						<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
-							<div class="rounded-2xl border border-slate-700/60 bg-slate-800/80 p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-cyan-500/50">
-								<span class="text-cyan-400 text-sm md:text-base font-mono mb-2 block">{edu.period}</span>
-								<h3 class="text-lg md:text-xl font-bold text-white leading-tight">{edu.degree}</h3>
-								<p class="text-slate-400 font-medium mt-1 text-base">{edu.institution}</p>
-								<p class="text-slate-500 text-sm mt-0.5">{edu.location}</p>
-								{edu.grade && <p class="text-slate-400 text-sm mt-2">GPA: {edu.grade}</p>}
-								{edu.note && <p class="text-slate-300 text-sm mt-2 italic leading-relaxed">{edu.note}</p>}
+							<div class="rounded-2xl border border-border-subtle bg-bg-card p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-accent/50">
+								<span class="text-accent text-sm md:text-base font-mono mb-2 block">{edu.period}</span>
+								<h3 class="text-lg md:text-xl font-bold text-text-primary leading-tight">{edu.degree}</h3>
+								<p class="text-text-muted font-medium mt-1 text-base">{edu.institution}</p>
+								<p class="text-text-muted text-sm mt-0.5">{edu.location}</p>
+								{edu.grade && <p class="text-text-muted text-sm mt-2">GPA: {edu.grade}</p>}
+								{edu.note && <p class="text-text-secondary text-sm mt-2 italic leading-relaxed">{edu.note}</p>}
 							</div>
 						</div>
 					</div>
@@ -92,11 +92,11 @@ import resumeData from '../data/resume.json';
 	</div>
 
 	<!-- Skills Section -->
-	<div class="mt-20 pt-16 border-t border-slate-800/50 w-full max-w-4xl mx-auto fade-in-up delay-300">
-		<h2 class="text-2xl font-semibold tracking-tight text-white mb-8">Technical Skills</h2>
+	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-300">
+		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Technical Skills</h2>
 		<div class="flex flex-wrap gap-3">
 			{resumeData.skills.map((skill) => (
-				<span class="px-3 py-1.5 text-base font-medium rounded-lg bg-slate-800/60 text-slate-300 border border-slate-700 hover:border-cyan-500/50 hover:text-white hover:bg-slate-700/80 transition-all cursor-default shadow-sm backdrop-blur-sm">
+				<span class="px-3 py-1.5 text-base font-medium rounded-lg bg-bg-card text-text-secondary border border-border-subtle hover:border-accent/50 hover:text-text-primary hover:bg-bg-card-hover transition-all cursor-default shadow-sm backdrop-blur-sm">
 					{skill}
 				</span>
 			))}
@@ -104,19 +104,19 @@ import resumeData from '../data/resume.json';
 	</div>
 
 	<!-- Projects Section -->
-	<div class="mt-20 pt-16 border-t border-slate-800/50 w-full max-w-4xl mx-auto fade-in-up delay-200">
-		<h2 class="text-2xl font-semibold tracking-tight text-white mb-8">Projects</h2>
+	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-200">
+		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Projects</h2>
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
 			{resumeData.projects.map((project) => (
-				<div class="group relative rounded-2xl border border-slate-700/60 bg-slate-800/60 p-6 hover:border-cyan-500/50 hover:bg-slate-800/80 transition-all backdrop-blur-sm shadow-lg hover:shadow-[0_0_20px_rgba(34,211,238,0.07)]">
+				<div class="group relative rounded-2xl border border-border-subtle bg-bg-card p-6 hover:border-accent/50 hover:bg-bg-card-hover transition-all backdrop-blur-sm shadow-lg hover:shadow-[0_0_20px_var(--color-accent-bg)]">
 					<div class="flex items-start justify-between gap-2 mb-3">
-						<h3 class="font-semibold text-white text-base leading-snug">{project.name}</h3>
-						<span class="font-mono text-cyan-400/80 text-sm whitespace-nowrap">{project.year}</span>
+						<h3 class="font-semibold text-text-primary text-base leading-snug">{project.name}</h3>
+						<span class="font-mono text-accent/80 text-sm whitespace-nowrap">{project.year}</span>
 					</div>
-					<p class="text-slate-400 text-base leading-relaxed mb-4">{project.description}</p>
+					<p class="text-text-muted text-base leading-relaxed mb-4">{project.description}</p>
 					<div class="flex flex-wrap gap-1.5">
 						{project.tech.map((t) => (
-							<span class="px-2 py-0.5 text-sm rounded-md bg-cyan-950/50 text-cyan-300 border border-cyan-900/50">{t}</span>
+							<span class="px-2 py-0.5 text-sm rounded-md bg-accent-bg text-accent border border-accent/30">{t}</span>
 						))}
 					</div>
 				</div>
@@ -125,16 +125,16 @@ import resumeData from '../data/resume.json';
 	</div>
 
 	<!-- Publications Section -->
-	<div class="mt-20 pt-16 border-t border-slate-800/50 w-full max-w-4xl mx-auto fade-in-up delay-200">
-		<h2 class="text-2xl font-semibold tracking-tight text-white mb-8">Publications</h2>
+	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-200">
+		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Publications</h2>
 		<div class="space-y-5">
 			{resumeData.publications.map((pub) => (
-				<div class="group relative pl-4 border-l-2 border-slate-700 hover:border-cyan-500 transition-colors">
-					<div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-slate-700 group-hover:bg-cyan-400 transition-colors"></div>
-					<p class="text-white text-base font-medium leading-snug">{pub.title}</p>
+				<div class="group relative pl-4 border-l-2 border-border-strong hover:border-accent transition-colors">
+					<div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-border-strong group-hover:bg-accent transition-colors"></div>
+					<p class="text-text-primary text-base font-medium leading-snug">{pub.title}</p>
 					<div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 mt-1">
-						<span class="text-slate-400 text-sm">{pub.venue}</span>
-						<span class="font-mono text-cyan-400/80 text-sm">{pub.year}{pub.note ? ` · ${pub.note}` : ''}</span>
+						<span class="text-text-muted text-sm">{pub.venue}</span>
+						<span class="font-mono text-accent/80 text-sm">{pub.year}{pub.note ? ` · ${pub.note}` : ''}</span>
 					</div>
 				</div>
 			))}
@@ -145,7 +145,7 @@ import resumeData from '../data/resume.json';
 	<div class="mt-20 flex justify-center">
 		<button
 			id="back-to-top"
-			class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-slate-400 hover:text-white bg-slate-800/60 hover:bg-slate-700/80 rounded-xl transition-all border border-slate-700 hover:border-cyan-500/50 shadow-lg hover:shadow-[0_0_15px_rgba(34,211,238,0.15)] backdrop-blur-sm cursor-pointer"
+			class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-text-muted hover:text-text-primary bg-bg-card hover:bg-bg-card-hover rounded-xl transition-all border border-border-subtle hover:border-accent/50 shadow-lg hover:shadow-[0_0_15px_var(--color-accent-bg)] backdrop-blur-sm cursor-pointer"
 		>
 			<svg class="w-4 h-4 transition-transform group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
 				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>

@@ -18,36 +18,36 @@ function formatDate(date: Date): string {
 <Layout title="Blog | Emad Gohari" description="Thoughts on machine learning, AI, and software engineering.">
 	<section class="py-16 fade-in-up w-full">
 		<div class="mb-12">
-			<h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-3">Blog</h1>
-			<p class="text-slate-400 text-lg">Thoughts on machine learning, AI, and software engineering.</p>
+			<h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-3">Blog</h1>
+			<p class="text-text-secondary text-lg">Thoughts on machine learning, AI, and software engineering.</p>
 		</div>
 
 		{posts.length === 0 ? (
-			<p class="text-slate-500 text-center py-20">No posts yet. Check back soon.</p>
+			<p class="text-text-muted text-center py-20">No posts yet. Check back soon.</p>
 		) : (
 			<div class="space-y-6">
 				{posts.map((post) => (
 					<a
 						href={`/blog/${post.id.replace(/\.md$/, '')}/`}
-						class="group block p-6 rounded-2xl border border-slate-700/60 bg-slate-800/40 hover:bg-slate-800/70 hover:border-cyan-500/40 backdrop-blur-sm transition-all shadow-lg hover:shadow-[0_0_20px_rgba(34,211,238,0.08)]"
+						class="group block p-6 rounded-2xl border border-border-subtle bg-bg-card hover:bg-bg-card-hover hover:border-accent/40 backdrop-blur-sm transition-all shadow-lg hover:shadow-[0_0_20px_var(--color-accent-bg)]"
 					>
 						<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-							<h2 class="text-xl font-semibold text-white group-hover:text-cyan-400 transition-colors">
+							<h2 class="text-xl font-semibold text-text-primary group-hover:text-accent transition-colors">
 								{post.data.title}
 							</h2>
-							<time class="text-sm font-mono text-cyan-400/70 shrink-0" datetime={post.data.pubDate.toISOString()}>
+							<time class="text-sm font-mono text-accent/70 shrink-0" datetime={post.data.pubDate.toISOString()}>
 								{formatDate(post.data.pubDate)}
 							</time>
 						</div>
 
-						<p class="text-slate-400 text-sm leading-relaxed mb-4">
+						<p class="text-text-muted text-sm leading-relaxed mb-4">
 							{post.data.description}
 						</p>
 
 						{post.data.tags && post.data.tags.length > 0 && (
 							<div class="flex flex-wrap gap-2">
 								{post.data.tags.map((tag: string) => (
-									<span class="px-2.5 py-0.5 text-xs font-medium rounded-md bg-slate-800/80 text-slate-400 border border-slate-700/60">
+									<span class="px-2.5 py-0.5 text-xs font-medium rounded-md bg-bg-card text-text-muted border border-border-subtle">
 										{tag}
 									</span>
 								))}

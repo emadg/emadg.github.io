@@ -20,6 +20,61 @@
     initParticles();
   });
 
+  // Color Management
+  let particleColor = { r: 100, g: 149, b: 237, a: 0.6 }; // Initial fallback
+  let targetParticleColor = { ...particleColor };
+
+  function parseColor(colorStr: string) {
+    // Check for rgba/rgb
+    const match = colorStr.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+    if (match) {
+      return {
+        r: parseInt(match[1]),
+        g: parseInt(match[2]),
+        b: parseInt(match[3]),
+        a: match[4] ? parseFloat(match[4]) : 1
+      };
+    }
+    // Check for hex (simple support)
+    if (colorStr.startsWith('#')) {
+        const hex = colorStr.substring(1);
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        return { r, g, b, a: 1 };
+    }
+    return null;
+  }
+
+  function updateTargetColor() {
+    const style = getComputedStyle(document.documentElement);
+    const color = style.getPropertyValue('--particle-color').trim();
+    if (color) {
+        const parsed = parseColor(color);
+        if (parsed) {
+            targetParticleColor = parsed;
+        }
+    }
+  }
+
+  // Initial color fetch
+  updateTargetColor();
+
+  // Watch for theme changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        updateTargetColor();
+      }
+    });
+  });
+  observer.observe(document.documentElement, { attributes: true });
+
+  // Linear interpolation
+  function lerp(start: number, end: number, factor: number) {
+    return start + (end - start) * factor;
+  }
+
   // Particle Settings
   const particleCount = Math.min(Math.floor(window.innerWidth / 8), 250); // Increased density significantly
   const particles: Particle[] = [];
@@ -49,11 +104,11 @@
       if (this.y < 0 || this.y > height) this.vy *= -1;
     }
 
-    draw() {
+    draw(colorStr: string) {
       if(!ctx) return;
       ctx.beginPath();
       ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(100, 149, 237, 0.6)'; // Cornflower blue/cyan-ish
+      ctx.fillStyle = colorStr;
       ctx.fill();
     }
   }
@@ -69,9 +124,23 @@
     if(!ctx) return;
     ctx.clearRect(0, 0, width, height);
 
+    // Smoothly transition color
+    const factor = 0.1; // Transition speed
+    particleColor.r = lerp(particleColor.r, targetParticleColor.r, factor);
+    particleColor.g = lerp(particleColor.g, targetParticleColor.g, factor);
+    particleColor.b = lerp(particleColor.b, targetParticleColor.b, factor);
+    particleColor.a = lerp(particleColor.a, targetParticleColor.a, factor);
+
+    const r = Math.round(particleColor.r);
+    const g = Math.round(particleColor.g);
+    const b = Math.round(particleColor.b);
+    const a = particleColor.a;
+    const colorStr = `rgba(${r}, ${g}, ${b}, ${a})`;
+    const rgbStr = `${r}, ${g}, ${b}`; // For lines
+
     for (let i = 0; i < particles.length; i++) {
       particles[i].update();
-      particles[i].draw();
+      particles[i].draw(colorStr);
 
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
@@ -85,7 +154,8 @@
           
           // Opacity based on distance
           const opacity = 1 - (distance / connectionDistance);
-          ctx.strokeStyle = `rgba(100, 149, 237, ${opacity * 0.2})`;
+          // Use the interpolated RGB but scale opacity
+          ctx.strokeStyle = `rgba(${rgbStr}, ${opacity * 0.2})`;
           ctx.lineWidth = 1;
           ctx.stroke();
         }
