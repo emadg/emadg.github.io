@@ -29,75 +29,45 @@ Browser Request
 
 - Imports Google Fonts (Inter + JetBrains Mono) and TailwindCSS.
 - Defines custom font families in the `@theme` block.
-- Sets base body styles: `bg-slate-950`, white text, antialiased.
+- **Defines Semantic Color Tokens**: Maps generic names (e.g., `--color-bg-body`) to specific values for Light (`:root`) and Dark (`:root.dark`) modes.
+- Sets base body styles using these semantic tokens.
 - Defines the `fade-in-up` animation and sequential delay classes.
-- Defines 3D flip-card utilities: `perspective-1000`, `transform-style-3d`, `backface-hidden`, `rotate-y-180`.
-- Defines `.card-inner` grid stacking (both front/back sides in `grid-area: 1/1`) for dynamic card height.
+- Defines 3D flip-card utilities and `.card-inner` grid stacking.
+- Defines the `.theme-transition` class for smooth color swapping.
 
 ### `src/layouts/Layout.astro`
 
 - Accepts `title` and optional `description` props.
-- Renders the `<NetworkBackground />` as a fixed full-screen layer behind everything.
-- Wraps the page content in a central frosted-glass panel:
-  - `bg-slate-900/20` (low opacity dark background)
-  - `backdrop-blur-[6px]` (light blur so the particle animation is subtly visible through it)
-  - `max-w-5xl` (constrains width)
-  - Full-height with `min-h-screen`
-- Contains a minimal footer at the bottom of the panel.
+- **Theme Logic**: Includes an inline `<script>` in `<head>` to prevent Flash of Wrong Theme (FOWT). It checks `localStorage` or `prefers-color-scheme` and applies the `.dark` class immediately.
+- Renders the `<NetworkBackground />` as a fixed full-screen layer.
+- Wraps content in a central frosted-glass panel using semantic background/border tokens.
+- Uses `transform-gpu` to ensure smooth rendering of the backdrop blur.
 
 ### `src/components/NetworkBackground.astro`
 
 Two layers:
 1. A `<canvas>` element that renders animated particles.
-2. A `<div>` overlay with an inline SVG fractal noise texture at very low opacity (`0.03`).
+2. A `<div>` overlay with an inline SVG fractal noise texture.
 
 The `<script>` block:
-- Creates `particleCount` particles (density: `innerWidth / 8`, max 250).
-- Each particle is a dot with radius 1.5 to 4.0 px, colored cornflower blue (`rgba(100, 149, 237, 0.6)`).
-- Particles drift slowly (speed 0.3) and bounce off edges.
-- Lines are drawn between particles within 180px of each other, with opacity fading by distance.
-- Runs via `requestAnimationFrame`.
-
-**Tuning knobs:**
-| Variable | Current | Effect |
-|---|---|---|
-| `particleCount` divisor | `8` | Lower = more particles |
-| `connectionDistance` | `180` | Higher = more connecting lines |
-| `particleSpeed` | `0.3` | Higher = faster movement |
-| Particle `radius` | `1.5 - 4.0` | Dot size range |
-| Dot color RGBA | `(100, 149, 237, 0.6)` | Cornflower blue |
-| Line opacity multiplier | `0.2` | Subtlety of connection lines |
+- Creates particles that drift and connect with lines.
+- **Theme Reactivity**: Observes the `<html>` element for class changes. When the theme toggles, it smoothly interpolates the particle colors (Cornflower Blue for dark, Darker Blue for light) over ~400ms.
 
 ### `src/components/Hero.astro`
 
-- Renders a pulsing cyan badge, the main headline (with gradient text), a summary paragraph, and social links (Email, GitHub, LinkedIn).
-- All elements use the `fade-in-up` animation class with staggered delays.
-- **To customize:** edit the text directly in the file, or update the `href` values for social links.
+- Renders a pulsing accent badge, headline, summary, and social links.
+- Uses semantic color tokens (e.g., `text-text-primary`, `text-text-muted`) to adapt to the active theme.
 
 ### `src/components/Resume.astro`
 
-- Imports data from `src/data/resume.json` at build time.
-- Renders a "Download Resume PDF" button linking to `/resume.pdf`.
-- Builds a centered vertical timeline (`max-w-4xl`):
-  - A thin gradient line runs down the center of the page.
-  - Glowing cyan dots sit on the line for each entry.
-  - Cards alternate left and right (`index % 2`).
-  - Experience cards are 3D flip cards (dynamic height via CSS grid): front shows role/company/period/location, back shows detailed description.
-  - Education cards appear after experience on the timeline (single-sided, no flip).
-- Below the timeline: Skills (tag pills), Projects (two-column card grid), Publications (accent-border list).
-
-**3D Flip Logic** (in the `<script>` block):
-- An `IntersectionObserver` with `rootMargin: '-45% 0px -45% 0px'` fires when a card enters the middle 10% band of the viewport, toggling `rotate-y-180` on the `.card-inner` element.
-- Mouse `mouseenter` also adds `rotate-y-180`.
-- Mouse `mouseleave` only removes it if the card is NOT currently in the center intersection zone.
+- Imports data from `src/data/resume.json`.
+- Builds the timeline, skills, and project sections using semantic tokens for backgrounds, borders, and text.
+- 3D Flip Logic remains the same, but card styles now adapt to light/dark mode.
 
 ### `src/components/Nav.astro`
 
-- Top navigation bar rendered inside `Layout.astro`, above the `<main>` content.
-- Left side: "EG." monogram linking to home.
-- Right side: "Home" and "Blog" links with active-state highlighting (cyan text + subtle bg).
-- The "Blog" link is **conditionally rendered**: at build time it fetches the blog collection via `getCollection('blog')` and only shows the link if posts exist.
-- Uses `Astro.url.pathname` to determine which link is active.
+- Top navigation bar.
+- **Theme Toggle**: Includes a sun/moon button that toggles the `.dark` class on `<html>`, saves the preference to `localStorage`, and triggers a temporary `.theme-transition` class for smooth animation.
 
 ### `src/content/config.ts`
 
@@ -141,17 +111,21 @@ Defines an Astro content collection called `blog` with a Zod schema:
 
 ### Change the color accent
 
-The accent color is **cyan** from Tailwind's default palette (`cyan-400`, `cyan-500`, etc.). Search globally for `cyan-` and replace with your preferred Tailwind color (e.g. `emerald-`, `violet-`, `amber-`).
+The accent color is defined in `src/styles/global.css` under the `:root` and `:root.dark` blocks. Look for `--accent`, `--accent-hover`, and `--accent-bg`. Change the hex codes to your preferred color (e.g., Emerald, Violet).
 
 ### Change the background color tone
 
-The page background is `bg-slate-950` (set in `global.css`). The `slate` palette is naturally blue-gray. To shift warmer, use `zinc-` or `neutral-`. To shift cooler/more blue, use `blue-` with high numbers.
+The page background is defined in `src/styles/global.css` as `--bg-body`.
+- **Light Mode**: Defaults to `#f1f5f9` (Slate 100).
+- **Dark Mode**: Defaults to `#020617` (Slate 950).
+Update these values to shift the tone (e.g., to Zinc or Neutral).
 
 ### Adjust the frosted glass transparency
 
-In `Layout.astro`, the central panel has two key classes:
-- `bg-slate-900/20` - the `/20` is the opacity (0-100). Increase it to make the panel more opaque.
-- `backdrop-blur-[6px]` - increase the pixel value for heavier blur, decrease for more transparency.
+In `src/styles/global.css`, adjust the `--bg-panel` variable:
+- **Light Mode**: `rgba(255, 255, 255, 0.4)`
+- **Dark Mode**: `rgba(15, 23, 42, 0.2)`
+To change the blur amount, edit `src/layouts/Layout.astro` and look for `backdrop-blur-[5px]`.
 
 ### Add a new page
 

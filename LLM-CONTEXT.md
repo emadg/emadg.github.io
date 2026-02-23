@@ -27,10 +27,10 @@ A personal website and portfolio for Emad Gohari, a Senior Research Engineer spe
 - Prose/typography styles for rendered Markdown blog content (`global.css`)
 - Sample blog post (`src/content/blog/building-ml-pipelines.md`)
 - Custom "EG" monogram favicon with cyan-to-blue gradient (`public/favicon.svg`)
+- **Dark/Light mode toggle** with smooth transitions and system preference detection
 
 **Not yet implemented:**
 - SEO meta tags (Open Graph, Twitter cards)
-- Dark/light mode toggle (currently dark-only)
 - Mobile-optimized timeline (cards currently use 50% width which is narrow on phones)
 
 ## File Map
@@ -70,16 +70,23 @@ public/
 
 ## Design Language
 
-- **Background**: `bg-slate-950` with an animated canvas of cornflower-blue particles (`rgba(100, 149, 237, 0.6)`) connected by fading lines.
-- **Central panel**: `bg-slate-900/20`, `backdrop-blur-[6px]`, bordered on left/right by `border-slate-700/30`. Max width `max-w-5xl`.
-- **Accent color**: Cyan (`cyan-400`, `cyan-500`) used for badges, glows, hover states, timeline dots.
+- **Background**: Animated canvas with particle network.
+  - **Dark Mode**: `bg-slate-950` with cornflower-blue particles (`rgba(100, 149, 237, 0.6)`).
+  - **Light Mode**: `bg-slate-100` (`#f1f5f9`) with darker blue particles (`rgba(30, 64, 175, 0.7)`) for contrast.
+- **Central panel**: Frosted-glass effect.
+  - **Dark Mode**: `bg-slate-900/20`, `backdrop-blur-[5px]`.
+  - **Light Mode**: `bg-white/40`, `backdrop-blur-[4px]`.
+  - Bordered on left/right by subtle borders (`border-slate-700/30` or `border-slate-300`). Max width `max-w-5xl`.
+- **Accent color**: Cyan (`cyan-400`/`cyan-600`) used for badges, glows, hover states, timeline dots.
 - **Typography**: Inter (sans-serif, body text), JetBrains Mono (monospace, dates/code). Loaded via Google Fonts CDN.
-- **Animations**: CSS `fade-in-up` keyframes with staggered delays. Canvas animation runs via `requestAnimationFrame`.
+- **Animations**: CSS `fade-in-up` keyframes with staggered delays. Canvas animation runs via `requestAnimationFrame`. Smooth theme transitions (~400ms) on toggle.
 - **Resume cards**: CSS grid stacking (`.card-inner` uses `display: grid` with both sides in `grid-area: 1/1`) for dynamic height. 3D CSS transforms (`perspective`, `transform-style: preserve-3d`, `backface-visibility: hidden`, `rotateY(180deg)`). Flip triggers: hover and IntersectionObserver when card enters center 10% of viewport.
 
 ## Key Technical Details
 
-- TailwindCSS v4 uses the Vite plugin (`@tailwindcss/vite`), NOT a `tailwind.config.js` file. Custom theme tokens go in `@theme {}` inside `global.css`.
+- TailwindCSS v4 uses the Vite plugin (`@tailwindcss/vite`), NOT a `tailwind.config.js` file.
+- **Theming**: Implemented via CSS custom properties (variables) in `src/styles/global.css`. Semantic tokens (e.g., `--bg-body`, `--text-primary`) map to different values for `:root` (light) and `:root.dark`.
+- **Theme Toggle**: `Nav.astro` contains the toggle button. `Layout.astro` includes an inline script to prevent flash-of-wrong-theme (FOWT) by checking `localStorage` or system preference before render.
 - There are NO React/Vue/Svelte dependencies. Components are all `.astro` (server-rendered). Client-side interactivity is vanilla TypeScript in `<script>` tags.
 - Resume data is imported as JSON at build time (`import resumeData from '../data/resume.json'`), not fetched at runtime.
 - The blog content collection uses Astro's legacy `type: 'content'` API. `post.id` includes the `.md` extension and must be stripped for clean URLs.
