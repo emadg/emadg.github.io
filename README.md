@@ -142,9 +142,15 @@ npm run pdf
 
 # Or specify a custom Chrome path
 CHROME_PATH="/path/to/chrome" npm run pdf
+
+# Custom output file or directory (--dir writes resume.pdf inside the folder)
+npm run pdf -- --out ./build/my-cv.pdf
+npm run pdf -- --dir ./exports
+PDF_OUT=./out.pdf npm run pdf
+npm run pdf -- --help
 ```
 
-This starts the dev server, renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf`, and shuts down. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+This starts the dev server, renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` by default, and shuts down. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
 
 You can also preview the print layout in your browser at `http://localhost:4321/resume` while the dev server is running.
 
