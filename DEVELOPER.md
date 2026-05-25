@@ -87,11 +87,11 @@ Defines an Astro content collection called `blog` with a Zod schema:
 
 ### `scripts/generate-pdf.mjs`
 
-- Node.js script that generates `public/resume.pdf` from the `/resume` page.
+- Node.js script that generates a PDF from the `/resume` page (default path: `public/resume.pdf`).
 - Uses `puppeteer-core` (dev dependency) with the system's Chrome/Chromium — no bundled browser download.
 - Auto-detects Chrome on macOS, Linux, and Windows. Override with `CHROME_PATH` env var.
 - Workflow: starts Astro dev server → waits for it → opens headless Chrome → prints to PDF → shuts down.
-- Run via `npm run pdf`.
+- Run via `npm run pdf`. Optional output: `npm run pdf -- --out ./build/cv.pdf`, `npm run pdf -- --dir ./exports` (writes `resume.pdf` in that folder), or `PDF_OUT=./out.pdf npm run pdf`. See `npm run pdf -- --help`.
 
 ### `src/pages/blog/index.astro`
 
