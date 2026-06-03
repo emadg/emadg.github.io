@@ -3,10 +3,11 @@ import resumeData from '../data/resume.json';
 
 const contact = {
 	name: "Emad Gohari",
-	title: "Senior Machine Learning Research Engineer II - AI, LLMs, NLP",
+	title: "Senior Machine Learning Engineer - AI, LLM, NLP",
 	email: "E.Gohari.B@gmail.com",
 	github: "github.com/emadg",
 	linkedin: "linkedin.com/in/emad-gohari",
+	website: "EmadGohari.com",
 };
 ---
 
@@ -14,9 +15,9 @@ const contact = {
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>{contact.name} — Resume</title>
+	<title>{contact.name} | Resume</title>
 	<style>
-		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=PT+Serif:wght@700&display=swap');
 
 		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -44,17 +45,32 @@ const contact = {
 		header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
 		header .name-row .title { font-size: 12px; font-weight: 400; color: #444; }
 		header .contact-row {
-			display: flex; gap: 16px; margin-top: 6px;
+			display: flex; gap: 16px; margin-top: 8px; padding-top: 7px;
+			border-top: 1px solid #ddd;
 			font-size: 9.5px; color: #555;
 		}
-		header .contact-row a { color: #555; }
+		header .contact-row a {
+			color: #555; display: inline-flex; align-items: center; gap: 4px;
+		}
+		header .contact-row svg {
+			flex-shrink: 0; width: 10px; height: 10px;
+		}
 
 		/* ---- Sections ---- */
 		section { margin-bottom: 12px; }
 		section h2 {
-			font-size: 11.5px; font-weight: 700; text-transform: uppercase;
-			letter-spacing: 1.2px; color: #111;
+			font-family: 'PT Serif', Georgia, serif;
+			font-size: 13px; font-weight: 700; font-style: normal; text-transform: uppercase;
+			color: #111;
 			border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 7px;
+			display: flex; align-items: center; gap: 7px;
+		}
+		section h2::before {
+			content: '';
+			display: inline-block;
+			width: 2px; height: 11px;
+			background: #111;
+			flex-shrink: 0;
 		}
 
 		/* ---- Experience / Education entries ---- */
@@ -115,9 +131,22 @@ const contact = {
 			<span class="title">{contact.title}</span>
 		</div>
 		<div class="contact-row">
-			<span>{contact.email}</span>
-			<span>{contact.github}</span>
-			<span>{contact.linkedin}</span>
+			<a href={`mailto:${contact.email}`}>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+				{contact.email}
+			</a>
+			<a href={`https://${contact.github}`}>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.373 0 12c0 5.303 3.438 9.8 8.205 11.387.6.113.82-.258.82-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576C20.566 21.797 24 17.3 24 12c0-6.627-5.373-12-12-12z"/></svg>
+				{contact.github}
+			</a>
+			<a href={`https://${contact.linkedin}`}>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+				{contact.linkedin}
+			</a>
+			<a href={`https://${contact.website}`}>
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+				{contact.website}
+			</a>
 		</div>
 	</header>
 
@@ -127,7 +156,7 @@ const contact = {
 		{resumeData.experience.map((job) => (
 			<div class="entry">
 				<div class="entry-header">
-					<h3>{job.role} — {job.company}</h3>
+					<h3>{job.role} at {job.company}</h3>
 					<span class="period">{job.period}</span>
 				</div>
 				<div class="entry-sub">{job.location}</div>
@@ -142,7 +171,7 @@ const contact = {
 		{resumeData.education.map((edu) => (
 			<div class="entry">
 				<div class="entry-header">
-					<h3>{edu.degree} — {edu.institution}</h3>
+					<h3>{edu.degree}, {edu.institution}</h3>
 					<span class="period">{edu.period}</span>
 				</div>
 				<div class="entry-sub">{edu.location}{edu.grade ? ` · GPA: ${edu.grade}` : ''}</div>

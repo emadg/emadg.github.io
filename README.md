@@ -24,7 +24,7 @@ npm run preview
 |-------|------|---------|
 | Framework | [Astro](https://astro.build) | 5.x |
 | Styling | [TailwindCSS](https://tailwindcss.com) | 4.x |
-| Fonts | Inter (body), JetBrains Mono (code) | Google Fonts CDN |
+| Fonts | Inter (body), JetBrains Mono (code), PT Serif (resume page headings) | Google Fonts CDN |
 | Language | TypeScript (strict) | - |
 
 ## Project Structure
