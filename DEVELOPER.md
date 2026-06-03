@@ -80,8 +80,11 @@ Defines an Astro content collection called `blog` with a Zod schema:
 ### `src/pages/resume.astro`
 
 - Print-optimized HTML resume page that reads all data from `resume.json`.
-- Uses vanilla CSS (no Tailwind) for precise print control: Inter font, Letter-size `@page` rule, proper margins.
-- Sections: header (name + title), experience, education, projects (two-column grid), publications, skills.
+- Uses vanilla CSS (no Tailwind) for precise print control: Inter + PT Serif fonts, Letter-size `@page` rule, proper margins.
+- **Contact row**: clickable links with inline SVG icons for email, GitHub, LinkedIn, and website (`EmadGohari.com`). Separated from name/title by a thin horizontal rule.
+- **Section headings**: PT Serif bold, uppercase, with a 2px × 11px vertical bar accent via CSS `::before` (no markup changes needed to add/remove sections).
+- **Entry format**: "Role at Company" for experience; "Degree, Institution" for education.
+- Section order: header (name + title + contact), experience, education, projects (two-column grid), publications, skills.
 - Accessible at `/resume` during development for previewing before PDF generation.
 - **Not linked from the main site navigation** — it exists solely as a PDF source.
 

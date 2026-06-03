@@ -6,7 +6,7 @@ Use this document as a starting prompt when resuming development on this project
 
 A personal website and portfolio for Emad Gohari, a Senior Research Engineer specializing in NLP & Machine Learning. It is a static site built with **Astro 5.x** and **TailwindCSS 4.x** using TypeScript in strict mode. The site has a dark, blue-gray aesthetic with a frosted-glass central panel over an animated particle-network canvas background.
 
-## Current State (as of Feb 2026)
+## Current State (as of Jun 2026)
 
 **Implemented:**
 - Animated particle-network canvas background (`src/components/NetworkBackground.astro`)
@@ -28,6 +28,12 @@ A personal website and portfolio for Emad Gohari, a Senior Research Engineer spe
 - Sample blog post (`src/content/blog/building-ml-pipelines.md`)
 - Custom "EG" monogram favicon with cyan-to-blue gradient (`public/favicon.svg`)
 - **Dark/Light mode toggle** with smooth transitions and system preference detection
+- Print-optimized resume page (`src/pages/resume.astro`) visual enhancements:
+  - Contact row upgraded to clickable links with inline SVG icons (email, GitHub, LinkedIn, website)
+  - Website field added to contact header (`EmadGohari.com`)
+  - Section headings use **PT Serif bold** font with a decorative **2px vertical bar accent** via CSS `::before`
+  - Entry format: "Role at Company" / "Degree, Institution" (comma/at separators instead of em-dash)
+- PDF generation script (`scripts/generate-pdf.mjs`) accepts `--out <file>`, `--dir <folder>`, and `PDF_OUT` env var for custom output paths
 
 **Not yet implemented:**
 - SEO meta tags (Open Graph, Twitter cards)
@@ -55,13 +61,13 @@ src/
     blog/                    # Markdown blog posts (add .md files here to populate the blog)
   pages/
     index.astro              # Composes Layout > Hero > Resume
-    resume.astro             # Print-optimized HTML resume for PDF generation (not linked from nav)
+    resume.astro             # Print-optimized HTML resume for PDF generation (not linked from nav); contact row with SVG icons + PT Serif section headings with vertical bar accent
     blog/
       index.astro            # Blog listing page, sorted by date descending
       [slug].astro           # Individual blog post page with prose-styled Markdown rendering
 
 scripts/
-    generate-pdf.mjs         # Puppeteer script: starts dev server, renders /resume → public/resume.pdf via system Chrome
+    generate-pdf.mjs         # Puppeteer script: starts dev server, renders /resume → public/resume.pdf; supports --out <file>, --dir <folder>, PDF_OUT env var
 
 public/
     resume.pdf               # Generated PDF resume (run `npm run pdf` to regenerate)
@@ -78,7 +84,7 @@ public/
   - **Light Mode**: `bg-white/40`, `backdrop-blur-[4px]`.
   - Bordered on left/right by subtle borders (`border-slate-700/30` or `border-slate-300`). Max width `max-w-5xl`.
 - **Accent color**: Cyan (`cyan-400`/`cyan-600`) used for badges, glows, hover states, timeline dots.
-- **Typography**: Inter (sans-serif, body text), JetBrains Mono (monospace, dates/code). Loaded via Google Fonts CDN.
+- **Typography**: Inter (sans-serif, body text), JetBrains Mono (monospace, dates/code). Loaded via Google Fonts CDN. **PT Serif bold** is used exclusively in the print resume page (`resume.astro`) for section headings.
 - **Animations**: CSS `fade-in-up` keyframes with staggered delays. Canvas animation runs via `requestAnimationFrame`. Smooth theme transitions (~400ms) on toggle.
 - **Resume cards**: CSS grid stacking (`.card-inner` uses `display: grid` with both sides in `grid-area: 1/1`) for dynamic height. 3D CSS transforms (`perspective`, `transform-style: preserve-3d`, `backface-visibility: hidden`, `rotateY(180deg)`). Flip triggers: hover and IntersectionObserver when card enters center 10% of viewport.
 
@@ -92,7 +98,7 @@ public/
 - The blog content collection uses Astro's legacy `type: 'content'` API. `post.id` includes the `.md` extension and must be stripped for clean URLs.
 - The `Nav.astro` component fetches the blog collection at build time; the "Blog" link only appears when at least one post exists in `src/content/blog/`.
 - Astro's built-in Shiki handles code syntax highlighting in blog posts.
-- PDF generation uses `puppeteer-core` (dev dependency, no bundled browser) with the system's Chrome. Auto-detects on macOS/Linux/Windows; overridable via `CHROME_PATH` env var.
+- PDF generation uses `puppeteer-core` (dev dependency, no bundled browser) with the system's Chrome. Auto-detects on macOS/Linux/Windows; overridable via `CHROME_PATH` env var. Output path is configurable via `--out <file>`, `--dir <folder>`, or `PDF_OUT` env var (default: `public/resume.pdf`).
 
 ## Owner Preferences
 

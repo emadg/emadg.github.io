@@ -5,7 +5,7 @@ pubDate: 2026-02-15
 tags: ["Machine Learning", "MLOps", "Python"]
 ---
 
-One of the most underrated skills in machine learning isn't model architecture — it's pipeline design. A model that can't be reliably retrained, validated, and deployed is a model that will rot.
+One of the most underrated skills in machine learning isn't model architecture: it's pipeline design. A model that can't be reliably retrained, validated, and deployed is a model that will rot.
 
 ## Why Pipelines Matter
 
@@ -22,11 +22,11 @@ A well-designed pipeline solves all of these by making the workflow **reproducib
 
 At a high level, an ML pipeline has a few distinct stages:
 
-1. **Data ingestion** — pull raw data from its source (database, API, object storage)
-2. **Preprocessing** — clean, transform, and feature-engineer
-3. **Training** — fit the model with tracked hyperparameters
-4. **Evaluation** — validate against held-out data, compare to baseline
-5. **Deployment** — push the model artifact to a registry or serving endpoint
+1. **Data ingestion**: pull raw data from its source (database, API, object storage)
+2. **Preprocessing**: clean, transform, and feature-engineer
+3. **Training**: fit the model with tracked hyperparameters
+4. **Evaluation**: validate against held-out data, compare to baseline
+5. **Deployment**: push the model artifact to a registry or serving endpoint
 
 Each stage should be an independent, testable unit. If your preprocessing logic is tangled into your training script, you're going to have a bad time debugging data issues six months from now.
 
