@@ -1,0 +1,170 @@
+{
+  "experience": [
+    {
+      "company": "Thomson Reuters",
+      "location": "Toronto, Canada",
+      "role": "Senior Research Engineer II (AI & ML)",
+      "period": "Jul 2021 - Present",
+      "description": "Senior ML Engineer on CLEAR, Thomson Reuters' flagship due diligence and risk management platform used by banks, law firms, insurance companies, and law enforcement for KYC/AML screening and investigations. Built production ML systems across the full lifecycle — from PII-isolated annotation infrastructure and large-scale data pipelines through to LLM-powered summarization features and a commercially launched agentic investigation product. Operated throughout in a regulated environment where model accuracy has direct compliance and legal consequences for customers."
+    },
+    {
+      "company": "INAGO INC.",
+      "location": "Toronto, Canada",
+      "role": "NLP & Machine Learning Engineer",
+      "period": "Jul 2018 - Jun 2021",
+      "description": "Built NLP models for language understanding engines and automated text generation, including fine-tuning transformer models (BERT, T5) for domain-specific tasks. Managed the full training lifecycle — data preparation, model training, evaluation, and deployment — and led collaborative research projects with university partners in automated text generation and linguistics."
+    }
+  ],
+  "education": [
+    {
+      "institution": "York University",
+      "location": "Toronto, Canada",
+      "degree": "M.Sc. in Computer Science",
+      "grade": "8.17 / 9",
+      "period": "2014 - 2018",
+      "note": "Thesis: Interactive Question Answering Using Frame-based Knowledge Representation"
+    },
+    {
+      "institution": "Amirkabir University of Technology",
+      "location": "Tehran, Iran",
+      "degree": "B.Sc. in Computer Engineering",
+      "grade": "17.18 / 20",
+      "period": "2010 - 2014",
+      "note": null
+    }
+  ],
+  "skills": [
+    "Python",
+    "PyTorch",
+    "Scikit-Learn",
+    "Numpy",
+    "Pandas",
+    "SpaCy",
+    "NLTK",
+    "Transformers",
+    "Large Language Models",
+    "Prompt Engineering",
+    "Agentic AI",
+    "PydanticAI",
+    "Retrieval-Augmented Generation (RAG)",
+    "LLM Evaluation",
+    "NLP",
+    "Machine Learning",
+    "Deep Learning",
+    "XGBoost",
+    "Apache Spark",
+    "AWS",
+    "Amazon SageMaker",
+    "AWS CloudFormation",
+    "Docker",
+    "PostgreSQL",
+    "Elasticsearch",
+    "Opensearch",
+    "OpenAI API",
+    "Java",
+    "Scala",
+    "Bash",
+    "Agile Development"
+  ],
+  "projects": [
+    {
+      "name": "Agentic Investigation System — CLEAR Investigate",
+      "year": "2025",
+      "description": "Contributed to building CLEAR Investigate, Thomson Reuters' first agentic AI product for investigation and due diligence, live in production for financial services, insurance, and law enforcement professionals. Designed and built the agent experimentation architecture using PydanticAI, enabling rapid prototyping of multi-step investigation workflows that orchestrate across entity search, report retrieval, web search, and an internal knowledge graph. Implemented LLM call caching reducing API costs by ~25–30%. Built automated LLM-as-judge evaluation pipelines assessing citation accuracy, tool use correctness, hallucination rate, and answer relevance. Coordinated SME annotation tasks to produce ground-truth datasets for systematic agent capability benchmarking.",
+      "tech": [
+        "Python",
+        "PydanticAI",
+        "OpenAI GPT-4",
+        "Claude Sonnet",
+        "LLM-as-Judge Evaluation",
+        "AWS"
+      ]
+    },
+    {
+      "name": "CLEAR Business AI — GenAI Report Summarization",
+      "year": "2024",
+      "description": "Built the AI-powered summary system for CLEAR Business entity reports, live in production processing hundreds of reports daily. Designed a selective XML parsing engine extracting only relevant sections per prompt, preventing long-context degradation without truncation. Engineered a multi-prompt LLM architecture with separate targeted calls for business overview, risk analysis, and social media and contact discovery. Added Bing Search integration with a verification LLM call to filter name-collision false positives, and citation linking from every summary claim back to exact source locations. Completed multiple SME annotation and evaluation rounds before production launch.",
+      "tech": [
+        "Python",
+        "OpenAI GPT-4",
+        "Claude Sonnet",
+        "Bing Search API",
+        "Prompt Engineering",
+        "XML Processing"
+      ]
+    },
+    {
+      "name": "Entity Resolution Data Infrastructure — CLEAR KYC/AML Platform",
+      "year": "2022 - 2024",
+      "description": "Designed and built the core data engineering infrastructure for a next-generation entity resolution system operating across ~800M entities and billions of documents, with a 700 idents/second throughput target. Architected a PII-isolated AWS environment (SageMaker Studio, CloudFormation, per-researcher profiles) ensuring sensitive data never left the secure perimeter. Designed a unified versioned JSON schema reconciling two structurally incompatible annotation sources spanning hundreds of thousands of labeled records, with Spark and Python pipelines for complex multi-format merging, normalization, and conflict signal surfacing to enable reliable model experimentation. Later automated the full pipeline into SageMaker Pipelines, replacing manual execution with a reproducible scheduled workflow.",
+      "tech": [
+        "Spark",
+        "Python",
+        "Scikit-Learn",
+        "AWS SageMaker",
+        "CloudFormation",
+        "S3",
+        "EMR",
+        "OpenSearch",
+        "RDS"
+      ]
+    },
+    {
+      "name": "Semantic Search Improvement — Checkpoint Tax Research",
+      "year": "2021",
+      "description": "Designed and shipped a semantic search improvement for Checkpoint, Thomson Reuters' tax research platform, improving access to general and conceptual documents by 95% for users unfamiliar with domain-specific terminology. Built a query intent classifier using sentence embeddings to distinguish conceptual queries from specific lookups, dynamically promoting higher-level content in results. Delivered as a production feature within a ~100ms latency budget, directly addressing a gap surfaced by SMEs and customers.",
+      "tech": [
+        "Python",
+        "Sentence Embeddings",
+        "NLTK",
+        "Elasticsearch",
+        "AWS",
+        "Java"
+      ]
+    },
+    {
+      "name": "Automated Question Generation from Documents",
+      "year": "2020",
+      "description": "Fine-tuned T5 transformer for automated question generation from documents, reducing manual data curation effort by 40%. Systematically experimented with model input representations and evaluated outputs using BLEURT. Part of a collaborative research project with university partners.",
+      "tech": ["PyTorch", "SpaCy", "HuggingFace Transformers", "Python"]
+    },
+    {
+      "name": "Domain-Specific Language Understanding Engine",
+      "year": "2019",
+      "description": "Trained domain-specific Word2Vec embeddings and developed LSTM-based NLU models with detailed interpretability testing to improve language understanding accuracy and model transparency.",
+      "tech": ["PyTorch", "Python", "Word2Vec", "LSTM"]
+    },
+    {
+      "name": "Conversational Question Answering",
+      "year": "2018",
+      "description": "Built a question answering dialogue system powered by syntactic and semantic document analysis and ontology generation, enabling domain-specific QA through a dialogue interface. Developed as part of a collaborative project with an industrial partner.",
+      "tech": ["SpaCy", "Python"]
+    }
+  ],
+  "publications": [
+    {
+      "title": "Question-worthy sentence selection for question generation",
+      "venue": "Canadian AI 2020",
+      "year": "2020",
+      "note": "co-authored"
+    },
+    {
+      "title": "Interactive Question Answering Using Frame-based Knowledge Representation",
+      "venue": "York University M.Sc. Thesis",
+      "year": "2018",
+      "note": ""
+    },
+    {
+      "title": "Time aware topic based recommender system",
+      "venue": "Big Data & Information Analytics",
+      "year": "2016",
+      "note": "co-authored"
+    },
+    {
+      "title": "A study on prediction of user's tendency toward purchases in websites based on behavior models",
+      "venue": "Information and Knowledge Technology (IKT), 6th Conference, IEEE",
+      "year": "2014",
+      "note": "co-authored"
+    }
+  ]
+}

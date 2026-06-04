@@ -3,16 +3,16 @@
     {
       "company": "Thomson Reuters",
       "location": "Toronto, Canada",
-      "role": "Senior Research Engineer II",
+      "role": "Senior Machine Learning Engineer II",
       "period": "Jul 2021 - Present",
-      "description": "Delivering software components and ML Pipelines for experimentation & deployment of AI Models (ML/DL/LLM-based models) to improve customers' flagship products, and add new AI features related to NLP, search, knowledge graph, and recommendation problems."
+      "description": "Senior ML Engineer @ TR Labs, working on research for CLEAR products, Thomson Reuters' flagship due diligence platform for KYC/AML screening and investigations. Built production ML systems across the full lifecycle — including a commercially launched agentic investigation product, LLM-powered summarization features, and large-scale data infrastructure — in a regulated environment where model accuracy has direct compliance consequences."
     },
     {
       "company": "INAGO INC.",
       "location": "Toronto, Canada",
       "role": "NLP & Machine Learning Engineer",
       "period": "Jul 2018 - Jun 2021",
-      "description": "Deep neural network development, managing datasets, training, and deployment for Language Understanding Engines and Automated Text Generation Models. [Python, PyTorch, Word Embedding, AWS EC2, SpaCy, NLTK, BERT, T5 models]. Managing collaborative research projects with universities related to Automated Text Generation and Linguistics."
+      "description": "Built NLP models for language understanding and automated text generation, including fine-tuning BERT and T5 for domain-specific tasks. Managed the full training lifecycle and led collaborative research projects with university partners."
     }
   ],
   "education": [
@@ -43,14 +43,24 @@
     "NLTK",
     "Transformers",
     "Large Language Models",
+    "Prompt Engineering",
+    "Agentic AI",
+    "PydanticAI",
+    "Retrieval-Augmented Generation (RAG)",
+    "LLM Evaluation",
     "NLP",
     "Machine Learning",
     "Deep Learning",
+    "XGBoost",
+    "Apache Spark",
     "AWS",
+    "Amazon SageMaker",
+    "AWS CloudFormation",
     "Docker",
     "PostgreSQL",
     "Elasticsearch",
     "Opensearch",
+    "OpenAI API",
     "Java",
     "Scala",
     "Bash",
@@ -58,40 +68,85 @@
   ],
   "projects": [
     {
-      "name": "GenAI Summary for Business Entity Reports",
+      "name": "Agentic Investigation System — CLEAR Investigate",
+      "year": "2025 - 2026",
+      "description": "Contributed to building CLEAR Investigate, Thomson Reuters' first agentic AI product, live in production for customers. Designed the agent experimentation architecture using PydanticAI for rapid prototyping of multi-step workflows across entity search, report retrieval, web search, and an internal knowledge graph. Implemented LLM caching (~25% cost reduction), automated LLM-as-judge evaluation pipelines, and SME annotation workflows for ground-truth benchmarking.",
+      "tech": [
+        "Python",
+        "PydanticAI",
+        "OpenAI GPT-4",
+        "Claude Sonnet",
+        "LLM-as-Judge Evaluation",
+        "AWS"
+      ]
+    },
+    {
+      "name": "CLEAR Business AI — GenAI Report Summarization",
       "year": "2024",
-      "description": "Using LLMs prompting to generate summaries with customer-focused insights to facilitate the use of long business reports. Improving the current data extraction pipeline from reports.",
-      "tech": ["Python", "OpenAI GPT-4", "Claude Sonnet"]
+      "description": "Built the AI-powered summary panel for CLEAR Business entity reports, live in production processing hundreds of reports daily. Designed a selective XML parsing engine and multi-prompt LLM architecture with separate calls for business overview, risk analysis, and social media discovery — with Bing Search integration and a verification LLM call to filter false positives. Implemented citation linking to source locations and ran SME annotation and evaluation rounds before launch.",
+      "tech": [
+        "Python",
+        "OpenAI GPT-4",
+        "Claude Sonnet",
+        "Bing Search API",
+        "Prompt Engineering",
+        "XML Processing"
+      ]
     },
     {
-      "name": "Design and Building New Entity Matching System",
+      "name": "Entity Resolution Data Infrastructure — CLEAR KYC/AML Platform",
       "year": "2022 - 2024",
-      "description": "Worked on new generation of flagship product for Due Diligence and Risk Management.",
-      "tech": ["Spark", "Python", "Java", "Scikit-Learn", "AWS RDS", "Opensearch", "EMR", "SageMaker"]
+      "description": "Designed and built the data engineering infrastructure for an entity resolution system operating across ~800M entities and billions of documents at 700 idents/second. Architected a PII-isolated AWS environment and a unified versioned schema reconciling two incompatible annotation sources spanning hundreds of thousands of labeled records. Built Spark and Python pipelines for multi-format merging, conflict signal surfacing, and model experimentation, later automated into SageMaker Pipelines.",
+      "tech": [
+        "Spark",
+        "Python",
+        "Scikit-Learn",
+        "AWS SageMaker",
+        "CloudFormation",
+        "S3",
+        "EMR",
+        "OpenSearch",
+        "RDS"
+      ]
     },
     {
-      "name": "New Search Improvement Feature to Promote More Relevant Documents",
+      "name": "Semantic Search Improvement — Checkpoint Tax Research",
       "year": "2021",
-      "description": "Delivered new search functionality to detect more general type of queries and questions and promoting the more suitable content for these queries for a Tax Research web application (in-production).",
-      "tech": ["Python", "Java", "NLTK", "Sentence Embedding", "Elasticsearch", "AWS"]
+      "description": "Shipped a semantic search improvement for Checkpoint, Thomson Reuters' tax research platform, improving access to conceptual documents by 95%. Built a query intent classifier using sentence embeddings to dynamically promote higher-level content for general queries, delivered to production within a ~100ms latency budget.",
+      "tech": [
+        "Python",
+        "Sentence Embeddings",
+        "NLTK",
+        "Elasticsearch",
+        "AWS",
+        "Java"
+      ]
     },
     {
-      "name": "Improving Automated Question Generation from Documents",
+      "name": "Automated Question Generation from Documents",
       "year": "2020",
-      "description": "Fine-tuning T5 Transformer Language Model, experimenting for improving model input, using BLEURT evaluation. Auto-generated questions resulted in 40% reduction in manual data curation efforts.",
+      "description": "Fine-tuned T5 transformer for automated question generation, cutting manual data curation effort by 40%. Experimented with model input representations and evaluated using BLEURT as part of a university collaborative research project.",
       "tech": ["PyTorch", "SpaCy", "HuggingFace Transformers", "Python"]
     },
     {
-      "name": "Improved Language Understanding Engine Models",
+      "name": "Domain-Specific Language Understanding Engine",
       "year": "2019",
-      "description": "Training domain-specific Word2Vec word embeddings and adding detailed model testing for LSTMs to improve NLU model interpretability.",
-      "tech": ["PyTorch", "Python", "Word2Vec", "LSTM"]
+      "description": "Trained domain-specific Word2Vec embeddings and LSTM-based NLU models with interpretability testing to improve language understanding accuracy and model transparency.",
+      "tech": [
+        "PyTorch",
+        "Python",
+        "Word2Vec",
+        "LSTM"
+      ]
     },
     {
       "name": "Conversational Question Answering",
       "year": "2018",
-      "description": "Creating a question answering dialogue system powered by syntactic and semantic analysis of documents and ontology generation. Domain-specific question answering using a dialogue interface. Part of a collaborative project with an industrial partner.",
-      "tech": ["SpaCy", "Python"]
+      "description": "Built a domain-specific question answering dialogue system using syntactic and semantic document analysis and ontology generation, as part of a collaborative industry research project.",
+      "tech": [
+        "SpaCy",
+        "Python"
+      ]
     }
   ],
   "publications": [
