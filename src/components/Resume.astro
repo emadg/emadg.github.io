@@ -169,23 +169,40 @@ import resumeData from '../data/resume.json';
 			entries.forEach(entry => {
 				const cardInner = entry.target.querySelector('.card-inner');
 				if (entry.isIntersecting) {
-					// We add a specific class so we don't interfere with hover state
-					cardInner?.classList.add('rotate-y-180');
+					// Only auto-flip if user hasn't manually pinned to front
+					if (!entry.target.dataset.pinnedFront) {
+						cardInner?.classList.add('rotate-y-180');
+					}
 				} else {
+					// Card left center — reset both flip and the override flag
 					cardInner?.classList.remove('rotate-y-180');
+					delete entry.target.dataset.pinnedFront;
 				}
 			});
 		}, {
 			// Trigger when the element crosses the very middle of the viewport
-			rootMargin: '-45% 0px -45% 0px' 
+			rootMargin: '-45% 0px -45% 0px'
 		});
 
 		flipContainers.forEach(container => {
 			observer.observe(container);
 
-			// 2. Mouse hover overriding (makes it flip on hover too)
+			// 2. Click to toggle flip — allows reversing the flip on a centered card
+			container.addEventListener('click', () => {
+				const cardInner = container.querySelector('.card-inner');
+				if (cardInner?.classList.contains('rotate-y-180')) {
+					cardInner.classList.remove('rotate-y-180');
+					container.dataset.pinnedFront = 'true';
+				} else {
+					cardInner?.classList.add('rotate-y-180');
+					delete container.dataset.pinnedFront;
+				}
+			});
+
+			// 3. Mouse hover overriding (makes it flip on hover too)
 			container.addEventListener('mouseenter', () => {
 				const cardInner = container.querySelector('.card-inner');
+				delete container.dataset.pinnedFront;
 				cardInner?.classList.add('rotate-y-180');
 			});
 			

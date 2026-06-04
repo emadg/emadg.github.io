@@ -31,8 +31,8 @@ const MAX_WAIT_MS = 30_000;
 // Tweak these values and re-run `npm run pdf` to adjust spacing in the PDF.
 // All values are in pixels (at 96 dpi; 1 inch ≈ 96 px).
 const SPACING = {
-  headerBottom: 16,   // gap below the name/contact header block
-  sectionBottom: 14,   // gap below each section (between sections)
+  headerBottom: 12,   // gap below the name/contact header block
+  sectionBottom: 12,   // gap below each section (between sections)
   entryBottom: 7,   // gap below each job / education entry
   projectBottom: 7,   // gap below each project card
   pubBottom: 7,   // gap below each publication entry

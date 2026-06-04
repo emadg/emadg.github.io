@@ -5,7 +5,7 @@
       "location": "Toronto, Canada",
       "role": "Senior Machine Learning Engineer II",
       "period": "Jul 2021 - Present",
-      "description": "Senior ML Engineer @ TR Labs, working on research for CLEAR products, Thomson Reuters' flagship due diligence platform for KYC/AML screening and investigations. Built production ML systems across the full lifecycle — including a commercially launched agentic investigation product, LLM-powered summarization features, and large-scale data infrastructure — in a regulated environment where model accuracy has direct compliance consequences."
+      "description": "Senior Research Engineer at TR Labs, Thomson Reuters' applied research division, focused on CLEAR — the company's flagship due diligence platform for KYC/AML screening and investigations. Built production ML systems across the full lifecycle — including a commercially launched agentic investigation product, LLM-powered summarization features, and large-scale data infrastructure — in a regulated environment where model accuracy has direct compliance consequences."
     },
     {
       "company": "INAGO INC.",
@@ -151,7 +151,7 @@
   ],
   "publications": [
     {
-      "title": "Question-worthy sentence selection for question generation",
+      "title": "Question-worthy Sentence Selection for Question Generation",
       "venue": "Canadian AI 2020",
       "year": "2020",
       "note": "co-authored"
@@ -163,13 +163,13 @@
       "note": ""
     },
     {
-      "title": "Time aware topic based recommender system",
+      "title": "Time Aware Topic-based Recommender System",
       "venue": "Big Data & Information Analytics",
       "year": "2016",
       "note": "co-authored"
     },
     {
-      "title": "A study on prediction of user's tendency toward purchases in websites based on behavior models",
+      "title": "A Study on Prediction of User's Tendency Toward Purchases in Websites based on Behavior Models",
       "venue": "Information and Knowledge Technology (IKT), 6th Conference, IEEE",
       "year": "2014",
       "note": "co-authored"
