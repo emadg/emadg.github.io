@@ -27,6 +27,26 @@ const DEFAULT_OUTPUT = resolve(ROOT, 'public', 'resume.pdf');
 const DEV_URL = 'http://localhost:4321/resume';
 const MAX_WAIT_MS = 30_000;
 
+// ─── PDF spacing tuning ────────────────────────────────────────────────────
+// Tweak these values and re-run `npm run pdf` to adjust spacing in the PDF.
+// All values are in pixels (at 96 dpi; 1 inch ≈ 96 px).
+const SPACING = {
+  headerBottom: 16,   // gap below the name/contact header block
+  sectionBottom: 14,   // gap below each section (between sections)
+  entryBottom: 7,   // gap below each job / education entry
+  projectBottom: 7,   // gap below each project card
+  pubBottom: 7,   // gap below each publication entry
+};
+
+const PDF_SPACING_CSS = `
+  header          { margin-bottom: ${SPACING.headerBottom}px  !important; }
+  section         { margin-bottom: ${SPACING.sectionBottom}px !important; break-inside: avoid; }
+  .entry          { margin-bottom: ${SPACING.entryBottom}px   !important; }
+  .project        { margin-bottom: ${SPACING.projectBottom}px !important; }
+  .pub            { margin-bottom: ${SPACING.pubBottom}px     !important; }
+`;
+// ──────────────────────────────────────────────────────────────────────────
+
 const CHROME_PATHS = {
   darwin: [
     '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
@@ -201,6 +221,8 @@ async function main() {
     });
     const page = await browser.newPage();
     await page.goto(DEV_URL, { waitUntil: 'networkidle0' });
+
+    await page.addStyleTag({ content: PDF_SPACING_CSS });
 
     await page.pdf({
       path: OUTPUT,
