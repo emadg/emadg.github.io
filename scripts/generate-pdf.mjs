@@ -40,7 +40,7 @@ const SPACING = {
 
 const PDF_SPACING_CSS = `
   header          { margin-bottom: ${SPACING.headerBottom}px  !important; }
-  section         { margin-bottom: ${SPACING.sectionBottom}px !important; break-inside: avoid; }
+  section         { margin-bottom: ${SPACING.sectionBottom}px !important; }
   .entry          { margin-bottom: ${SPACING.entryBottom}px   !important; }
   .project        { margin-bottom: ${SPACING.projectBottom}px !important; }
   .pub            { margin-bottom: ${SPACING.pubBottom}px     !important; }

@@ -3,7 +3,7 @@ import resumeData from '../data/resume.json';
 
 const contact = {
 	name: "Emad Gohari",
-	title: "Senior Machine Learning Engineer - AI, LLM, NLP",
+	title: "Senior Machine Learning Engineer — NLP, Search & Recommendation Systems",
 	email: "E.Gohari.B@gmail.com",
 	github: "github.com/emadg",
 	linkedin: "linkedin.com/in/emad-gohari",
@@ -57,13 +57,14 @@ const contact = {
 		}
 
 		/* ---- Sections ---- */
-		section { margin-bottom: 12px; break-inside: avoid; }
+		section { margin-bottom: 12px; }
 		section h2 {
 			font-family: 'PT Serif', Georgia, serif;
 			font-size: 13px; font-weight: 700; font-style: normal; text-transform: uppercase;
 			color: #111;
 			border-bottom: 1px solid #ccc; padding-bottom: 3px; margin-bottom: 7px;
 			display: flex; align-items: center; gap: 7px;
+			break-after: avoid;
 		}
 		section h2::before {
 			content: '';
@@ -149,6 +150,12 @@ const contact = {
 			</a>
 		</div>
 	</header>
+
+	<!-- Summary -->
+	<section>
+		<h2>Summary</h2>
+		<p class="entry-desc" style="margin-top: 0;">{resumeData.summary}</p>
+	</section>
 
 	<!-- Experience -->
 	<section>

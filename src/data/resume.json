@@ -1,4 +1,5 @@
 {
+  "summary": "Senior Machine Learning Engineer with 8+ years shipping production ML systems for text-centric domains — NLP, LLMs, semantic search, and entity resolution — most recently on Thomson Reuters' CLEAR due-diligence platform. Led delivery of a commercially launched agentic AI investigation product, GenAI summarization features processing hundreds of documents daily, and an entity resolution system spanning ~800M records with duplicate and conflict detection at scale. Strong Python and Java background with PyTorch, LLM evaluation, and search/ranking systems (Elasticsearch, OpenSearch); early research background in embedding-based recommender systems for news content. Comfortable driving projects end-to-end with cross-functional partners, from concept through production.",
   "experience": [
     {
       "company": "Thomson Reuters",
@@ -12,7 +13,7 @@
       "location": "Toronto, Canada",
       "role": "NLP & Machine Learning Engineer",
       "period": "Jul 2018 - Jun 2021",
-      "description": "Built NLP models for language understanding and automated text generation, including fine-tuning BERT and T5 for domain-specific tasks. Managed the full training lifecycle and led collaborative research projects with university partners."
+      "description": "Built NLP models for language understanding and automated text generation, including fine-tuning BERT and T5 for domain-specific tasks. Managed the full training lifecycle and led and mentored collaborative research projects with York University partners."
     }
   ],
   "education": [
@@ -49,8 +50,12 @@
     "Retrieval-Augmented Generation (RAG)",
     "LLM Evaluation",
     "NLP",
+    "Text-centric AI/ML",
     "Machine Learning",
     "Deep Learning",
+    "Search & Ranking",
+    "Duplicate Detection",
+    "Recommender Systems",
     "XGBoost",
     "Apache Spark",
     "AWS",
@@ -96,7 +101,7 @@
     {
       "name": "Entity Resolution Data Infrastructure — CLEAR KYC/AML Platform",
       "year": "2022 - 2024",
-      "description": "Designed and built the data engineering infrastructure for an entity resolution system operating across ~800M entities and billions of documents at 700 idents/second. Architected a PII-isolated AWS environment and a unified versioned schema reconciling two incompatible annotation sources spanning hundreds of thousands of labeled records. Built Spark and Python pipelines for multi-format merging, conflict signal surfacing, and model experimentation, later automated into SageMaker Pipelines.",
+      "description": "Designed and built the data engineering infrastructure for an entity resolution system operating across ~800M entities and billions of documents at 700 idents/second, powering duplicate and conflict detection at scale. Architected a PII-isolated AWS environment and a unified versioned schema reconciling two incompatible annotation sources spanning hundreds of thousands of labeled records. Built Spark and Python pipelines for multi-format merging, conflict signal surfacing, and model experimentation, later automated into SageMaker Pipelines.",
       "tech": [
         "Spark",
         "Python",
@@ -112,7 +117,7 @@
     {
       "name": "Semantic Search Improvement — Checkpoint Tax Research",
       "year": "2021",
-      "description": "Shipped a semantic search improvement for Checkpoint, Thomson Reuters' tax research platform, improving access to conceptual documents by 95%. Built a query intent classifier using sentence embeddings to dynamically promote higher-level content for general queries, delivered to production within a ~100ms latency budget.",
+      "description": "Shipped a semantic search improvement for Checkpoint, Thomson Reuters' tax research platform, improving access to conceptual documents by 95%. Built a query intent classifier using sentence embeddings to dynamically re-rank and promote higher-level content for general queries, delivered to production within a ~100ms latency budget.",
       "tech": [
         "Python",
         "Sentence Embeddings",
@@ -166,7 +171,7 @@
       "title": "Time Aware Topic-based Recommender System",
       "venue": "Big Data & Information Analytics",
       "year": "2016",
-      "note": "co-authored"
+      "note": "co-authored — embedding-based topic recommendation methods for news content"
     },
     {
       "title": "A Study on Prediction of User's Tendency Toward Purchases in Websites based on Behavior Models",
