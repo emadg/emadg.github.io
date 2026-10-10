@@ -30,6 +30,7 @@
       "items": [
         "Machine Learning",
         "Deep Learning",
+        "Model Evaluation",
         "NLP",
         "Transformers (Hugging Face)",
         "PyTorch",
@@ -47,8 +48,11 @@
     {
       "category": "MLOps, Data & Cloud",
       "items": [
+        "MLOps",
+        "ML Pipelines",
+        "Experiment Tracking (MLflow)",
+        "Data Pipelines",
         "AWS SageMaker (Studio, Pipelines)",
-        "MLflow",
         "Apache Spark (PySpark)",
         "Snowflake",
         "AWS (S3, EMR)",
