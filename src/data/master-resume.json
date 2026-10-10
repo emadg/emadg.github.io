@@ -449,6 +449,25 @@
                 "Bing Search API",
                 "LLM verification"
               ]
+            },
+            {
+              "id": "kf-bai-model-comparison",
+              "claim": "Ran the summarization sections on both GPT-4 and Claude Sonnet and compared outputs (SME review or side-by-side) together with latency and cost to inform which model was used.",
+              "strong_points": [
+                "Direct evidence of quality/latency/cost trade-off judgment in model selection.",
+                "Confirmed by Emad on 2026-10-09 (DoorDash tailoring)."
+              ],
+              "weak_points": [
+                "Which model won, the exact criteria, and any numbers are not recorded; do not state a winner or savings.",
+                "Comparison of hosted LLMs, not open-weights or SLM deployment."
+              ],
+              "status": "supported",
+              "skills": [
+                "Model selection",
+                "Quality/latency/cost trade-offs",
+                "GPT-4",
+                "Claude"
+              ]
             }
           ]
         },
