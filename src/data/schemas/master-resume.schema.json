@@ -1,0 +1,203 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "master-resume.schema.json",
+  "title": "Master resume",
+  "description": "Evidence source for tailoring applications (src/data/master-resume.json). Not rendered directly; tailored resume.json variants are built from it.",
+  "type": "object",
+  "required": ["meta", "basics", "summaries", "experience", "skills_inventory", "education", "publications", "interview_stories", "claim_checks"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "meta": {
+      "type": "object",
+      "required": ["purpose", "last_updated", "tailoring_rule"],
+      "properties": {
+        "purpose": { "type": "string" },
+        "last_updated": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "tailoring_rule": { "type": "string" },
+        "status_legend": { "type": "object", "additionalProperties": { "type": "string" } }
+      }
+    },
+    "basics": {
+      "type": "object",
+      "required": ["name", "headline", "location"],
+      "properties": {
+        "name": { "type": "string" },
+        "headline": { "type": "string" },
+        "focus_areas": { "$ref": "#/$defs/strings" },
+        "location": { "type": "string" },
+        "email": { "type": "string" },
+        "github": { "type": "string" },
+        "linkedin": { "type": "string" },
+        "website": { "type": "string" }
+      }
+    },
+    "summaries": {
+      "type": "array",
+      "description": "Summary variants; add role-targeted ones (e.g. focus: \"agentic-ai\", \"ml-platform\").",
+      "items": {
+        "type": "object",
+        "required": ["id", "focus", "text"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "focus": { "type": "string" },
+          "text": { "type": "string" }
+        }
+      }
+    },
+    "experience": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "company", "location", "period", "titles", "projects"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "company": { "type": "string" },
+          "location": { "type": "string" },
+          "period": { "type": "string" },
+          "period_note": { "type": "string" },
+          "titles": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": ["title", "verified"],
+              "additionalProperties": false,
+              "properties": {
+                "title": { "type": "string" },
+                "verified": { "type": "boolean" }
+              }
+            }
+          },
+          "notes": { "type": "string" },
+          "role_bullets": { "$ref": "#/$defs/strings", "description": "Job-level bullets not tied to one project." },
+          "projects": { "type": "array", "items": { "$ref": "#/$defs/project" } }
+        }
+      }
+    },
+    "skills_inventory": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "items"],
+        "additionalProperties": false,
+        "properties": {
+          "category": { "type": "string" },
+          "items": { "$ref": "#/$defs/strings" },
+          "caveats": { "type": "string" }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["institution", "location", "degree", "period"],
+        "additionalProperties": false,
+        "properties": {
+          "institution": { "type": "string" },
+          "location": { "type": "string" },
+          "degree": { "type": "string" },
+          "period": { "type": "string" },
+          "grade": { "type": "string" },
+          "grade_optional": { "type": "boolean" },
+          "note": { "type": "string" }
+        }
+      }
+    },
+    "publications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "venue", "year"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string" },
+          "venue": { "type": "string" },
+          "year": { "type": "string" },
+          "verify": { "type": "string", "description": "What still needs confirming; empty when verified." }
+        }
+      }
+    },
+    "interview_stories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "title", "project_refs", "outline"],
+        "additionalProperties": false,
+        "properties": {
+          "id": { "type": "string" },
+          "title": { "type": "string" },
+          "project_refs": { "$ref": "#/$defs/strings" },
+          "outline": { "type": "string" },
+          "open_questions": { "$ref": "#/$defs/strings" }
+        }
+      }
+    },
+    "claim_checks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["topic", "detail"],
+        "additionalProperties": false,
+        "properties": {
+          "topic": { "type": "string" },
+          "detail": { "type": "string" },
+          "project_refs": { "$ref": "#/$defs/strings" }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "strings": { "type": "array", "items": { "type": "string" } },
+    "project": {
+      "type": "object",
+      "required": ["id", "name", "period", "stage", "personal_scope", "bullets", "stack", "key_facts"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "product": { "type": "string" },
+        "period": { "type": "string" },
+        "period_approximate": { "type": "boolean" },
+        "stage": {
+          "enum": ["production", "internal", "prototype", "poc", "research"],
+          "description": "Same values as resume.schema.json project.stage."
+        },
+        "stage_note": { "type": "string" },
+        "personal_scope": { "type": "string", "description": "What Emad personally designed, built, or decided." },
+        "team_context": { "type": "string", "description": "Team decisions and outcomes; not individual claims." },
+        "notes": { "type": "string", "description": "Design story, evaluation context, cautions." },
+        "bullets": { "$ref": "#/$defs/strings", "description": "Candidate resume bullets." },
+        "stack": { "$ref": "#/$defs/strings", "description": "Technologies confirmed for this project." },
+        "stack_unconfirmed": { "$ref": "#/$defs/strings", "description": "Technologies listed in older drafts but not confirmed for personal use here." },
+        "key_facts": { "type": "array", "items": { "$ref": "#/$defs/keyFact" } }
+      }
+    },
+    "keyFact": {
+      "type": "object",
+      "description": "A referenceable claim for project descriptions, impacts, and results.",
+      "required": ["id", "claim", "strong_points", "weak_points", "status"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^kf-" },
+        "claim": { "type": "string", "description": "One or two sentences summarizing the fact." },
+        "strong_points": { "$ref": "#/$defs/strings", "description": "Why this can be emphasized, and how far it can be pushed for role fit." },
+        "weak_points": { "$ref": "#/$defs/strings", "description": "What makes it harder to defend or prove in an interview." },
+        "status": { "enum": ["supported", "needs-verification", "retracted"] },
+        "metric": {
+          "type": "object",
+          "required": ["value", "basis", "verified"],
+          "additionalProperties": false,
+          "properties": {
+            "value": { "type": "string", "description": "e.g. \"~40% lower latency\", \"$X saved/yr\"" },
+            "basis": { "type": "string", "description": "How it was measured, or why it is uncertain." },
+            "verified": { "type": "boolean" }
+          }
+        },
+        "skills": { "$ref": "#/$defs/strings", "description": "JD keywords this fact demonstrates." }
+      }
+    }
+  }
+}
