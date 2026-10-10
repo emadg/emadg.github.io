@@ -39,7 +39,11 @@ src/
     config.ts               # Astro content collection schema (blog)
     blog/                   # Blog posts go here as .md files
   data/
-    resume.json             # All resume data (single source of truth)
+    resume.json             # Resume shown on the site and in the PDF
+    master-resume.json      # Full evidence inventory with key facts (source for tailoring)
+    schemas/                # JSON Schemas for both files (editor validation)
+  lib/
+    resume.ts               # Resume helpers: data loading, **bold** rendering, flattening
   layouts/
     Layout.astro            # Shared page shell: head, frosted panel, footer
   pages/
@@ -56,11 +60,32 @@ public/
 
 ## Updating Content
 
-All resume content lives in **`src/data/resume.json`**. Edit the JSON and the site rebuilds automatically (no component changes needed).
+All resume content lives in **`src/data/resume.json`**. Edit the JSON and the site rebuilds automatically (no component changes needed). The file declares its schema (`src/data/schemas/resume.schema.json`), so VS Code validates it as you type.
+
+Text in `summary`, experience `description`, and project `description`/`highlights` accepts `**bold**` markup. Use it for the key outcome of each project.
+
+`src/data/master-resume.json` is the longer evidence inventory used to tailor applications (not rendered). Each project there has `key_facts`: claims with `strong_points`, `weak_points`, a `status` (supported / needs-verification / retracted), and an optional `metric`.
+
+### Basics and summary
+
+Name, headline, and contact details shown at the top of the PDF, followed by a short summary.
+
+```json
+"basics": {
+  "name": "Your Name",
+  "headline": "Senior Machine Learning Engineer",
+  "location": "Toronto, ON, Canada",
+  "email": "you@example.com",
+  "github": "github.com/you",
+  "linkedin": "linkedin.com/in/you",
+  "website": "example.com"
+},
+"summary": "Two or three sentences tailored to the role, with **bold** highlights."
+```
 
 ### Experience
 
-Each entry appears as a flip card on the timeline (front: summary, back: description).
+Each entry appears as a flip card on the timeline (front: summary, back: description). In the PDF, each job is followed by its projects.
 
 ```json
 {
@@ -68,7 +93,8 @@ Each entry appears as a flip card on the timeline (front: summary, back: descrip
   "location": "City, Country",
   "role": "Your Title",
   "period": "Jan 2020 - Present",
-  "description": "What you did and the impact you made."
+  "description": "Short role and team context.",
+  "projects": [ /* see Projects */ ]
 }
 ```
 
@@ -89,21 +115,28 @@ Each entry appears on the timeline below experience (no flip, single-sided card)
 
 ### Skills
 
-A flat array of strings displayed as tags.
+Grouped by category. The PDF shows one line per category near the top; the site shows all items as tags.
 
 ```json
-"skills": ["Python", "PyTorch", "Docker"]
+"skills": [
+  { "category": "LLM & Agentic AI", "items": ["Large Language Models", "PydanticAI"] },
+  { "category": "Data & Cloud", "items": ["AWS", "Apache Spark"] }
+]
 ```
 
 ### Projects
 
-Each entry appears as a card in a two-column grid.
+Nested under the job they belong to. In the PDF, each is a titled box under its job: name, stage tag, and period on top, then the description, then a "Tech & Skills" line. The site also lists all projects together in a grid.
+
+`stage` is one of `production` (used by real customers), `internal`, `prototype`, `poc`, or `research`. `highlights` is optional and renders as bullets.
 
 ```json
 {
   "name": "Project Name",
-  "year": "2024",
-  "description": "Brief description of the project.",
+  "period": "2024",
+  "stage": "production",
+  "description": "What was built, how, and the **measured impact**.",
+  "highlights": ["Optional bullet"],
   "tech": ["Python", "AWS"]
 }
 ```
@@ -147,10 +180,19 @@ CHROME_PATH="/path/to/chrome" npm run pdf
 npm run pdf -- --out ./build/my-cv.pdf
 npm run pdf -- --dir ./exports
 PDF_OUT=./out.pdf npm run pdf
+
+# Render a different (e.g. tailored) resume JSON without touching src/data/resume.json
+npm run pdf -- --data ./applications/acme/resume.json --out ./applications/acme/resume.pdf
 npm run pdf -- --help
+
+# Auto-fit is on by default; turn it off or pin the scale by hand
+npm run pdf -- --no-fit
+npm run pdf -- --zoom 0.97
 ```
 
-This starts the dev server, renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` by default, and shuts down. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+**Auto-fit:** before printing, the script simulates where pages break and scales the whole page very slightly (between 94% and 103%) to remove blank space at the bottom of every page except the last, without adding pages. It prints the blank space per page before and after. Limits are in `FIT`, and gaps and indents are in `SPACING`, both at the top of `scripts/generate-pdf.mjs`.
+
+This starts its own dev server on port 4399 (`--port` to change; it refuses to run if the port is busy), renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` by default, and shuts down. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
 
 You can also preview the print layout in your browser at `http://localhost:4321/resume` while the dev server is running.
 

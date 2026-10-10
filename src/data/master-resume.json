@@ -1,0 +1,710 @@
+{
+  "$schema": "./schemas/master-resume.schema.json",
+  "meta": {
+    "purpose": "Comprehensive evidence source for tailoring applications. Intentionally longer than an application resume. Key facts are referenceable claims; strong_points say how far a claim can be pushed for fit, weak_points say what makes it hard to defend. Never paste notes, weak points, or claim checks into an application.",
+    "last_updated": "2026-10-09",
+    "tailoring_rule": "Lead with three or four projects most relevant to a role and choose the strongest defensible bullets. Keep role title, dates, model stage, metrics, team contribution, and personally implemented work consistent across the resume and interview.",
+    "status_legend": {
+      "supported": "Established from Emad's own account; usable in applications at the chosen framing level.",
+      "needs-verification": "Plausible but unconfirmed (ownership, numbers, or scope). Do not use in an application until resolved.",
+      "retracted": "Contradicted by Emad's later clarification. Never use; kept so it is not reintroduced from older drafts."
+    }
+  },
+  "basics": {
+    "name": "Emad Gohari",
+    "headline": "Senior Machine Learning / NLP Engineer",
+    "focus_areas": ["Applied ML", "LLM systems", "Agentic AI", "ML platforms"],
+    "location": "Toronto, Ontario, Canada",
+    "email": "E.Gohari.B@gmail.com",
+    "github": "github.com/emadg",
+    "linkedin": "linkedin.com/in/emad-gohari",
+    "website": "EmadGohari.com"
+  },
+  "summaries": [
+    {
+      "id": "general",
+      "focus": "general",
+      "text": "Machine learning engineer with approximately eight years of experience developing NLP, classical and deep-learning models, and LLM applications. At Thomson Reuters Labs, worked across the ML lifecycle for CLEAR and Checkpoint: secure data and annotation infrastructure, repeatable model training and evaluation, semantic search, production report summarization, and agentic investigation workflows. Designs experiments with researchers and subject-matter experts, translates research code into reusable pipelines, and works with product engineers on delivery in sensitive-data environments."
+    }
+  ],
+  "experience": [
+    {
+      "id": "thomson-reuters",
+      "company": "Thomson Reuters Labs",
+      "location": "Toronto, Canada",
+      "period": "Jul 2021 - Sep 2026",
+      "period_note": "September 2026 end date comes from conversation, not an HR record; older resume JSONs say \"Present\".",
+      "titles": [
+        { "title": "Senior Research Engineer II (AI & ML)", "verified": false },
+        { "title": "Senior Machine Learning Engineer II", "verified": false }
+      ],
+      "notes": "Selected work spans multiple products and project phases. Dates are approximate where noted. Confirm official title history.",
+      "role_bullets": [],
+      "projects": [
+        {
+          "id": "tr-er-retraining",
+          "name": "CLEAR entity resolution — retraining and Snowflake pipelines",
+          "product": "CLEAR",
+          "period": "2026",
+          "period_approximate": true,
+          "stage": "prototype",
+          "stage_note": "Retraining workflow designed, implemented, and tested; actual adoption not yet documented. Snowflake work is proof of concept. The new XGBoost model was in early testing and used to build a fresh entity database; no production-serving claim.",
+          "personal_scope": "Designed, proposed, implemented, and tested the SageMaker Pipelines retraining workflow; extended reusable processing components; implemented Snowflake processing and training proofs of concept and assessed migration gaps. Worked specifically on the Snowflake processing pipeline.",
+          "team_context": "The team trained a new XGBoost entity-matching model to replace a long-running legacy model that was difficult to retrain and had accumulated rule-based workarounds. The team maintained a held-out set, used training and validation splits, addressed the gap between positive-heavy annotations and largely negative candidate pairs, and compared model versions with the legacy system using precision, recall, F1, and SME reviews. Emad recalled roughly eight to ten experimentation rounds and positive SME feedback.",
+          "notes": "Personal ownership of sampling, feature engineering, and evaluation, along with numerical model results, remains to be pinned down; these are team context, not individual achievement bullets. Worked with model researchers, a lead engineer, and CLEAR product engineering.",
+          "bullets": [
+            "Designed, proposed, implemented, and tested an on-demand retraining workflow using SageMaker Pipelines, bringing researchers' feature-generation, model-training, and metric-calculation code into reusable processing steps.",
+            "Enabled researchers to run multiple training experiments in parallel and track experiments through MLflow, reducing manual orchestration and making hypothesis testing more reproducible.",
+            "Extended reusable components for SageMaker Python, Poetry-based, and PySpark processing jobs within a DAG-based pipeline repository.",
+            "Implemented proof-of-concept Snowflake data-processing and model-training pipelines and assessed compatibility and feature gaps for moving AWS research workflows to Snowflake.",
+            "Worked with model researchers, a lead engineer, and CLEAR product engineering to translate research needs into a retraining workflow for the developing entity-resolution system."
+          ],
+          "stack": ["Python", "AWS SageMaker Pipelines", "PySpark", "Spark", "MLflow", "Snowflake", "XGBoost", "Poetry"],
+          "stack_unconfirmed": ["PostgreSQL (earlier AWS research workflows)"],
+          "key_facts": [
+            {
+              "id": "kf-er-sagemaker-retraining",
+              "claim": "Designed, proposed, implemented, and tested an on-demand model retraining workflow on SageMaker Pipelines that turned researchers' feature-generation, training, and metric code into reusable pipeline steps.",
+              "strong_points": [
+                "End-to-end personal ownership: design, proposal, implementation, and testing were all Emad's.",
+                "Covers high-demand MLOps keywords: SageMaker Pipelines, DAG orchestration, reusable components, retraining.",
+                "Classic research-to-production story that many ML engineering JDs ask for."
+              ],
+              "weak_points": [
+                "Actual adoption and before/after workflow are not documented yet.",
+                "Personal architectural tradeoffs still need to be written down for interviews.",
+                "The model it retrains was in early testing, so this is not a production-serving system."
+              ],
+              "status": "supported",
+              "skills": ["MLOps", "ML pipelines", "AWS SageMaker Pipelines", "Model retraining", "Python"]
+            },
+            {
+              "id": "kf-er-parallel-experiments",
+              "claim": "Enabled researchers to run training experiments in parallel and track them in MLflow, reducing manual orchestration and making hypothesis testing reproducible.",
+              "strong_points": [
+                "Experiment tracking and reproducibility are common JD requirements.",
+                "Can be framed as speeding up the research team's iteration loop."
+              ],
+              "weak_points": [
+                "The ~40–50% faster hypothesis-testing estimate has no defined baseline, and elapsed time vs. researcher effort is not distinguished.",
+                "Usage frequency by researchers is not documented."
+              ],
+              "status": "supported",
+              "metric": {
+                "value": "~40–50% less hypothesis-testing time (estimate)",
+                "basis": "Emad's estimate; baseline undefined. Distinguish elapsed time from researcher effort before using.",
+                "verified": false
+              },
+              "skills": ["MLflow", "Experiment tracking", "Reproducibility", "Parallel training"]
+            },
+            {
+              "id": "kf-er-reusable-components",
+              "claim": "Extended reusable pipeline components for SageMaker Python, Poetry-based, and PySpark processing jobs in a DAG-based pipeline repository.",
+              "strong_points": [
+                "Shows platform thinking: building blocks others reuse, not one-off scripts.",
+                "Covers PySpark and packaging (Poetry) keywords."
+              ],
+              "weak_points": [
+                "Extended an existing repository rather than creating it.",
+                "Number of consumers of these components is unknown."
+              ],
+              "status": "supported",
+              "skills": ["ML platform", "PySpark", "AWS SageMaker", "Python packaging"]
+            },
+            {
+              "id": "kf-er-snowflake-poc",
+              "claim": "Implemented proof-of-concept Snowflake data-processing and model-training pipelines and assessed compatibility and feature gaps for moving AWS research workflows to Snowflake.",
+              "strong_points": [
+                "Snowflake is an in-demand keyword for data/ML platform roles.",
+                "Migration feasibility assessment shows architecture judgment, not just implementation.",
+                "Emad specifically built the Snowflake processing pipeline."
+              ],
+              "weak_points": [
+                "Proof of concept only; deployment status unconfirmed.",
+                "Pipeline inputs, outputs, and the exact individual design scope are not yet pinned down.",
+                "Which findings were accepted, rejected, or deferred is unknown."
+              ],
+              "status": "supported",
+              "skills": ["Snowflake", "Data pipelines", "Cloud migration", "Model training pipelines"]
+            },
+            {
+              "id": "kf-er-xgboost-model",
+              "claim": "Contributed to a new XGBoost entity-matching model replacing a hard-to-retrain legacy model with accumulated rule-based workarounds, evaluated against the legacy system on precision, recall, F1, and SME review over roughly eight to ten experimentation rounds.",
+              "strong_points": [
+                "Strong classical-ML story: model replacement, evaluation discipline, held-out set, SME validation.",
+                "Positive SME feedback was received."
+              ],
+              "weak_points": [
+                "This is team context; Emad's personal ownership of sampling, feature engineering, and evaluation is not established.",
+                "No numerical model results are available.",
+                "Model was in early testing; no production-serving or measured quality-gain claim."
+              ],
+              "status": "needs-verification",
+              "skills": ["XGBoost", "Entity resolution", "Model evaluation", "Precision/recall"]
+            },
+            {
+              "id": "kf-er-label-imbalance",
+              "claim": "Addressed the gap between positive-heavy annotations and largely negative candidate pairs with negative sampling and holdout discipline.",
+              "strong_points": ["Shows practical understanding of class imbalance and evaluation leakage — a common interview topic."],
+              "weak_points": ["Which decisions and code Emad personally owned is unclear; currently team context."],
+              "status": "needs-verification",
+              "skills": ["Class imbalance", "Negative sampling", "Evaluation design"]
+            },
+            {
+              "id": "kf-er-cross-functional",
+              "claim": "Translated model researchers' needs into a retraining workflow, working with a lead engineer and CLEAR product engineering.",
+              "strong_points": ["Cross-functional collaboration and research-to-engineering handoff are frequently requested."],
+              "weak_points": ["Collaboration, not leadership; no people management implied."],
+              "status": "supported",
+              "skills": ["Cross-functional collaboration", "Research-to-production"]
+            }
+          ]
+        },
+        {
+          "id": "tr-investigate",
+          "name": "CLEAR Investigate — agentic investigation workflows",
+          "product": "CLEAR Investigate",
+          "period": "2025 - 2026",
+          "period_approximate": true,
+          "stage": "prototype",
+          "stage_note": "The wider product launched commercially (team outcome). Emad's direct work was experimentation configuration and evaluation tooling; confirm which parts were used by others or integrated.",
+          "personal_scope": "After the team selected PydanticAI, implemented a central configuration file for agent system prompts, tool descriptions and availability, and agent/subagent connections. Migrated an existing LLM-as-judge evaluation capability into a more organized repository. Explored Claude prompt caching without completing an integration.",
+          "team_context": "Framework selection (PydanticAI) and the wider product architecture were team decisions. As definitions stabilized, the team began separating agents and tools into standalone components.",
+          "notes": "Design story: centralizing frequently changed prompts, tool metadata, and agent wiring reduced friction during prototype iteration. The setup was intended to explore single-agent and manager/subagent approaches for entity identification, report extraction, and web research; confirm which configurations were actually run. Separating stable definitions later is a concrete speed-of-experimentation versus maintainability tradeoff.",
+          "bullets": [
+            "After the team selected PydanticAI, implemented a central configuration file for agent system prompts, tool descriptions and availability, and agent/subagent connections, allowing experimenters to change investigation setups without editing definitions scattered across multiple files.",
+            "Migrated an existing LLM-as-judge evaluation capability into a more organized repository to support reuse and prepare it for possible CI/CD integration."
+          ],
+          "stack": ["Python", "PydanticAI", "Claude", "LLM-as-judge evaluation"],
+          "stack_unconfirmed": ["Other LLMs and AWS components used personally in this project", "OpenAI GPT-4"],
+          "key_facts": [
+            {
+              "id": "kf-inv-central-config",
+              "claim": "Implemented a central configuration layer for agent system prompts, tool descriptions and availability, and agent/subagent wiring, letting experimenters change investigation setups without editing scattered definitions.",
+              "strong_points": [
+                "Concrete design decision that sped up agent prototyping on a product that later launched commercially.",
+                "Covers Agentic AI, multi-agent orchestration, PydanticAI, and prompt management keywords.",
+                "Comes with a good tradeoff story: speed of experimentation versus maintainability."
+              ],
+              "weak_points": [
+                "PydanticAI selection and overall architecture were team decisions.",
+                "The team later split stable definitions into standalone components, partly superseding the central config.",
+                "Which agent configurations were actually run is unconfirmed."
+              ],
+              "status": "supported",
+              "skills": ["Agentic AI", "PydanticAI", "Multi-agent systems", "Prompt engineering", "LLM orchestration"]
+            },
+            {
+              "id": "kf-inv-llm-judge-migration",
+              "claim": "Migrated an existing LLM-as-judge evaluation capability into an organized, reusable repository prepared for CI/CD integration.",
+              "strong_points": [
+                "LLM evaluation is a high-value keyword for GenAI roles.",
+                "Shows engineering hygiene around evaluation tooling."
+              ],
+              "weak_points": [
+                "Migration of existing judge code, not original design of the evaluation method.",
+                "CI/CD integration was a goal; not confirmed as done."
+              ],
+              "status": "supported",
+              "skills": ["LLM evaluation", "LLM-as-judge", "CI/CD readiness"]
+            },
+            {
+              "id": "kf-inv-agent-topologies",
+              "claim": "Configuration supported exploring single-agent and manager/subagent approaches for entity identification, report extraction, and web research.",
+              "strong_points": ["Multi-agent topology comparison is a strong agentic-systems talking point."],
+              "weak_points": ["Which configurations were actually run, and any comparison results, are unconfirmed."],
+              "status": "needs-verification",
+              "skills": ["Multi-agent systems", "Agent architecture"]
+            },
+            {
+              "id": "kf-inv-product-launch",
+              "claim": "Contributed to CLEAR Investigate, Thomson Reuters' agentic AI investigation product, which launched commercially.",
+              "strong_points": ["Association with a commercially launched agentic AI product is a strong signal for GenAI roles."],
+              "weak_points": [
+                "The launch is a team outcome; Emad's integrated contributions are unconfirmed.",
+                "\"First agentic AI product\" wording from older drafts is not verified."
+              ],
+              "status": "needs-verification",
+              "skills": ["Agentic AI", "Production GenAI"]
+            },
+            {
+              "id": "kf-inv-prompt-caching",
+              "claim": "Implemented LLM caching that reduced API cost by ~25–30%.",
+              "strong_points": ["Only usable as: explored Claude prompt caching as research (no shipped feature, no savings)."],
+              "weak_points": [
+                "Emad's caching integration was not finished; this claim from older resume JSONs is contradicted by his clarification.",
+                "No cost-savings measurement exists."
+              ],
+              "status": "retracted",
+              "skills": ["Prompt caching"]
+            }
+          ]
+        },
+        {
+          "id": "tr-business-ai",
+          "name": "CLEAR Business AI — entity-report summarization",
+          "product": "CLEAR Business",
+          "period": "2024",
+          "period_approximate": false,
+          "stage": "production",
+          "stage_note": "Entered production.",
+          "personal_scope": "Built the LLM summarization workflow; implemented selective XML extraction and targeted LLM calls; implemented extraction-logic and prompt revisions after SME feedback; integrated Bing Search with an LLM verification step; linked summary claims to report source locations.",
+          "team_context": "A product manager supplied sample target summaries for approximately 10–15 companies of different sizes and types. A project researcher led much of the prompt definition for ambiguous free-text extraction; Emad supplied input.",
+          "notes": "This was a small set of targeted LLM calls, not a chatbot. Used explicit instructions and examples in prompts when information was embedded in report text rather than structured XML fields. Specific evaluation scores and an individual SME comment are not currently recalled; do not invent one.",
+          "bullets": [
+            "Built an LLM summarization workflow for structured business-entity reports that entered production.",
+            "Implemented selective XML extraction for specific fields and report sections, supplying relevant context to targeted LLM calls that generated components such as business overview, key personnel, adverse media/records, liens and lawsuits.",
+            "Iterated on extraction logic and system prompts after SME annotation rounds, addressing feedback on individual summary sections against product requirements. Used explicit instructions and examples in prompts when needed information was embedded in report text rather than easily extracted from structured XML fields.",
+            "Integrated Bing Search with an LLM verification step to reduce false matches between people or businesses sharing names; linked summary claims to report source locations."
+          ],
+          "stack": ["Python", "XML processing", "GPT-4", "Claude Sonnet", "Bing Search API", "Prompt design"],
+          "stack_unconfirmed": [],
+          "key_facts": [
+            {
+              "id": "kf-bai-production",
+              "claim": "Built an LLM summarization workflow for structured business-entity reports that went live in production for CLEAR customers.",
+              "strong_points": [
+                "Production deployment used by real customers — the strongest stage label.",
+                "End-to-end GenAI delivery: extraction, prompting, verification, citations, SME evaluation."
+              ],
+              "weak_points": [
+                "Production volume (\"hundreds of reports per day\") is not personally confirmed.",
+                "No before/after quality metric or evaluation rubric is available."
+              ],
+              "status": "supported",
+              "metric": {
+                "value": "Hundreds of reports per day",
+                "basis": "From older resume drafts; not personally observed or confirmed.",
+                "verified": false
+              },
+              "skills": ["LLM applications", "Production GenAI", "Summarization", "GPT-4", "Claude"]
+            },
+            {
+              "id": "kf-bai-selective-xml",
+              "claim": "Designed selective XML extraction that fed only the relevant fields and report sections into targeted per-section LLM calls (business overview, key personnel, adverse media/records, liens and lawsuits).",
+              "strong_points": [
+                "Shows context engineering: precise context per call for accuracy and cost control.",
+                "Maps to \"structured data + LLM\" and \"information extraction\" JD language."
+              ],
+              "weak_points": [
+                "A small set of targeted calls, not a chatbot or a retrieval (RAG) system — do not reframe as RAG.",
+                "Cost or latency savings were not measured."
+              ],
+              "status": "supported",
+              "skills": ["Context engineering", "Information extraction", "XML processing", "Prompt engineering"]
+            },
+            {
+              "id": "kf-bai-sme-iteration",
+              "claim": "Iterated extraction logic and system prompts across SME annotation rounds, starting from product-manager exemplar summaries for 10–15 companies of varied size and type.",
+              "strong_points": [
+                "Human-in-the-loop evaluation and requirement-driven iteration are valued in GenAI roles.",
+                "Concrete exemplar-driven development process to describe."
+              ],
+              "weak_points": [
+                "The project researcher led much of the prompt definition for ambiguous free-text extraction.",
+                "No evaluation scores or specific SME failure example are recalled."
+              ],
+              "status": "supported",
+              "skills": ["LLM evaluation", "Human-in-the-loop", "Prompt iteration"]
+            },
+            {
+              "id": "kf-bai-name-verification",
+              "claim": "Integrated Bing Search with an LLM verification step to reduce false matches between people or businesses sharing names, and linked summary claims to report source locations.",
+              "strong_points": [
+                "Grounding and citation linking map directly to \"trustworthy / hallucination-reduction\" language.",
+                "Tool-use pattern (search + LLM verifier) transfers to agentic roles."
+              ],
+              "weak_points": ["False-match reduction was not quantified."],
+              "status": "supported",
+              "skills": ["Grounding", "Citations", "Bing Search API", "LLM verification"]
+            }
+          ]
+        },
+        {
+          "id": "tr-er-infrastructure",
+          "name": "CLEAR entity resolution — secure data and annotation infrastructure",
+          "product": "CLEAR",
+          "period": "2022 - 2024",
+          "period_approximate": true,
+          "stage": "internal",
+          "stage_note": "Internal research infrastructure used for experimentation on sensitive entity data.",
+          "personal_scope": "Designed the PII-isolated research environment; defined the versioned annotation schema; built Spark and Python merge workflows; automated a manual workflow with SageMaker Pipelines.",
+          "team_context": "",
+          "notes": "Confirm project-specific use of each stack item.",
+          "bullets": [
+            "Designed a PII-isolated AWS research environment with SageMaker Studio, CloudFormation, and researcher-specific profiles to support experimentation on sensitive entity data.",
+            "Defined a versioned JSON schema to reconcile two structurally incompatible annotation sources; built Spark and Python workflows to ingest, normalize, merge, and surface conflicting records.",
+            "Automated a previously manual data workflow with SageMaker Pipelines to make runs repeatable and scheduled."
+          ],
+          "stack": ["Python", "Spark", "PySpark", "AWS SageMaker", "CloudFormation"],
+          "stack_unconfirmed": ["S3", "EMR", "OpenSearch", "RDS", "scikit-learn"],
+          "key_facts": [
+            {
+              "id": "kf-infra-pii-environment",
+              "claim": "Designed a PII-isolated AWS research environment with SageMaker Studio, CloudFormation, and researcher-specific profiles for experimentation on sensitive entity data.",
+              "strong_points": [
+                "Security and compliance in a regulated (KYC/AML) domain is a differentiator.",
+                "Infrastructure-as-code keyword coverage (CloudFormation)."
+              ],
+              "weak_points": ["Number of researchers using it and duration of use are not documented."],
+              "status": "supported",
+              "skills": ["PII handling", "AWS SageMaker Studio", "CloudFormation", "Infrastructure as code", "Data security"]
+            },
+            {
+              "id": "kf-infra-annotation-schema",
+              "claim": "Defined a versioned JSON schema reconciling two structurally incompatible annotation sources, with Spark and Python workflows to ingest, normalize, merge, and surface conflicting records.",
+              "strong_points": [
+                "Data quality and label management are core to ML engineering and often under-represented on resumes.",
+                "Spark keyword coverage."
+              ],
+              "weak_points": ["Annotation scale (\"hundreds of thousands of labeled records\") from older drafts is not verified."],
+              "status": "supported",
+              "metric": {
+                "value": "Hundreds of thousands of labeled records",
+                "basis": "From older resume drafts; annotation scale not verified.",
+                "verified": false
+              },
+              "skills": ["Data engineering", "Spark", "Annotation data", "Schema design", "Data quality"]
+            },
+            {
+              "id": "kf-infra-pipeline-automation",
+              "claim": "Automated a previously manual data workflow with SageMaker Pipelines so runs became repeatable and scheduled.",
+              "strong_points": ["Clear before/after: ad hoc manual runs to reproducible scheduled pipeline."],
+              "weak_points": ["Time or error reduction was not measured."],
+              "status": "supported",
+              "skills": ["MLOps", "AWS SageMaker Pipelines", "Workflow automation"]
+            },
+            {
+              "id": "kf-infra-system-scale",
+              "claim": "The entity resolution system operates across ~800M entities and billions of documents with a 700 idents/second throughput target.",
+              "strong_points": ["Large-scale context makes the infrastructure work sound substantial."],
+              "weak_points": [
+                "System-level figures, not the throughput of Emad's own pipelines.",
+                "Numbers come from older drafts and need substantiation separately."
+              ],
+              "status": "needs-verification",
+              "skills": ["Large-scale data"]
+            }
+          ]
+        },
+        {
+          "id": "tr-checkpoint-search",
+          "name": "Checkpoint — semantic search for tax research",
+          "product": "Checkpoint",
+          "period": "2021",
+          "period_approximate": true,
+          "stage": "production",
+          "stage_note": "Shipped.",
+          "personal_scope": "Designed and shipped the sentence-embedding query-intent classifier; worked with SMEs and customer feedback to identify the retrieval gap; integrated within search latency constraints.",
+          "team_context": "",
+          "notes": "Confirm individual component use for the stack.",
+          "bullets": [
+            "Designed and shipped a sentence-embedding query-intent classifier that distinguished broad conceptual queries from specific tax lookups and promoted higher-level documents for users unfamiliar with specialist terminology.",
+            "Worked with SMEs and customer feedback to identify the retrieval gap and integrate the change within search latency constraints."
+          ],
+          "stack": ["Python", "Sentence embeddings"],
+          "stack_unconfirmed": ["NLTK", "Elasticsearch", "AWS", "Java"],
+          "key_facts": [
+            {
+              "id": "kf-cp-intent-classifier",
+              "claim": "Designed and shipped a sentence-embedding query-intent classifier that separated broad conceptual queries from specific tax lookups and promoted higher-level documents for non-specialist users.",
+              "strong_points": [
+                "Shipped to production on a commercial search product.",
+                "Covers semantic search, embeddings, and information retrieval keywords."
+              ],
+              "weak_points": ["Search quality impact is not measured in a verified way."],
+              "status": "supported",
+              "skills": ["Semantic search", "Sentence embeddings", "Information retrieval", "Text classification"]
+            },
+            {
+              "id": "kf-cp-latency-sme",
+              "claim": "Identified the retrieval gap with SMEs and customer feedback and integrated the change within search latency constraints.",
+              "strong_points": ["Shows user-driven problem finding and production constraints awareness."],
+              "weak_points": ["The ~100ms latency budget from older drafts is unverified."],
+              "status": "supported",
+              "metric": {
+                "value": "~100ms latency budget",
+                "basis": "From older resume drafts; not verified.",
+                "verified": false
+              },
+              "skills": ["Latency constraints", "Stakeholder collaboration"]
+            },
+            {
+              "id": "kf-cp-access-improvement",
+              "claim": "Improved access to conceptual documents by 95%.",
+              "strong_points": ["A strong quantified outcome if substantiated."],
+              "weak_points": ["Measurement method and baseline are unknown; must be substantiated before any use."],
+              "status": "needs-verification",
+              "metric": {
+                "value": "95% improvement in access to conceptual documents",
+                "basis": "From older resume drafts; method unknown.",
+                "verified": false
+              },
+              "skills": ["Search relevance"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "inago",
+      "company": "INAGO Inc.",
+      "location": "Toronto, Canada",
+      "period": "Jul 2018 - Jun 2021",
+      "period_note": "",
+      "titles": [{ "title": "NLP & Machine Learning Engineer", "verified": true }],
+      "notes": "",
+      "role_bullets": [
+        "Developed domain-specific NLP and language-understanding systems spanning data preparation, model training, evaluation, and application integration."
+      ],
+      "projects": [
+        {
+          "id": "inago-question-generation",
+          "name": "Automated question generation from documents",
+          "product": "",
+          "period": "2020",
+          "period_approximate": true,
+          "stage": "research",
+          "stage_note": "Research collaboration with university partners.",
+          "personal_scope": "Fine-tuned T5 to generate questions from documents, explored input representations, and evaluated generated text with BLEURT.",
+          "team_context": "Research collaboration with university partners.",
+          "notes": "",
+          "bullets": [
+            "Fine-tuned T5 to generate questions from documents, explored input representations, and evaluated generated text with BLEURT in a research collaboration with university partners."
+          ],
+          "stack": ["Python", "PyTorch", "Hugging Face Transformers", "T5", "BLEURT"],
+          "stack_unconfirmed": ["spaCy"],
+          "key_facts": [
+            {
+              "id": "kf-qg-t5",
+              "claim": "Fine-tuned T5 for question generation from documents, experimenting with input representations and evaluating output with BLEURT.",
+              "strong_points": [
+                "Hands-on transformer fine-tuning and generation evaluation predating the LLM wave.",
+                "University research collaboration."
+              ],
+              "weak_points": [
+                "Research setting, not production.",
+                "The 40% reduction in manual curation effort from older drafts is not substantiated."
+              ],
+              "status": "supported",
+              "metric": {
+                "value": "40% less manual data curation effort",
+                "basis": "From older resume drafts; not substantiated.",
+                "verified": false
+              },
+              "skills": ["Transformer fine-tuning", "T5", "Text generation", "NLG evaluation", "PyTorch"]
+            }
+          ]
+        },
+        {
+          "id": "inago-nlu",
+          "name": "Domain-specific language understanding",
+          "product": "",
+          "period": "2019",
+          "period_approximate": true,
+          "stage": "research",
+          "stage_note": "Stage unconfirmed; confirm whether these models were integrated into a product.",
+          "personal_scope": "Trained domain Word2Vec embeddings and built LSTM-based natural-language-understanding models with interpretability testing.",
+          "team_context": "",
+          "notes": "",
+          "bullets": [
+            "Trained domain Word2Vec embeddings and built LSTM-based natural-language-understanding models with interpretability testing."
+          ],
+          "stack": ["Python", "PyTorch", "Word2Vec", "LSTM"],
+          "stack_unconfirmed": [],
+          "key_facts": [
+            {
+              "id": "kf-nlu-lstm",
+              "claim": "Trained domain-specific Word2Vec embeddings and LSTM-based NLU models with interpretability testing.",
+              "strong_points": ["Deep-learning NLP fundamentals plus model interpretability."],
+              "weak_points": ["Accuracy gains and deployment are not documented."],
+              "status": "supported",
+              "skills": ["NLU", "Word2Vec", "LSTM", "Model interpretability", "Deep learning"]
+            }
+          ]
+        },
+        {
+          "id": "inago-conversational-qa",
+          "name": "Conversational question answering",
+          "product": "",
+          "period": "2018",
+          "period_approximate": true,
+          "stage": "research",
+          "stage_note": "Developed with an industry partner.",
+          "personal_scope": "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation.",
+          "team_context": "Industry partner collaboration.",
+          "notes": "",
+          "bullets": [
+            "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation with an industry partner."
+          ],
+          "stack": ["Python", "spaCy"],
+          "stack_unconfirmed": [],
+          "key_facts": [
+            {
+              "id": "kf-cqa-system",
+              "claim": "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation with an industry partner.",
+              "strong_points": ["Question answering and dialogue systems connect to today's conversational AI roles.", "Continuation of M.Sc. thesis work on interactive QA."],
+              "weak_points": ["Research collaboration; usage and results are not documented."],
+              "status": "supported",
+              "skills": ["Question answering", "Dialogue systems", "Ontology generation", "spaCy"]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "skills_inventory": [
+    {
+      "category": "Languages and data",
+      "items": ["Python", "Java", "Scala", "Bash", "pandas", "NumPy", "Spark/PySpark", "PostgreSQL", "Snowflake", "Elasticsearch", "OpenSearch"],
+      "caveats": ""
+    },
+    {
+      "category": "Machine learning and NLP",
+      "items": ["scikit-learn", "PyTorch", "XGBoost", "Hugging Face Transformers", "spaCy", "NLTK", "sentence embeddings", "classification", "information retrieval", "language understanding", "supervised learning", "evaluation and dataset preparation"],
+      "caveats": ""
+    },
+    {
+      "category": "LLM systems",
+      "items": ["PydanticAI agent configuration and orchestration prototypes", "prompt design", "LLM-as-judge evaluation migration", "citation checking", "source-grounded summarization", "OpenAI API"],
+      "caveats": "RAG appears in prior skills lists but needs a specific defensible project example before it is highlighted."
+    },
+    {
+      "category": "Cloud and delivery",
+      "items": ["AWS SageMaker Studio and Pipelines", "S3", "EMR", "CloudFormation", "Docker", "MLflow", "research-to-engineering handoff", "work with SMEs"],
+      "caveats": "Confirm direct Docker scope. Do not add Kubernetes, model-serving APIs, or observability ownership without a concrete example."
+    }
+  ],
+  "education": [
+    {
+      "institution": "York University",
+      "location": "Toronto, Canada",
+      "degree": "M.Sc., Computer Science",
+      "period": "2014 - 2018",
+      "grade": "8.17 / 9",
+      "grade_optional": true,
+      "note": "Thesis: Interactive Question Answering Using Frame-based Knowledge Representation"
+    },
+    {
+      "institution": "Amirkabir University of Technology",
+      "location": "Tehran, Iran",
+      "degree": "B.Sc., Computer Engineering",
+      "period": "2010 - 2014",
+      "grade": "17.18 / 20",
+      "grade_optional": true,
+      "note": ""
+    }
+  ],
+  "publications": [
+    {
+      "title": "Question-worthy Sentence Selection for Question Generation",
+      "venue": "Canadian AI",
+      "year": "2020",
+      "verify": "Confirm full citation and author order."
+    },
+    {
+      "title": "Interactive Question Answering Using Frame-based Knowledge Representation",
+      "venue": "York University master's thesis",
+      "year": "2018",
+      "verify": ""
+    },
+    {
+      "title": "Time Aware Topic-based Recommender System",
+      "venue": "Big Data & Information Analytics",
+      "year": "2016",
+      "verify": "Confirm bibliographic details."
+    },
+    {
+      "title": "A Study on Prediction of User's Tendency Toward Purchases in Websites based on Behavior Models",
+      "venue": "Information and Knowledge Technology conference",
+      "year": "2014",
+      "verify": "Confirm bibliographic details."
+    }
+  ],
+  "interview_stories": [
+    {
+      "id": "story-research-to-retraining",
+      "title": "Research to repeatable training",
+      "project_refs": ["tr-er-retraining"],
+      "outline": "Why a manually managed model workflow was a bottleneck; design and implementation of the SageMaker DAG; reusable components, parallel experimentation, MLflow tracking; before/after workflow and actual adoption.",
+      "open_questions": ["Personal architectural tradeoffs still to document."]
+    },
+    {
+      "id": "story-label-imbalance",
+      "title": "Experimentation under label imbalance",
+      "project_refs": ["tr-er-retraining"],
+      "outline": "Positive-heavy annotations versus mostly non-match candidate pairs; negative sampling, holdout discipline, comparison with the legacy model, and SME checks.",
+      "open_questions": ["Clarify which decisions and code Emad owned."]
+    },
+    {
+      "id": "story-aws-to-snowflake",
+      "title": "AWS to Snowflake exploration",
+      "project_refs": ["tr-er-retraining"],
+      "outline": "The processing and training proofs of concept Emad implemented; compatibility and feature gaps.",
+      "open_questions": ["What findings were accepted, rejected, or deferred."]
+    },
+    {
+      "id": "story-trustworthy-llm-output",
+      "title": "Trustworthy LLM output",
+      "project_refs": ["tr-business-ai"],
+      "outline": "Product-manager exemplar summaries, structured XML rules versus free-text extraction prompts, section-level SME reviews, extraction/prompt revisions, entity-name verification, and citation links.",
+      "open_questions": ["No specific SME error example is recalled; do not invent one."]
+    },
+    {
+      "id": "story-agent-config-and-eval",
+      "title": "Agent prototype configuration and evaluation migration",
+      "project_refs": ["tr-investigate"],
+      "outline": "Why Emad centralized prompts, tool descriptions, and agent wiring in a config file for faster experiments; why the team later separated stable definitions; single-agent versus manager/subagent exploration; migration of existing judge code; and unfinished Claude caching research.",
+      "open_questions": ["Distinguish the team's decisions and refactors from Emad's direct implementation."]
+    },
+    {
+      "id": "story-secure-ml-infra",
+      "title": "Secure ML infrastructure",
+      "project_refs": ["tr-er-infrastructure"],
+      "outline": "PII isolation, schema and annotation reconciliation, and the transition from ad hoc runs to a reproducible scheduled pipeline.",
+      "open_questions": []
+    }
+  ],
+  "claim_checks": [
+    {
+      "topic": "Title and dates",
+      "detail": "Verify official Thomson Reuters job title(s), progression, and exact end date; prior resume JSONs still say \"Present\". September 2026 is based on conversation, not an HR record.",
+      "project_refs": []
+    },
+    {
+      "topic": "Snowflake ownership",
+      "detail": "Emad worked specifically on the Snowflake processing pipeline, in addition to data-processing and model-training proofs of concept. Confirm the pipeline's inputs, outputs, deployment status, and exact individual design and implementation before a stronger bullet.",
+      "project_refs": ["tr-er-retraining"]
+    },
+    {
+      "topic": "Retraining efficiency",
+      "detail": "Define the baseline for the approximate 40–50% hypothesis-testing-time estimate and distinguish elapsed time from researcher effort.",
+      "project_refs": ["tr-er-retraining"]
+    },
+    {
+      "topic": "Entity matching outcomes",
+      "detail": "Obtain model scores and comparison method if available. The XGBoost model was in early testing and used in a fresh database build; no production-serving or measured quality-gain claim is established.",
+      "project_refs": ["tr-er-retraining"]
+    },
+    {
+      "topic": "Other numerical claims",
+      "detail": "Substantiate report volume (hundreds/day), Checkpoint access improvement (95%), question-generation curation effort (40%), annotation scale, and system throughput target separately. Omit unsupported numbers from an application resume. The earlier cache-cost-savings claim is retracted; the integration was not finished.",
+      "project_refs": ["tr-business-ai", "tr-checkpoint-search", "inago-question-generation", "tr-er-infrastructure", "tr-investigate"]
+    },
+    {
+      "topic": "Agent production scope",
+      "detail": "Confirm which prototype/configuration and evaluation-repository work others used or was integrated. Distinguish those contributions from the team's selection of PydanticAI and the wider commercial launch.",
+      "project_refs": ["tr-investigate"]
+    },
+    {
+      "topic": "Business AI evaluation",
+      "detail": "Confirm personally observed production volume, evaluation rubric, and sample count if available. Product-manager exemplars and SME annotation rounds are established, but no precise before/after quality metric or specific SME failure example is available. The project researcher led much of the ambiguous-text prompt definition; Emad personally implemented some extraction and prompt changes.",
+      "project_refs": ["tr-business-ai"]
+    },
+    {
+      "topic": "Position-specific skills",
+      "detail": "Keep Kubernetes, production model-hosting services, direct RAG implementation, and unverified platform/leadership claims out of tailored applications until supported by examples.",
+      "project_refs": []
+    }
+  ]
+}

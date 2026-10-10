@@ -1,0 +1,103 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "resume.schema.json",
+  "title": "Resume",
+  "description": "Application resume rendered by src/pages/resume.astro (PDF) and src/components/Resume.astro (website). Text fields marked 'inline' accept **bold** markup.",
+  "type": "object",
+  "required": ["basics", "summary", "skills", "experience", "education", "publications"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "basics": {
+      "type": "object",
+      "required": ["name", "headline", "location", "email"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "headline": { "type": "string", "description": "Shown next to the name; tailor to the target role." },
+        "location": { "type": "string" },
+        "email": { "type": "string" },
+        "github": { "type": "string", "description": "Without https://" },
+        "linkedin": { "type": "string", "description": "Without https://" },
+        "website": { "type": "string", "description": "Without https://" }
+      }
+    },
+    "summary": { "type": "string", "description": "2–3 sentence professional summary (inline)." },
+    "skills": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["category", "items"],
+        "additionalProperties": false,
+        "properties": {
+          "category": { "type": "string" },
+          "items": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+        }
+      }
+    },
+    "experience": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["company", "location", "role", "period", "description", "projects"],
+        "additionalProperties": false,
+        "properties": {
+          "company": { "type": "string" },
+          "location": { "type": "string" },
+          "role": { "type": "string" },
+          "period": { "type": "string" },
+          "description": { "type": "string", "description": "Short role/team context (inline)." },
+          "projects": { "type": "array", "items": { "$ref": "#/$defs/project" } }
+        }
+      }
+    },
+    "education": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["institution", "location", "degree", "period"],
+        "additionalProperties": false,
+        "properties": {
+          "institution": { "type": "string" },
+          "location": { "type": "string" },
+          "degree": { "type": "string" },
+          "grade": { "type": ["string", "null"] },
+          "period": { "type": "string" },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    },
+    "publications": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["title", "venue", "year"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string" },
+          "venue": { "type": "string" },
+          "year": { "type": "string" },
+          "note": { "type": ["string", "null"] }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "project": {
+      "type": "object",
+      "required": ["name", "period", "stage", "description", "tech"],
+      "additionalProperties": false,
+      "properties": {
+        "name": { "type": "string" },
+        "period": { "type": "string" },
+        "stage": {
+          "enum": ["production", "internal", "prototype", "poc", "research"],
+          "description": "production = used by real customers; internal = internal tool/infrastructure in use; prototype; poc = proof of concept; research."
+        },
+        "description": { "type": "string", "description": "What was built, how, and the impact (inline). Bold the key outcome." },
+        "highlights": { "type": "array", "items": { "type": "string" }, "description": "Optional bullets rendered under the description (inline)." },
+        "tech": { "type": "array", "items": { "type": "string" }, "minItems": 1 }
+      }
+    }
+  }
+}

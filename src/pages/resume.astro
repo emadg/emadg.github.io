@@ -1,21 +1,17 @@
 ---
-import resumeData from '../data/resume.json';
+import { loadResume, renderInline, STAGE_LABEL, type Project } from '../lib/resume';
 
-const contact = {
-	name: "Emad Gohari",
-	title: "Senior Machine Learning Engineer - AI, LLM, NLP",
-	email: "E.Gohari.B@gmail.com",
-	github: "github.com/emadg",
-	linkedin: "linkedin.com/in/emad-gohari",
-	website: "EmadGohari.com",
-};
+const resumeData = loadResume();
+const contact = resumeData.basics;
 ---
 
 <!doctype html>
 <html lang="en">
 <head>
 	<meta charset="UTF-8" />
-	<title>{contact.name} | Resume</title>
+	<title>{contact.name} — Resume</title>
+	<meta name="author" content={contact.name} />
+	<meta name="description" content={contact.headline} />
 	<style>
 		@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=PT+Serif:wght@700&display=swap');
 
@@ -49,7 +45,7 @@ const contact = {
 			border-top: 1px solid #ddd;
 			font-size: 9.5px; color: #555;
 		}
-		header .contact-row a {
+		header .contact-row a, header .contact-row .location {
 			color: #555; display: inline-flex; align-items: center; gap: 4px;
 		}
 		header .contact-row svg {
@@ -57,7 +53,7 @@ const contact = {
 		}
 
 		/* ---- Sections ---- */
-		section { margin-bottom: 12px; break-inside: avoid; }
+		section { margin-bottom: 12px; }
 		section h2 {
 			font-family: 'PT Serif', Georgia, serif;
 			font-size: 13px; font-weight: 700; font-style: normal; text-transform: uppercase;
@@ -73,7 +69,18 @@ const contact = {
 			flex-shrink: 0;
 		}
 
+		strong { font-weight: 600; color: #111; }
+
+		/* ---- Summary ---- */
+		.summary { font-size: 10px; color: #333; line-height: 1.5; }
+
+		/* ---- Skills: one line per category ---- */
+		.skills-row { font-size: 9.5px; color: #333; line-height: 1.55; }
+		.skills-row .category { font-weight: 600; color: #111; }
+
 		/* ---- Experience / Education entries ---- */
+		.job { margin-bottom: 10px; }
+		.job-head { break-inside: avoid; break-after: avoid; margin-bottom: 5px; }
 		.entry { margin-bottom: 9px; }
 		.entry-header {
 			display: flex; justify-content: space-between; align-items: baseline;
@@ -90,35 +97,42 @@ const contact = {
 			font-size: 9.5px; color: #555; font-style: italic; margin-top: 2px;
 		}
 
-		/* ---- Projects ---- */
-		.project { margin-bottom: 7px; }
+		/* ---- Projects: titled box under each job ---- */
+		.project {
+			margin: 0 0 6px 12px; padding: 5px 9px 5px;
+			border: 1px solid #e3e6ea; border-left: 2px solid #111; border-radius: 3px;
+			background: #fcfcfd;
+		}
 		.project-header {
-			display: flex; justify-content: space-between; align-items: baseline;
+			display: flex; justify-content: space-between; align-items: baseline; gap: 10px;
 		}
-		.project-header h3 { font-size: 10.5px; font-weight: 600; }
-		.project-header .year { font-size: 9.5px; color: #555; white-space: nowrap; }
-		.project-desc { font-size: 10px; color: #333; margin-top: 1px; line-height: 1.5; }
-		.project-tech { font-size: 9px; color: #666; margin-top: 2px; }
-
-		/* ---- Skills ---- */
-		.skills-list {
-			display: flex; flex-wrap: wrap; gap: 2px 6px;
-			font-size: 9.5px; color: #333;
+		.project-header h4 { font-size: 10.5px; font-weight: 600; color: #111; }
+		.project-header .stage {
+			/* text-box trims the text to cap height..baseline, so equal padding
+			   centers the uppercase label exactly. The no-op transform stops Chrome
+			   snapping each box edge to the pixel grid separately (which made some
+			   tags look off-center). Right padding offsets trailing letter-spacing. */
+			display: inline-block; margin-left: 6px; padding: 3px 3.6px 3px 4px;
+			font-size: 7.5px; line-height: 1; font-weight: 600; letter-spacing: 0.4px; text-transform: uppercase;
+			text-box: trim-both cap alphabetic; transform: scale(1.0001);
+			color: #444; border: 1px solid #aaa; border-radius: 2px; vertical-align: 1px;
 		}
-		.skills-list span::after { content: "·"; margin-left: 6px; color: #bbb; }
-		.skills-list span:last-child::after { content: ""; margin-left: 0; }
+		.project-header .period { font-size: 9.5px; color: #555; white-space: nowrap; }
+		.project-desc { font-size: 10px; color: #333; margin-top: 2px; line-height: 1.5; }
+		.project-highlights { font-size: 10px; color: #333; line-height: 1.5; margin: 2px 0 0 14px; }
+		.project-tech {
+			font-size: 9px; color: #2b2b2b; margin-top: 4px; padding-top: 3px;
+			border-top: 1px dashed #ccd1d7;
+		}
+		.project-tech .label { font-weight: 600; color: #111; }
 
 		/* ---- Publications ---- */
 		.pub { margin-bottom: 5px; }
 		.pub-title { font-size: 10px; font-weight: 500; }
 		.pub-meta { font-size: 9px; color: #555; }
 
-		/* ---- Two-column layout for bottom sections ---- */
-		.two-col {
-			display: grid; grid-template-columns: 1fr 1fr; gap: 0 24px;
-		}
-
-		/* Avoid page breaks inside entries */
+		/* Keep headings with their content; avoid breaks inside small blocks */
+		section h2 { break-after: avoid; }
 		.entry, .project, .pub { break-inside: avoid; }
 	</style>
 </head>
@@ -128,9 +142,13 @@ const contact = {
 	<header>
 		<div class="name-row">
 			<h1>{contact.name}</h1>
-			<span class="title">{contact.title}</span>
+			<span class="title">{contact.headline}</span>
 		</div>
 		<div class="contact-row">
+			<span class="location">
+				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+				{contact.location}
+			</span>
 			<a href={`mailto:${contact.email}`}>
 				<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
 				{contact.email}
@@ -150,17 +168,50 @@ const contact = {
 		</div>
 	</header>
 
-	<!-- Experience -->
+	<!-- Summary -->
+	<section>
+		<h2>Summary</h2>
+		<p class="summary" set:html={renderInline(resumeData.summary)} />
+	</section>
+
+	<!-- Skills -->
+	<section>
+		<h2>Technical Skills</h2>
+		{resumeData.skills.map((group) => (
+			<div class="skills-row">
+				<span class="category">{group.category}:</span> {group.items.join(', ')}
+			</div>
+		))}
+	</section>
+
+	<!-- Experience: each job followed by its projects -->
 	<section>
 		<h2>Experience</h2>
 		{resumeData.experience.map((job) => (
-			<div class="entry">
-				<div class="entry-header">
-					<h3>{job.role} at {job.company}</h3>
-					<span class="period">{job.period}</span>
+			<div class="job">
+				<div class="job-head">
+					<div class="entry-header">
+						<h3>{job.role} at {job.company}</h3>
+						<span class="period">{job.period}</span>
+					</div>
+					<div class="entry-sub">{job.location}</div>
+					<div class="entry-desc" set:html={renderInline(job.description)} />
 				</div>
-				<div class="entry-sub">{job.location}</div>
-				<div class="entry-desc">{job.description}</div>
+				{job.projects.map((project: Project) => (
+					<div class="project">
+						<div class="project-header">
+							<h4>{project.name}<span class="stage">{STAGE_LABEL[project.stage] ?? project.stage}</span></h4>
+							<span class="period">{project.period}</span>
+						</div>
+						<div class="project-desc" set:html={renderInline(project.description)} />
+						{project.highlights?.length ? (
+							<ul class="project-highlights">
+								{project.highlights.map((h) => <li set:html={renderInline(h)} />)}
+							</ul>
+						) : null}
+						<div class="project-tech"><span class="label">Tech &amp; Skills:</span> {project.tech.join(', ')}</div>
+					</div>
+				))}
 			</div>
 		))}
 	</section>
@@ -180,23 +231,6 @@ const contact = {
 		))}
 	</section>
 
-	<!-- Projects -->
-	<section>
-		<h2>Projects</h2>
-		<div class="two-col">
-			{resumeData.projects.map((project) => (
-				<div class="project">
-					<div class="project-header">
-						<h3>{project.name}</h3>
-						<span class="year">{project.year}</span>
-					</div>
-					<div class="project-desc">{project.description}</div>
-					<div class="project-tech">{project.tech.join(' · ')}</div>
-				</div>
-			))}
-		</div>
-	</section>
-
 	<!-- Publications -->
 	<section>
 		<h2>Publications</h2>
@@ -206,16 +240,6 @@ const contact = {
 				<div class="pub-meta">{pub.venue}, {pub.year}{pub.note ? ` · ${pub.note}` : ''}</div>
 			</div>
 		))}
-	</section>
-
-	<!-- Skills -->
-	<section>
-		<h2>Technical Skills</h2>
-		<div class="skills-list">
-			{resumeData.skills.map((skill) => (
-				<span>{skill}</span>
-			))}
-		</div>
 	</section>
 
 </body>

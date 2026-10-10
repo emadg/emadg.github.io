@@ -60,7 +60,7 @@ The `<script>` block:
 
 ### `src/components/Resume.astro`
 
-- Imports data from `src/data/resume.json`.
+- Imports data from `src/data/resume.json`. Uses `allProjects()` and `allSkills()` from `src/lib/resume.ts` to flatten nested projects and skill categories, and `renderInline()` for `**bold**` text.
 - Builds the timeline, skills, and project sections using semantic tokens for backgrounds, borders, and text.
 - 3D Flip Logic remains the same, but card styles now adapt to light/dark mode.
 
@@ -79,12 +79,13 @@ Defines an Astro content collection called `blog` with a Zod schema:
 
 ### `src/pages/resume.astro`
 
-- Print-optimized HTML resume page that reads all data from `resume.json`.
+- Print-optimized HTML resume page. Data comes from `loadResume()` in `src/lib/resume.ts`: `resume.json` by default, or the file named by the `RESUME_DATA` env var (set by `npm run pdf -- --data`).
 - Uses vanilla CSS (no Tailwind) for precise print control: Inter + PT Serif fonts, Letter-size `@page` rule, proper margins.
-- **Contact row**: clickable links with inline SVG icons for email, GitHub, LinkedIn, and website (`EmadGohari.com`). Separated from name/title by a thin horizontal rule.
+- **Contact row**: location plus clickable links with inline SVG icons for email, GitHub, LinkedIn, and website, all from `basics` in the JSON. Separated from name/title by a thin horizontal rule.
 - **Section headings**: PT Serif bold, uppercase, with a 2px × 11px vertical bar accent via CSS `::before` (no markup changes needed to add/remove sections).
 - **Entry format**: "Role at Company" for experience; "Degree, Institution" for education.
-- Section order: header (name + title + contact), experience, education, projects (two-column grid), publications, skills.
+- Single-column layout for ATS parsing. Section order: header (name + headline + contact), summary, technical skills (one line per category), experience (each job followed by its projects as titled boxes with a stage tag and a "Tech & Skills" footer), education, publications.
+- Page breaks: only small blocks (`.project`, `.entry`, `.pub`) avoid breaking inside, so long sections like Experience can span pages.
 - Accessible at `/resume` during development for previewing before PDF generation.
 - **Not linked from the main site navigation** — it exists solely as a PDF source.
 
@@ -93,8 +94,10 @@ Defines an Astro content collection called `blog` with a Zod schema:
 - Node.js script that generates a PDF from the `/resume` page (default path: `public/resume.pdf`).
 - Uses `puppeteer-core` (dev dependency) with the system's Chrome/Chromium — no bundled browser download.
 - Auto-detects Chrome on macOS, Linux, and Windows. Override with `CHROME_PATH` env var.
-- Workflow: starts Astro dev server → waits for it → opens headless Chrome → prints to PDF → shuts down.
-- Run via `npm run pdf`. Optional output: `npm run pdf -- --out ./build/cv.pdf`, `npm run pdf -- --dir ./exports` (writes `resume.pdf` in that folder), or `PDF_OUT=./out.pdf npm run pdf`. See `npm run pdf -- --help`.
+- Workflow: starts its own Astro dev server on a dedicated port (default 4399, `--port`; fails if busy) → waits for it → opens headless Chrome → prints to PDF → shuts down.
+- Run via `npm run pdf`. Optional output: `npm run pdf -- --out ./build/cv.pdf`, `npm run pdf -- --dir ./exports` (writes `resume.pdf` in that folder), or `PDF_OUT=./out.pdf npm run pdf`. Optional input: `--data <file>` or `RESUME_DATA` renders another resume JSON. See `npm run pdf -- --help`.
+- `SPACING` at the top of the script tunes gaps (header, section, job, project box and its left indent, entry, publication).
+- **Auto-fit** (`autoFit()`): lays the page out at the printable width with print media, simulates pagination over the blocks that never split (`header`, `h2`, `.summary`, `.skills-row`, `.job-head`, `.project`, `.entry`, `.pub`; headings and job headers stay with the next block), then tries CSS `zoom` values within `FIT.min`–`FIT.max`. It picks the one with the least blank space on all pages but the last, keeping `FIT.safetyPx` spare and never adding a page. Gains under `FIT.minGainPx` keep 100%. `--no-fit` disables it; `--zoom <n>` pins a value.
 
 ### `src/pages/blog/index.astro`
 

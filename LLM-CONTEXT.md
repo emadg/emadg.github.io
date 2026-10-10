@@ -16,7 +16,8 @@ A personal website and portfolio for Emad Gohari, a Senior Research Engineer spe
 - Dynamic-height flip cards using CSS grid stacking (no fixed height, no scrolling)
 - Education entries on the timeline (single-sided, no flip) below experience entries
 - Skills, projects, and publications sections below the timeline
-- Resume data externalized to JSON (`src/data/resume.json`) — single source of truth
+- Resume data externalized to JSON (`src/data/resume.json`) — single source of truth for the site and PDF; validated by `src/data/schemas/resume.schema.json`
+- Master evidence inventory (`src/data/master-resume.json`, schema in `src/data/schemas/`) with per-project key facts (claim, strong/weak points, status, metric); used by the `tailor-resume` skill, not rendered
 - Print-optimized resume page (`src/pages/resume.astro`) for PDF generation
 - PDF generation script using `puppeteer-core` + system Chrome (`scripts/generate-pdf.mjs`, `npm run pdf`)
 - Downloadable PDF resume button (downloads as `EmadGohari_MLE_CV_2026.pdf`)
@@ -33,7 +34,8 @@ A personal website and portfolio for Emad Gohari, a Senior Research Engineer spe
   - Website field added to contact header (`EmadGohari.com`)
   - Section headings use **PT Serif bold** font with a decorative **2px vertical bar accent** via CSS `::before`
   - Entry format: "Role at Company" / "Degree, Institution" (comma/at separators instead of em-dash)
-- PDF generation script (`scripts/generate-pdf.mjs`) accepts `--out <file>`, `--dir <folder>`, and `PDF_OUT` env var for custom output paths
+- PDF generation script (`scripts/generate-pdf.mjs`) accepts `--out <file>`, `--dir <folder>`, and `PDF_OUT` env var for custom output paths, plus `--data <file>`/`RESUME_DATA` for alternate input, `--port` (default 4399), and auto-fit (slight CSS zoom chosen by simulated pagination to avoid blank page ends; `--no-fit`, `--zoom <n>`)
+- ATS-oriented print layout: single column; summary and categorized skills near the top; each job followed by its projects as titled boxes (stage tag, description with **bold**, "Tech & Skills" footer)
 
 **Not yet implemented:**
 - SEO meta tags (Open Graph, Twitter cards)
@@ -55,7 +57,11 @@ src/
     Hero.astro               # Landing section: badge, headline with gradient text, summary, social links (email, GitHub, LinkedIn)
     Resume.astro             # Timeline with 3D flip cards (experience) and single-sided cards (education), skills tags, projects grid, publications list, PDF download button
   data/
-    resume.json              # { experience, education, skills, projects, publications }
+    resume.json              # { basics, summary, skills[{category,items}], experience[{..., projects[]}], education, publications }
+    master-resume.json       # Tailoring evidence: projects with key_facts, interview stories, claim checks
+    schemas/                 # JSON Schemas for both files
+  lib/
+    resume.ts                # loadResume (RESUME_DATA override), renderInline (**bold**), allProjects, allSkills
   content/
     config.ts                # Astro content collection: blog (title, description, pubDate, tags)
     blog/                    # Markdown blog posts (add .md files here to populate the blog)
@@ -67,7 +73,7 @@ src/
       [slug].astro           # Individual blog post page with prose-styled Markdown rendering
 
 scripts/
-    generate-pdf.mjs         # Puppeteer script: starts dev server, renders /resume → public/resume.pdf; supports --out <file>, --dir <folder>, PDF_OUT env var
+    generate-pdf.mjs         # Puppeteer script: starts dev server, renders /resume → public/resume.pdf; supports --out <file>, --dir <folder>, PDF_OUT, --data <file>/RESUME_DATA, --port
 
 public/
     resume.pdf               # Generated PDF resume (run `npm run pdf` to regenerate)
@@ -94,7 +100,7 @@ public/
 - **Theming**: Implemented via CSS custom properties (variables) in `src/styles/global.css`. Semantic tokens (e.g., `--bg-body`, `--text-primary`) map to different values for `:root` (light) and `:root.dark`.
 - **Theme Toggle**: `Nav.astro` contains the toggle button. `Layout.astro` includes an inline script to prevent flash-of-wrong-theme (FOWT) by checking `localStorage` or system preference before render.
 - There are NO React/Vue/Svelte dependencies. Components are all `.astro` (server-rendered). Client-side interactivity is vanilla TypeScript in `<script>` tags.
-- Resume data is imported as JSON at build time (`import resumeData from '../data/resume.json'`), not fetched at runtime.
+- Resume data is imported as JSON at build time, not fetched at runtime. The print page uses `loadResume()`, which reads `RESUME_DATA` instead when set, so tailored variants render without editing `resume.json`.
 - The blog content collection uses Astro's legacy `type: 'content'` API. `post.id` includes the `.md` extension and must be stripped for clean URLs.
 - The `Nav.astro` component fetches the blog collection at build time; the "Blog" link only appears when at least one post exists in `src/content/blog/`.
 - Astro's built-in Shiki handles code syntax highlighting in blog posts.

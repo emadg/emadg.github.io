@@ -1,5 +1,6 @@
 ---
 import resumeData from '../data/resume.json';
+import { allProjects, allSkills, renderInline } from '../lib/resume';
 ---
 
 <section class="py-16 fade-in-up delay-300 w-full relative">
@@ -50,7 +51,7 @@ import resumeData from '../data/resume.json';
 							<!-- Back Side of Card -->
 							<div class="backface-hidden rotate-y-180 rounded-2xl border border-accent/40 bg-bg-card-hover p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_var(--color-accent-bg)] text-left">
 								<h4 class="text-accent font-semibold mb-2 text-base uppercase tracking-wider">Details & Impact</h4>
-								<p class="text-text-secondary text-base leading-relaxed">{job.description}</p>
+								<p class="text-text-secondary text-base leading-relaxed" set:html={renderInline(job.description)} />
 							</div>
 								
 							</div>
@@ -95,7 +96,7 @@ import resumeData from '../data/resume.json';
 	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-300">
 		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Technical Skills</h2>
 		<div class="flex flex-wrap gap-3">
-			{resumeData.skills.map((skill) => (
+			{allSkills(resumeData).map((skill) => (
 				<span class="px-3 py-1.5 text-base font-medium rounded-lg bg-bg-card text-text-secondary border border-border-subtle hover:border-accent/50 hover:text-text-primary hover:bg-bg-card-hover transition-all cursor-default shadow-sm backdrop-blur-sm">
 					{skill}
 				</span>
@@ -107,13 +108,13 @@ import resumeData from '../data/resume.json';
 	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-200">
 		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Projects</h2>
 		<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-			{resumeData.projects.map((project) => (
+			{allProjects(resumeData).map((project) => (
 				<div class="group relative rounded-2xl border border-border-subtle bg-bg-card p-6 hover:border-accent/50 hover:bg-bg-card-hover transition-all backdrop-blur-sm shadow-lg hover:shadow-[0_0_20px_var(--color-accent-bg)]">
 					<div class="flex items-start justify-between gap-2 mb-3">
 						<h3 class="font-semibold text-text-primary text-base leading-snug">{project.name}</h3>
-						<span class="font-mono text-accent/80 text-sm whitespace-nowrap">{project.year}</span>
+						<span class="font-mono text-accent/80 text-sm whitespace-nowrap">{project.period}</span>
 					</div>
-					<p class="text-text-muted text-base leading-relaxed mb-4">{project.description}</p>
+					<p class="text-text-muted text-base leading-relaxed mb-4" set:html={renderInline(project.description)} />
 					<div class="flex flex-wrap gap-1.5">
 						{project.tech.map((t) => (
 							<span class="px-2 py-0.5 text-sm rounded-md bg-accent-bg text-accent border border-accent/30">{t}</span>
