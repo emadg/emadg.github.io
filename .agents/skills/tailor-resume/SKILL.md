@@ -46,6 +46,8 @@ Use these repository sources when present:
 - `src/data/master-resume.json` (schema: `src/data/schemas/master-resume.schema.json`): detailed project inventory per job, personal versus team scope (`personal_scope`, `team_context`), project `stage`, candidate `bullets`, `interview_stories`, and explicit `claim_checks`. Read the claim checks and each selected project's notes before selecting bullets.
 - `src/data/resume.json` (schema: `src/data/schemas/resume.schema.json`): the current base resume; a starting point for wording and the shape tailored variants must follow, subject to corrections in the master and conversation.
 
+New master facts accumulate on the `master-resume-updates` branch until Emad merges it into `main`, so `main` may lag behind. If `git worktree list` shows a worktree for that branch, read the master from there and make master updates there, committing each confirmed fact on that branch. Leave the `main` checkout's master untouched. Without a worktree, read the branch with `git show master-resume-updates:src/data/master-resume.json` and ask before changing branches.
+
 ### Using key facts
 
 Each master project has `key_facts`: referenceable claims for descriptions, impacts, and results.
@@ -54,7 +56,7 @@ Each master project has `key_facts`: referenceable claims for descriptions, impa
 - `skills` lists the JD keywords a fact demonstrates; use it to map requirements to evidence.
 - `strong_points` say how far a fact can be pushed. Use them more as `framing` moves from `conservative` to `full-overfit`.
 - `weak_points` are the interview risks. Every mode must keep the final wording defensible against them; in `confident` and stronger modes, phrase around a weak point rather than ignoring it (for example, say "proof of concept" instead of implying deployment).
-- A `metric` with `verified: false` stays out of the application unless Emad supplies the basis. When he does, update the master so the next tailoring starts from it.
+- A `metric` with `verified: false` stays out of the application unless Emad supplies the basis. When Emad does, update the master on the `master-resume-updates` branch (see above) so the next tailoring starts from it.
 - `src/pages/resume.astro`: print design (summary, skills, then each job with its project boxes). Contact details live in `basics` of the resume JSON; verify them against any user updates.
 - `scripts/generate-pdf.mjs`, `package.json`, and `README.md`: inspect current rendering capabilities if reusing the site's pipeline.
 
@@ -104,7 +106,7 @@ Write accomplishment bullets around personal action, relevant technical substanc
 
 ### Rendering in this repository
 
-Keep application variants separate from the public portfolio by default. A tailored application does not implicitly request replacing `src/data/resume.json`, the master resume, or `public/resume.pdf`, nor submitting, publishing, committing, or pushing files.
+Keep application variants separate from the public portfolio by default. A tailored application does not implicitly request replacing `src/data/resume.json`, the master resume, or `public/resume.pdf`, nor submitting, publishing, committing, or pushing files. The exception is committing confirmed master facts on the `master-resume-updates` branch, as described above.
 
 Write the tailored content as a `resume.json`-shaped file in the application directory, valid against `src/data/schemas/resume.schema.json`: `basics.headline` and `summary` tailored to the role, `skills` grouped by category, and each job's selected `projects` nested under it with an honest `stage` (production, internal, prototype, poc, research), a what/how/impact `description` using `**bold**` on the key outcome, and `tech`. Then render it without touching source data:
 
