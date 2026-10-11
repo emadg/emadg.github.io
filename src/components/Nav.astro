@@ -9,6 +9,12 @@ const { scrollSnap = false } = Astro.props;
 const blogPosts = await getCollection('blog');
 const hasBlog = blogPosts.length > 0;
 const currentPath = Astro.url.pathname;
+
+const links = [
+	{ href: '/', label: 'Home', active: currentPath === '/' },
+	{ href: '/projects/', label: 'Projects', active: currentPath.startsWith('/projects') },
+	...(hasBlog ? [{ href: '/blog/', label: 'Blog', active: currentPath.startsWith('/blog') }] : []),
+];
 ---
 
 <nav class="w-full px-8 sm:px-12 py-4 border-b border-border-subtle flex items-center justify-between" style={scrollSnap ? "scroll-snap-align: start;" : ""}>
@@ -16,38 +22,27 @@ const currentPath = Astro.url.pathname;
 		EG<span class="text-accent">.</span>
 	</a>
 
-	<div class="flex items-center gap-1">
-		<a
-			href="/"
-			class:list={[
-				'px-4 py-2 text-sm font-medium rounded-lg transition-all',
-				currentPath === '/'
-					? 'text-accent bg-accent-bg'
-					: 'text-text-secondary hover:text-text-primary hover:bg-bg-card-hover',
-			]}
-		>
-			Home
-		</a>
-
-		{hasBlog && (
+	<div class="flex items-center gap-0.5 sm:gap-1">
+		{links.map((link) => (
 			<a
-				href="/blog"
+				href={link.href}
+				aria-current={link.active ? 'page' : undefined}
 				class:list={[
-					'px-4 py-2 text-sm font-medium rounded-lg transition-all',
-					currentPath.startsWith('/blog')
+					'px-2.5 sm:px-4 py-2 text-sm font-medium rounded-lg transition-all',
+					link.active
 						? 'text-accent bg-accent-bg'
 						: 'text-text-secondary hover:text-text-primary hover:bg-bg-card-hover',
 				]}
 			>
-				Blog
+				{link.label}
 			</a>
-		)}
+		))}
 
 		<!-- Theme Toggle Button -->
 		<button
 			id="theme-toggle"
 			type="button"
-			class="ml-2 p-2 rounded-lg text-text-muted hover:text-accent hover:bg-bg-card-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent/50"
+			class="ml-1 sm:ml-2 p-2 rounded-lg text-text-muted hover:text-accent hover:bg-bg-card-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent/50"
 			aria-label="Toggle theme"
 		>
 			<!-- Sun icon (shown in dark mode) -->

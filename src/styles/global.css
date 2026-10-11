@@ -189,3 +189,42 @@ html.theme-transition *::after {
     grid-area: 1 / 1;
   }
 }
+
+/* ------------------------------------------------------------------ */
+/* Project pages                                                       */
+/* ------------------------------------------------------------------ */
+@layer utilities {
+  /* Wide tables scroll inside their own box instead of widening the page. */
+  .table-wrap {
+    @apply my-6 w-full overflow-x-auto rounded-xl border border-border-subtle bg-bg-card;
+  }
+  .prose .table-wrap table { @apply my-0; }
+  .prose .table-wrap th { @apply align-bottom bg-accent-bg/40; }
+  .prose .table-wrap td:first-child { @apply min-w-36 sm:min-w-48; }
+  .prose .table-wrap th.num { @apply text-right; }
+  .prose .table-wrap td.num { @apply text-right font-mono tabular-nums sm:whitespace-nowrap; }
+  .prose .table-wrap tr:last-child td { @apply border-b-0; }
+  .prose .table-wrap caption { @apply caption-bottom text-left text-xs text-text-muted px-3 py-2; }
+  .prose .pending { @apply italic text-text-muted; }
+
+  /* Hand-drawn architecture diagrams: all colours come from theme tokens. */
+  .diagram {
+    @apply my-8 w-full overflow-x-auto rounded-xl border border-border-subtle bg-bg-card p-3 sm:p-4;
+  }
+  .diagram svg { @apply block h-auto w-full min-w-[640px]; }
+  .diagram figcaption { @apply mt-3 text-sm text-text-muted; }
+  .dg-group { fill: var(--accent-bg); stroke: var(--border-strong); stroke-width: 1; }
+  .dg-group-pending { fill: none; stroke: var(--border-strong); stroke-width: 1; stroke-dasharray: 5 4; }
+  .dg-box { fill: var(--bg-body); stroke: var(--border-strong); stroke-width: 1.2; }
+  .dg-box-accent { fill: var(--bg-body); stroke: var(--accent); stroke-width: 1.6; }
+  .dg-store { fill: var(--bg-card); stroke: var(--text-muted); stroke-width: 1.2; }
+  .dg-edge { fill: none; stroke: var(--text-muted); stroke-width: 1.3; }
+  .dg-edge-accent { fill: none; stroke: var(--accent); stroke-width: 1.5; }
+  .dg-edge-dashed { fill: none; stroke: var(--text-muted); stroke-width: 1.2; stroke-dasharray: 4 3; }
+  .dg-arrow { fill: var(--text-muted); }
+  .dg-arrow-accent { fill: var(--accent); }
+  .dg-text { fill: var(--text-primary); font-family: var(--font-sans); font-size: 12px; font-weight: 500; }
+  .dg-mono { fill: var(--text-primary); font-family: var(--font-mono); font-size: 11px; }
+  .dg-label { fill: var(--text-muted); font-family: var(--font-sans); font-size: 11px; }
+  .dg-title { fill: var(--text-secondary); font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase; }
+}

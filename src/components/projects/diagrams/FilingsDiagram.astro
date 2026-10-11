@@ -1,0 +1,101 @@
+---
+// Hand-drawn architecture of filings-extraction-finetune (mirrors the mermaid
+// diagram in the repo's README). Dashed lanes have not been run on a GPU yet.
+const data: [string, string][] = [
+	['EDGAR DEF 14A', 'proxy statements'],
+	['HTML to rows', 'pipe-delimited'],
+	['locate section', 'scored headings'],
+	['teacher LLM', 'JSON schema'],
+	['verifier', 'substring check'],
+	['train / val / test', 'split by company'],
+];
+const train: [string, string][] = [
+	['SFT', 'LoRA / QLoRA'],
+	['sample', '8 per prompt'],
+	['score', 'verifier + F1'],
+	['DPO', 'ref = SFT'],
+	['GRPO', 'optional, from SFT'],
+];
+const serve: [string, string][] = [
+	['export', 'merged, adapter, 4-bit'],
+	['vLLM server', 'guided JSON on/off'],
+	['benchmark', 'tok/s, TTFT, p95'],
+	['evaluate', 'vs base, teacher, rules'],
+];
+const dx = (i: number) => 22 + i * 122;
+const tx = (i: number) => 22 + i * 146;
+const vx = (i: number) => 22 + i * 182;
+---
+
+<figure class="diagram">
+	<svg viewBox="0 0 760 344" role="img" aria-labelledby="fe-title fe-desc" xmlns="http://www.w3.org/2000/svg">
+		<title id="fe-title">filings-extraction-finetune architecture</title>
+		<desc id="fe-desc">
+			Data lane, done on CPU: SEC proxy statements are converted to text rows, the ownership section is
+			located, a teacher LLM labels it and a deterministic verifier keeps only grounded labels, split by
+			company. Training lane, pending GPU runs: supervised fine-tuning with LoRA, on-policy sampling,
+			verifier scoring and DPO, with optional GRPO. Serving lane, pending: export, vLLM serving with
+			optional guided JSON, benchmarking and evaluation.
+		</desc>
+		<defs>
+			<marker id="fe-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+				<path d="M0,0 L10,5 L0,10 z" class="dg-arrow" />
+			</marker>
+		</defs>
+
+		<!-- Data and labels (done) -->
+		<rect x="10" y="10" width="740" height="100" rx="12" class="dg-group" />
+		<text x="24" y="31" class="dg-title">Data and labels, CPU: done</text>
+		{data.map(([a, b], i) => (
+			<g>
+				<rect x={dx(i)} y="44" width="108" height="46" rx="8" class={a === 'verifier' ? 'dg-box-accent' : 'dg-box'} />
+				<text x={dx(i) + 54} y="64" text-anchor="middle" class="dg-text">{a}</text>
+				<text x={dx(i) + 54} y="80" text-anchor="middle" class="dg-label" style="font-size:10px">{b}</text>
+			</g>
+		))}
+		{data.slice(0, -1).map((_, i) => (
+			<line x1={dx(i) + 108} y1="67" x2={dx(i + 1) - 1} y2="67" class="dg-edge" marker-end="url(#fe-arr)" />
+		))}
+		<text x={dx(4) + 54} y="103" text-anchor="middle" class="dg-label" style="font-size:10px">fail: rejected with reason</text>
+
+		<!-- data -> SFT -->
+		<path d={`M${dx(5) + 54},90 L${dx(5) + 54},120 L${tx(0) + 55},120 L${tx(0) + 55},150`} class="dg-edge" marker-end="url(#fe-arr)" />
+
+		<!-- Training (pending) -->
+		<rect x="10" y="126" width="740" height="98" rx="12" class="dg-group-pending" />
+		<text x="140" y="146" class="dg-title">Training, Colab GPU: pending</text>
+		{train.map(([a, b], i) => (
+			<g>
+				<rect x={tx(i)} y="152" width="130" height="46" rx="8" class="dg-box" style={i === 4 ? 'stroke-dasharray:4 3' : undefined} />
+				<text x={tx(i) + 65} y="172" text-anchor="middle" class="dg-text">{a}</text>
+				<text x={tx(i) + 65} y="188" text-anchor="middle" class="dg-label" style="font-size:10px">{b}</text>
+			</g>
+		))}
+		{train.slice(0, 3).map((_, i) => (
+			<line x1={tx(i) + 130} y1="175" x2={tx(i + 1) - 1} y2="175" class="dg-edge" marker-end="url(#fe-arr)" />
+		))}
+
+		<!-- DPO -> export -->
+		<path d={`M${tx(3) + 130},175 L${tx(3) + 138},175 L${tx(3) + 138},236 L${vx(0) + 70},236 L${vx(0) + 70},258`} class="dg-edge" marker-end="url(#fe-arr)" />
+
+		<!-- Serving (pending) -->
+		<rect x="10" y="244" width="740" height="90" rx="12" class="dg-group-pending" />
+		<text x="180" y="264" class="dg-title">Serving and evaluation, GPU: pending</text>
+		{serve.map(([a, b], i) => (
+			<g>
+				<rect x={vx(i)} y="272" width="164" height="46" rx="8" class="dg-box" />
+				<text x={vx(i) + 82} y="292" text-anchor="middle" class="dg-text">{a}</text>
+				<text x={vx(i) + 82} y="308" text-anchor="middle" class="dg-label" style="font-size:10px">{b}</text>
+			</g>
+		))}
+		{serve.slice(0, -1).map((_, i) => (
+			<line x1={vx(i) + 164} y1="295" x2={vx(i + 1) - 1} y2="295" class="dg-edge" marker-end="url(#fe-arr)" />
+		))}
+	</svg>
+	<figcaption>
+		<span class="block sm:hidden italic">Swipe sideways to see the whole diagram.</span>
+		The same verifier is the label filter, the DPO ranker, the GRPO reward and an evaluation metric. Dashed
+		lanes are implemented and smoke-tested on CPU with a 135M model, but have not been run at full scale on a
+		GPU yet.
+	</figcaption>
+</figure>

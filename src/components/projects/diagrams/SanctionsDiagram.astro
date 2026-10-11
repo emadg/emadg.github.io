@@ -1,0 +1,95 @@
+---
+// Hand-drawn architecture of sanctions-screening-service (mirrors the mermaid
+// diagram in the repo's README). Colours come from theme tokens.
+const refresh: [string, string][] = [
+	['fetch', 'OpenSanctions'],
+	['validate', 'checksum'],
+	['build index', '3-gram, phonetic'],
+	['index drift', 'PSI, JS'],
+	['evaluate', 'frozen queries'],
+	['gate', 'recall, alerts'],
+	['publish', 'atomic switch'],
+];
+const serve: [string, string][] = [
+	['normalise', 'transliterate, fold'],
+	['candidates', '3-gram + phonetic'],
+	['features', 'pairwise + listwise'],
+	['LightGBM + isotonic', 'calibrated P(match)'],
+	['matches', 'with explanations'],
+];
+const rx = (i: number) => 22 + i * 104;
+const sx = (i: number) => 22 + i * 146;
+---
+
+<figure class="diagram">
+	<svg viewBox="0 0 760 336" role="img" aria-labelledby="ss-title ss-desc" xmlns="http://www.w3.org/2000/svg">
+		<title id="ss-title">sanctions-screening-service architecture</title>
+		<desc id="ss-desc">
+			A daily refresh pipeline fetches the OpenSanctions snapshot, validates it, builds the index, checks
+			drift, evaluates on a frozen query set and publishes only if a gate passes. The serving path
+			normalises the query, generates candidates with character 3-gram TF-IDF and phonetic keys, computes
+			pairwise and listwise features, and scores them with a calibrated LightGBM model. Metrics and logs
+			feed query and score drift checks and alerts.
+		</desc>
+		<defs>
+			<marker id="ss-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+				<path d="M0,0 L10,5 L0,10 z" class="dg-arrow" />
+			</marker>
+			<marker id="ss-arr-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+				<path d="M0,0 L10,5 L0,10 z" class="dg-arrow-accent" />
+			</marker>
+		</defs>
+
+		<!-- Refresh pipeline -->
+		<rect x="10" y="10" width="740" height="100" rx="12" class="dg-group" />
+		<text x="24" y="31" class="dg-title">Daily refresh: Airflow DAG</text>
+		{refresh.map(([a, b], i) => (
+			<g>
+				<rect x={rx(i)} y="44" width="90" height="46" rx="8" class={a === 'gate' ? 'dg-box-accent' : 'dg-box'} />
+				<text x={rx(i) + 45} y="64" text-anchor="middle" class="dg-text">{a}</text>
+				<text x={rx(i) + 45} y="80" text-anchor="middle" class="dg-label" style="font-size:10px">{b}</text>
+			</g>
+		))}
+		{refresh.slice(0, -1).map((_, i) => (
+			<line x1={rx(i) + 90} y1="67" x2={rx(i + 1) - 1} y2="67" class="dg-edge" marker-end="url(#ss-arr)" />
+		))}
+
+		<!-- publish -> serving -->
+		<line x1={rx(6) + 45} y1="90" x2={rx(6) + 45} y2="136" class="dg-edge-accent" marker-end="url(#ss-arr-acc)" />
+		<text x={rx(6) + 37} y="126" text-anchor="end" class="dg-label">new index version</text>
+
+		<!-- Serving path -->
+		<rect x="10" y="138" width="740" height="104" rx="12" class="dg-group" />
+		<text x="24" y="159" class="dg-title">POST /v1/screen: FastAPI, Docker, Kubernetes</text>
+		{serve.map(([a, b], i) => (
+			<g>
+				<rect x={sx(i)} y="174" width="130" height="48" rx="8" class={i === 3 ? 'dg-box-accent' : 'dg-box'} />
+				<text x={sx(i) + 65} y="195" text-anchor="middle" class="dg-text">{a}</text>
+				<text x={sx(i) + 65} y="211" text-anchor="middle" class="dg-label" style="font-size:10px">{b}</text>
+			</g>
+		))}
+		{serve.slice(0, -1).map((_, i) => (
+			<line x1={sx(i) + 130} y1="198" x2={sx(i + 1) - 1} y2="198" class="dg-edge" marker-end="url(#ss-arr)" />
+		))}
+
+		<!-- Observability -->
+		<line x1={sx(4) + 65} y1="222" x2={sx(4) + 65} y2="274" class="dg-edge" marker-end="url(#ss-arr)" />
+		<rect x="22" y="276" width="216" height="48" rx="8" class="dg-store" />
+		<text x="130" y="296" text-anchor="middle" class="dg-text">alerts + Grafana</text>
+		<text x="130" y="312" text-anchor="middle" class="dg-label">Prometheus rules</text>
+		<rect x="270" y="276" width="216" height="48" rx="8" class="dg-store" />
+		<text x="378" y="296" text-anchor="middle" class="dg-text">query and score drift</text>
+		<text x="378" y="312" text-anchor="middle" class="dg-label">PSI, Jensen-Shannon, z-tests</text>
+		<rect x="518" y="276" width="220" height="48" rx="8" class="dg-store" />
+		<text x="628" y="296" text-anchor="middle" class="dg-text">/metrics + JSON logs</text>
+		<text x="628" y="312" text-anchor="middle" class="dg-label">latency per stage, score histogram</text>
+		<line x1="518" y1="300" x2="489" y2="300" class="dg-edge" marker-end="url(#ss-arr)" />
+		<line x1="270" y1="300" x2="241" y2="300" class="dg-edge" marker-end="url(#ss-arr)" />
+	</svg>
+	<figcaption>
+		<span class="block sm:hidden italic">Swipe sideways to see the whole diagram.</span>
+		The refresh publishes a new index only when validation, drift and frozen-set metric gates pass. On the
+		serving path, retrieval is exact (no ANN) and the matcher's output is a calibrated probability with
+		per-feature explanations.
+	</figcaption>
+</figure>

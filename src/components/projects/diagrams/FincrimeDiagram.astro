@@ -1,0 +1,104 @@
+---
+// Hand-drawn architecture of fincrime-investigator-agent (mirrors the mermaid
+// diagram in the repo's README / docs/DESIGN.md). Colours come from theme tokens.
+const nodes = ['plan', 'screen', 'expand', 'filings', 'policy', 'assess', 'verify', 'finalize'];
+const llmNodes = new Set(['assess', 'verify']);
+const W = 76;
+const x = (i: number) => 22 + i * 91;
+const cx = (i: number) => x(i) + W / 2;
+---
+
+<figure class="diagram">
+	<svg viewBox="0 0 760 356" role="img" aria-labelledby="fa-title fa-desc" xmlns="http://www.w3.org/2000/svg">
+		<title id="fa-title">fincrime-investigator-agent architecture</title>
+		<desc id="fa-desc">
+			A LangGraph state machine runs plan, screen, expand, filings, policy, assess, verify and finalize.
+			Assess and verify call an LLM; verify can send the memo back to assess once, then to a deterministic
+			repair step. Screen, expand and filings call a shared toolkit that is also exposed through an MCP
+			server. The toolkit reads OpenSanctions data through the screening service or an in-process fallback,
+			and SEC EDGAR filings through a hybrid BM25 and dense retrieval index.
+		</desc>
+		<defs>
+			<marker id="fa-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+				<path d="M0,0 L10,5 L0,10 z" class="dg-arrow" />
+			</marker>
+			<marker id="fa-arr-acc" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+				<path d="M0,0 L10,5 L0,10 z" class="dg-arrow-accent" />
+			</marker>
+		</defs>
+
+		<!-- Agent graph -->
+		<rect x="10" y="10" width="740" height="160" rx="12" class="dg-group" />
+		<text x="24" y="31" class="dg-title">LangGraph StateGraph</text>
+		<rect x="200" y="22" width="14" height="10" rx="2" class="dg-box" />
+		<text x="220" y="31" class="dg-label">deterministic</text>
+		<rect x="300" y="22" width="14" height="10" rx="2" class="dg-box-accent" />
+		<text x="320" y="31" class="dg-label">LLM call</text>
+
+		{nodes.map((n, i) => (
+			<g>
+				<rect x={x(i)} y="58" width={W} height="36" rx="8" class={llmNodes.has(n) ? 'dg-box-accent' : 'dg-box'} />
+				<text x={cx(i)} y="80" text-anchor="middle" class="dg-mono">{n}</text>
+			</g>
+		))}
+		{nodes.slice(0, -1).map((_, i) => (
+			<line x1={x(i) + W} y1="76" x2={x(i + 1) - 1} y2="76" class="dg-edge" marker-end="url(#fa-arr)" />
+		))}
+
+		<!-- verify -> assess retry loop -->
+		<path d={`M${cx(6)},58 C${cx(6)},34 ${cx(5)},34 ${cx(5)},56`} class="dg-edge-accent" marker-end="url(#fa-arr-acc)" />
+		<text x={(cx(5) + cx(6)) / 2} y="34" text-anchor="middle" class="dg-label">retry once, then repair</text>
+
+		<!-- verify -> repair -> finalize -->
+		<rect x="659" y="124" width="76" height="32" rx="8" class="dg-box" />
+		<text x="697" y="144" text-anchor="middle" class="dg-mono">repair</text>
+		<line x1="640" y1="94" x2="664" y2="122" class="dg-edge" marker-end="url(#fa-arr)" />
+		<line x1="697" y1="124" x2="697" y2="96" class="dg-edge" marker-end="url(#fa-arr)" />
+		<text x={cx(4)} y="114" text-anchor="middle" class="dg-label">risk floor</text>
+		<text x={cx(4)} y="128" text-anchor="middle" class="dg-label">(rules)</text>
+
+		<!-- Toolkit -->
+		<rect x="10" y="188" width="480" height="82" rx="12" class="dg-group" />
+		<text x="24" y="206" class="dg-title">Toolkit, shared with the MCP server</text>
+		<rect x="22" y="216" width="164" height="34" rx="8" class="dg-box" />
+		<text x="104" y="237" text-anchor="middle" class="dg-mono" style="font-size:10.5px">screen_entity, get_entity</text>
+		<rect x="196" y="216" width="134" height="34" rx="8" class="dg-box" />
+		<text x="263" y="237" text-anchor="middle" class="dg-mono" style="font-size:10.5px">expand_relationships</text>
+		<rect x="340" y="216" width="140" height="34" rx="8" class="dg-box" />
+		<text x="410" y="237" text-anchor="middle" class="dg-mono" style="font-size:10.5px">search_filings</text>
+
+		<line x1={cx(1)} y1="94" x2="116" y2="185" class="dg-edge-dashed" marker-end="url(#fa-arr)" />
+		<line x1={cx(2)} y1="94" x2="258" y2="185" class="dg-edge-dashed" marker-end="url(#fa-arr)" />
+		<line x1={cx(3)} y1="94" x2="390" y2="185" class="dg-edge-dashed" marker-end="url(#fa-arr)" />
+
+		<!-- LLM + MCP -->
+		<rect x="500" y="188" width="250" height="36" rx="8" class="dg-box-accent" />
+		<text x="625" y="210" text-anchor="middle" class="dg-text">LLM: Gemini or Claude</text>
+		<line x1={cx(5)} y1="188" x2={cx(5)} y2="96" class="dg-edge-dashed" marker-end="url(#fa-arr)" />
+		<line x1={cx(6)} y1="188" x2={cx(6)} y2="96" class="dg-edge-dashed" marker-end="url(#fa-arr)" />
+		<rect x="520" y="236" width="230" height="34" rx="8" class="dg-box" />
+		<text x="635" y="257" text-anchor="middle" class="dg-text">MCP server (Claude Code)</text>
+		<line x1="520" y1="253" x2="493" y2="253" class="dg-edge" marker-end="url(#fa-arr)" />
+
+		<!-- Data -->
+		<line x1="104" y1="250" x2="104" y2="292" class="dg-edge" marker-end="url(#fa-arr)" />
+		<line x1="263" y1="250" x2="263" y2="292" class="dg-edge" marker-end="url(#fa-arr)" />
+		<line x1="410" y1="250" x2="410" y2="292" class="dg-edge" marker-end="url(#fa-arr)" />
+		<rect x="22" y="294" width="308" height="48" rx="8" class="dg-store" />
+		<text x="176" y="314" text-anchor="middle" class="dg-text">OpenSanctions via screening service</text>
+		<text x="176" y="331" text-anchor="middle" class="dg-label">HTTP contract, or in-process fallback matcher</text>
+		<rect x="340" y="294" width="140" height="48" rx="8" class="dg-store" />
+		<text x="410" y="314" text-anchor="middle" class="dg-text">SEC EDGAR</text>
+		<text x="410" y="331" text-anchor="middle" class="dg-label">FTS5 BM25 + dense, RRF</text>
+		<rect x="500" y="294" width="250" height="48" rx="8" class="dg-store" />
+		<text x="625" y="314" text-anchor="middle" class="dg-text">OpenTelemetry spans + JSON trace</text>
+		<text x="625" y="331" text-anchor="middle" class="dg-label">tokens, cost and latency per node</text>
+	</svg>
+	<figcaption>
+		<span class="block sm:hidden italic">Swipe sideways to see the whole diagram.</span>
+		Deterministic nodes gather evidence and compute a risk floor; the LLM writes the memo and a verifier checks
+		it. <code>expand</code> and <code>filings</code> run only when they apply (a resolved identity, an
+		organisation). An optional human-review interrupt can pause high-risk outcomes before
+		<code>finalize</code>.
+	</figcaption>
+</figure>
