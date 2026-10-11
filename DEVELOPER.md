@@ -164,6 +164,19 @@ Your Markdown content here...
 
 The post will appear automatically on the `/blog` page and at `/blog/your-file-name/`. The "Blog" nav link will also appear once at least one post exists. Astro's built-in Shiki integration handles syntax-highlighted code blocks automatically.
 
+### Projects pages
+
+- Project metadata (title, tagline, status, highlights, links) lives in `src/data/projects.ts`. The repo/demo URL constants at the top are placeholders: leave a constant as `''` and the page shows a disabled "coming soon" label; set it and the link appears.
+- Each write-up is a page in `src/pages/projects/`. Results tables carry an HTML comment naming the results file in the project repo that each number comes from; keep them in sync when results change.
+- Architecture diagrams are inline SVG components in `src/components/projects/diagrams/`, coloured only through the `.dg-*` classes in `global.css`, so they follow light/dark mode.
+- The agent replay demo (`TraceReplay.astro`) reads `public/demos/fincrime-agent/traces/index.json` and the trace files next to it. To refresh after re-recording traces: `npm run sync-traces -- /path/to/fincrime-investigator-agent/demo/traces` (copies files, writes `index.json`, refuses files containing e-mail addresses or API keys).
+
+### SEO and social images
+
+- `Layout.astro` emits canonical, Open Graph and Twitter tags. Pages can pass `description`, `image` (1200x630, site path), `imageAlt`, `type` (`website`/`article`) and `publishedTime`.
+- `npm run og` regenerates `public/og-default.png` and `public/og/*.png` with puppeteer-core + system Chrome; card text is in `scripts/generate-og.mjs`.
+- `@astrojs/sitemap` writes `sitemap-index.xml` at build time (`/resume` is excluded); `public/robots.txt` points to it.
+
 ## Deployment
 
 The site builds to a `dist/` folder of pure static files. It is currently configured to deploy to **GitHub Pages** and **Cloudflare Pages** simultaneously from the same repo.
