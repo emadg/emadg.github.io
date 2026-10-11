@@ -7,9 +7,28 @@ interface Props {
 	title: string;
 	description?: string;
 	scrollSnap?: boolean;
+	/** Open Graph image: site path (e.g. "/og/foo.png") or absolute URL. 1200x630. */
+	image?: string;
+	imageAlt?: string;
+	/** Open Graph type: "website" for pages, "article" for posts and project write-ups. */
+	type?: 'website' | 'article';
+	/** ISO date for article:published_time. */
+	publishedTime?: string;
 }
 
-const { title, description = "Machine Learning Developer Portfolio & Resume", scrollSnap = false } = Astro.props;
+const {
+	title,
+	description = "Emad Gohari, senior ML and research engineer: NLP, LLM and agentic systems. Portfolio, projects and resume.",
+	scrollSnap = false,
+	image = '/og-default.png',
+	imageAlt = 'Emad Gohari, Senior Research Engineer, AI and ML',
+	type = 'website',
+	publishedTime,
+} = Astro.props;
+
+const site = Astro.site ?? new URL('https://emadgohari.com');
+const canonicalURL = new URL(Astro.url.pathname, site);
+const imageURL = new URL(image, site);
 ---
 
 <!doctype html>
@@ -17,10 +36,29 @@ const { title, description = "Machine Learning Developer Portfolio & Resume", sc
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<link rel="canonical" href={canonicalURL} />
+		<link rel="sitemap" href="/sitemap-index.xml" />
+
+		<!-- Open Graph / social cards -->
+		<meta property="og:type" content={type} />
+		<meta property="og:site_name" content="Emad Gohari" />
+		<meta property="og:title" content={title} />
+		<meta property="og:description" content={description} />
+		<meta property="og:url" content={canonicalURL} />
+		<meta property="og:image" content={imageURL} />
+		<meta property="og:image:width" content="1200" />
+		<meta property="og:image:height" content="630" />
+		<meta property="og:image:alt" content={imageAlt} />
+		{publishedTime && <meta property="article:published_time" content={publishedTime} />}
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:title" content={title} />
+		<meta name="twitter:description" content={description} />
+		<meta name="twitter:image" content={imageURL} />
+		<meta name="twitter:image:alt" content={imageAlt} />
 		
 		<!-- Theme Script to prevent flash of wrong theme -->
 		<script is:inline>

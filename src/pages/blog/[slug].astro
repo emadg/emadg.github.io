@@ -22,7 +22,12 @@ function formatDate(date: Date): string {
 }
 ---
 
-<Layout title={`${post.data.title} | Emad Gohari`} description={post.data.description}>
+<Layout
+	title={`${post.data.title} | Emad Gohari`}
+	description={post.data.description}
+	type="article"
+	publishedTime={post.data.pubDate.toISOString()}
+>
 	<article class="py-16 fade-in-up w-full">
 		<!-- Back link -->
 		<a

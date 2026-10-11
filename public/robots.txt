@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+# /resume is the print source for resume.pdf; the PDF itself stays crawlable.
+Disallow: /resume$
+Disallow: /resume/$
+
+Sitemap: https://emadgohari.com/sitemap-index.xml
