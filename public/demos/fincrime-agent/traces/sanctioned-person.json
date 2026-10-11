@@ -1,0 +1,916 @@
+{
+ "title": "Direct sanctions hit (transliterated name)",
+ "subject": {
+  "name": "Wladimir Putin",
+  "schema": "Person"
+ },
+ "recorded_at": "2026-10-11T08:17:49+00:00",
+ "note": "Recorded with gemini-3.8-flash.",
+ "memo": {
+  "risk_level": "high",
+  "risk_rationale": {
+   "text": "Screening resulted in a confirmed match to sanctioned entity Vladimir Vladimirovich Putin (Q7747), who is designated across multiple sanction programs.",
+   "evidence_ids": [
+    "E1",
+    "E2",
+    "E3"
+   ]
+  },
+  "summary": [
+   {
+    "text": "Screening for 'Wladimir Putin' confirmed a match to Vladimir Vladimirovich Putin (Q7747) with a match score of 0.94.",
+    "evidence_ids": [
+     "E1",
+     "E2"
+    ]
+   },
+   {
+    "text": "The matched individual is subject to export control and sanction listings across multiple regimes including OFAC SDN, EU, UK, and Swiss sanctions.",
+    "evidence_ids": [
+     "E2",
+     "E3"
+    ]
+   },
+   {
+    "text": "The relationship graph records 21 direct relationships, including 11 with sanctioned counterparties, although no direct ownership links were found in the index.",
+    "evidence_ids": [
+     "E25"
+    ]
+   }
+  ],
+  "sanctions_exposure": {
+   "status": "confirmed_match",
+   "matched_entity_ids": [
+    "Q7747"
+   ],
+   "claims": [
+    {
+     "text": "Vladimir Vladimirovich Putin (Q7747) is a confirmed match designated under us_ofac_sdn, eu_journal_sanctions, gb_fcdo_sanctions, ch_seco_sanctions, and other lists.",
+     "evidence_ids": [
+      "E2",
+      "E3"
+     ]
+    }
+   ]
+  },
+  "ownership_exposure": {
+   "status": "none_found",
+   "claims": [
+    {
+     "text": "Based on the screening index search of the direct relationship graph and ownership chains up to depth 2, the ownership rule result was none_found.",
+     "evidence_ids": [
+      "E25"
+     ]
+    }
+   ]
+  },
+  "key_relationships": [
+   {
+    "entity_id": "Q19816371",
+    "name": "Maria Vladimirovna Vorontsova",
+    "relation": "family member",
+    "risk_note": "Counterparty is listed under export control and sanctions datasets.",
+    "evidence_ids": [
+     "E4"
+    ]
+   },
+   {
+    "entity_id": "NK-FRQqzcuyEBn6ukJHMRL3Ks",
+    "name": "Акціонерне товариство \"Тенекс-Логістика\"",
+    "relation": "Līdzekļi",
+    "risk_note": "Counterparty is designated with asset.frozen and sanction topics.",
+    "evidence_ids": [
+     "E5"
+    ]
+   },
+   {
+    "entity_id": "NK-SjRwchVx3EX23ZBPXjkcKy",
+    "name": "UMATEX Joint-Stock Company",
+    "relation": "Līdzekļi",
+    "risk_note": "Counterparty is designated with asset.frozen and sanction topics.",
+    "evidence_ids": [
+     "E13"
+    ]
+   },
+   {
+    "entity_id": "NK-FENs6DchkjSfqUxYEzkw4f",
+    "name": "Товариство з обмеженою відповідальністю \"В Контакте\"",
+    "relation": "Līdzekļi",
+    "risk_note": "Counterparty is designated with asset.frozen and sanction topics.",
+    "evidence_ids": [
+     "E16"
+    ]
+   },
+   {
+    "entity_id": "Q1859524",
+    "name": "Viktor Volodymyrovich MEDVEDCHUK",
+    "relation": "Close associate of Vladimir PUTIN",
+    "risk_note": "Counterparty is marked as POI and listed under sanctions.",
+    "evidence_ids": [
+     "E21"
+    ]
+   },
+   {
+    "entity_id": "NK-kogYwiSMy6g8LTB4d36DuS",
+    "name": "AB \"INTER RAO Lietuva\"",
+    "relation": "UnknownLink",
+    "risk_note": "Counterparty is designated with asset.frozen and sanction topics.",
+    "evidence_ids": [
+     "E19"
+    ]
+   }
+  ],
+  "filings_findings": [
+   {
+    "text": "SEC filings were not searched because the subject is categorized as an individual, so filings information is unknown.",
+    "evidence_ids": [
+     "E26"
+    ]
+   }
+  ],
+  "open_questions": [
+   "Confirm whether the prospective customer is identical to Vladimir Vladimirovich Putin (Q7747) through secondary identifiers such as date of birth or government-issued ID.",
+   "Obtain full ownership documentation and percentage breakdowns for entities linked via asset-freezing roles to evaluate potential indirect control or beneficial ownership."
+  ],
+  "subject": {
+   "name": "Wladimir Putin",
+   "schema": "Person",
+   "birth_date": null,
+   "countries": []
+  },
+  "policy_floor": "high",
+  "evidence": [
+   {
+    "id": "E1",
+    "kind": "screening_summary",
+    "source": "screening:local-fallback",
+    "title": "Screening of 'Wladimir Putin'",
+    "snippet": "Screened 'Wladimir Putin' (schema Person, birth date n/a, countries n/a) against index fixture with matcher heuristic-fuzzy-v1: 1 candidate(s) above 0.5, 1 confirmed identity match(es), 0 possible match(es).",
+    "url": null,
+    "data": {
+     "index_version": "fixture",
+     "model_version": "heuristic-fuzzy-v1",
+     "latency_ms": 557.06,
+     "backend": "local-fallback"
+    },
+    "flags": []
+   },
+   {
+    "id": "E2",
+    "kind": "screening_match",
+    "source": "opensanctions:Q7747",
+    "title": "CONFIRMED match: Vladimir Vladimirovich Putin",
+    "snippet": "Match 'Vladimir Vladimirovich Putin' (Person, id Q7747) score 0.94; disposition confirmed (score 0.94; distinctive name match without secondary identifiers). Topics: export.control, sanction. Datasets: mc_fund_freezes, eu_journal_sanctions, ch_seco_sanctions, gb_fcdo_sanctions, us_ofac_sdn, jp_mof_sanctions. Listed birth dates: ['1952-10-07']. Countries: ['ru'].",
+    "url": "https://www.opensanctions.org/entities/Q7747/",
+    "data": {
+     "disposition": {
+      "entity_id": "Q7747",
+      "caption": "Vladimir Vladimirovich Putin",
+      "schema": "Person",
+      "score": 0.9385,
+      "status": "confirmed",
+      "reasons": [
+       "score 0.94",
+       "distinctive name match without secondary identifiers"
+      ],
+      "sanctioned": true,
+      "other_risk": [
+       "export.control"
+      ],
+      "informational": [],
+      "datasets": [
+       "mc_fund_freezes",
+       "eu_journal_sanctions",
+       "ch_seco_sanctions",
+       "gb_fcdo_sanctions",
+       "us_ofac_sdn",
+       "jp_mof_sanctions",
+       "nz_russia_sanctions",
+       "us_trade_csl",
+       "tw_shtc",
+       "fr_tresor_gels_avoir",
+       "eu_fsf",
+       "ca_dfatd_sema_sanctions",
+       "be_fod_sanctions",
+       "au_dfat_sanctions",
+       "ua_nsdc_sanctions"
+      ]
+     },
+     "explanation": {
+      "name_similarity": 0.938,
+      "query_coverage": 0.939,
+      "candidate_coverage": 0.945,
+      "token_sort_ratio": 0.929,
+      "dob_agreement": 0.0,
+      "country_agreement": 0.0
+     }
+    },
+    "flags": []
+   },
+   {
+    "id": "E3",
+    "kind": "entity_record",
+    "source": "opensanctions:Q7747",
+    "title": "Entity record: Vladimir Vladimirovich Putin",
+    "snippet": "Record Q7747: 'Vladimir Vladimirovich Putin' (Person). Topics: export.control, sanction. Datasets: mc_fund_freezes, eu_journal_sanctions, ch_seco_sanctions, gb_fcdo_sanctions, us_ofac_sdn, jp_mof_sanctions, nz_russia_sanctions, us_trade_csl. 21 relationship(s) within depth 2.",
+    "url": "https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32014R0269",
+    "data": {
+     "topics": [
+      "sanction",
+      "export.control"
+     ],
+     "datasets": [
+      "mc_fund_freezes",
+      "eu_journal_sanctions",
+      "ch_seco_sanctions",
+      "gb_fcdo_sanctions",
+      "us_ofac_sdn",
+      "jp_mof_sanctions",
+      "nz_russia_sanctions",
+      "us_trade_csl",
+      "tw_shtc",
+      "fr_tresor_gels_avoir",
+      "eu_fsf",
+      "ca_dfatd_sema_sanctions",
+      "be_fod_sanctions",
+      "au_dfat_sanctions",
+      "ua_nsdc_sanctions"
+     ]
+    },
+    "flags": []
+   },
+   {
+    "id": "E4",
+    "kind": "relationship",
+    "source": "opensanctions:NK-HZ9on9DVCUL9hfjhfoL2mQ",
+    "title": "Family: Maria Vladimirovna Vorontsova -> Vladimir Vladimirovich Putin",
+    "snippet": "Maria Vladimirovna Vorontsova (id Q19816371) is a family member of Vladimir Vladimirovich Putin (id Q7747) [source role: father]. Link type Family. Topics: Maria Vladimirovna Vorontsova: export.control, sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "Q19816371",
+     "dst": "Q7747",
+     "relation": "Family",
+     "kind": "family",
+     "link_role": "father",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "NK-HZ9on9DVCUL9hfjhfoL2mQ"
+    },
+    "flags": []
+   },
+   {
+    "id": "E5",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-2178b759c177741ddc744190799bdbe1a60af886",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> Акціонерне товариство \"Тенекс-Логістика\"",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to Акціонерне товариство \"Тенекс-Логістика\" (id NK-FRQqzcuyEBn6ukJHMRL3Ks) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; Акціонерне товариство \"Тенекс-Логістика\": asset.frozen, sanction.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-FRQqzcuyEBn6ukJHMRL3Ks",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-2178b759c177741ddc744190799bdbe1a60af886"
+    },
+    "flags": []
+   },
+   {
+    "id": "E6",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-4bff50c648466db82e1336c08da9438900dd2c58",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> SIA \"Forticom\"",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to SIA \"Forticom\" (id NK-LimpGzo94PudvB5sCE9KdK) [source role: Līdzekļi; kapitāldaļas]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; SIA \"Forticom\": asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-LimpGzo94PudvB5sCE9KdK",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi; kapitāldaļas",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-4bff50c648466db82e1336c08da9438900dd2c58"
+    },
+    "flags": []
+   },
+   {
+    "id": "E7",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-4e3d1461b92dd889f9c22bdf631a9ba95bec83a2",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> Sanatorija \"Jantarnij Bereg\", Krievijas Federācijas Prezidenta lietu pārvaldes Federālās budžeta valsts iestādes \"Bērnu medicīniskais centrs\" filiāle",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to Sanatorija \"Jantarnij Bereg\", Krievijas Federācijas Prezidenta lietu pārvaldes Federālās budžeta valsts iestādes \"Bērnu medicīniskais centrs\" filiāle (id NK-RCvT2hj3edmSpXcC63WGTw) [source role: Kapitāldaļas; transportlīdzekļi; traktortehnika; inženierbūve]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; Sanatorija \"Jantarnij Bereg\", Krievijas Federācijas Prezidenta lietu pārvaldes Federālās budžeta valsts iestādes \"Bērnu medicīniskais centrs\" filiāle: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-RCvT2hj3edmSpXcC63WGTw",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Kapitāldaļas; transportlīdzekļi; traktortehnika; inženierbūve",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-4e3d1461b92dd889f9c22bdf631a9ba95bec83a2"
+    },
+    "flags": []
+   },
+   {
+    "id": "E8",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-56f5e667ef1350e39157c0dd390ca9969c287103",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> MAIL.RU LLC / LLC \"VK\"",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to MAIL.RU LLC / LLC \"VK\" (id lv-sanction-4c4454f7a6687c9e9311bc33900f1e883bfa3e3c) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; MAIL.RU LLC / LLC \"VK\": asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "lv-sanction-4c4454f7a6687c9e9311bc33900f1e883bfa3e3c",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-56f5e667ef1350e39157c0dd390ca9969c287103"
+    },
+    "flags": []
+   },
+   {
+    "id": "E9",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-5ca7785fb8493fd5f4d05e71d7d71eb2a35210e4",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> MYCOM BV / MY.GAMES B.V.",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to MYCOM BV / MY.GAMES B.V. (id lv-sanction-ea9231b82ce7abecea87bcc03aac6f821d6e7b9f) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; MYCOM BV / MY.GAMES B.V.: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "lv-sanction-ea9231b82ce7abecea87bcc03aac6f821d6e7b9f",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-5ca7785fb8493fd5f4d05e71d7d71eb2a35210e4"
+    },
+    "flags": []
+   },
+   {
+    "id": "E10",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-a5ee8195b16ada0b4485c12fc412846ea49b00f5",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> VIRTUSPRO LIMITED",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to VIRTUSPRO LIMITED (id NK-8KnH72qwb5iPQouPnPPYXH) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; VIRTUSPRO LIMITED: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-8KnH72qwb5iPQouPnPPYXH",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-a5ee8195b16ada0b4485c12fc412846ea49b00f5"
+    },
+    "flags": []
+   },
+   {
+    "id": "E11",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-c4984a5697fb82443ff5598b98f3f87ba506d56f",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> FGBU DETSKIJ MEDICINSKIJ CENTR",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to FGBU DETSKIJ MEDICINSKIJ CENTR (id lv-sanction-7dc6d8b7a5eb2f199ddb08f01d558d99a56283dc) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; FGBU DETSKIJ MEDICINSKIJ CENTR: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "lv-sanction-7dc6d8b7a5eb2f199ddb08f01d558d99a56283dc",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-c4984a5697fb82443ff5598b98f3f87ba506d56f"
+    },
+    "flags": []
+   },
+   {
+    "id": "E12",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-d30692b8bd42733440c961f56054f5f5f9cd3737",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> PIXONIC GAMES LTD / MY.GAMES HOLDINGS LTD",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to PIXONIC GAMES LTD / MY.GAMES HOLDINGS LTD (id NK-ANZMU26HNBDQUKX5jScork) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; PIXONIC GAMES LTD / MY.GAMES HOLDINGS LTD: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-ANZMU26HNBDQUKX5jScork",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-d30692b8bd42733440c961f56054f5f5f9cd3737"
+    },
+    "flags": []
+   },
+   {
+    "id": "E13",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-da75d5bd9c6cc101ab1aedd81133915c4ae806af",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> UMATEX Joint-Stock Company",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to UMATEX Joint-Stock Company (id NK-SjRwchVx3EX23ZBPXjkcKy) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; UMATEX Joint-Stock Company: asset.frozen, sanction.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-SjRwchVx3EX23ZBPXjkcKy",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-da75d5bd9c6cc101ab1aedd81133915c4ae806af"
+    },
+    "flags": []
+   },
+   {
+    "id": "E14",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-dcf044c587fce900446177d31c6dac89076b7ebf",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> DCGAMEPUB LIMITED",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to DCGAMEPUB LIMITED (id NK-BQodKnCmThBDTtQCGYUvgC) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; DCGAMEPUB LIMITED: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-BQodKnCmThBDTtQCGYUvgC",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-dcf044c587fce900446177d31c6dac89076b7ebf"
+    },
+    "flags": []
+   },
+   {
+    "id": "E15",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-e6ea240183847ab4d1e2cd4a39cb9155c200333e",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> Krievijas Federācijas Prezidenta lietu pārvaldes Federālās budžeta valsts iestāde \"Atveseļošanas komplekss \"BOR\"\"",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to Krievijas Federācijas Prezidenta lietu pārvaldes Federālās budžeta valsts iestāde \"Atveseļošanas komplekss \"BOR\"\" (id lv-sanction-4077140c0f19062776603b1ade238cc839659a94) [source role: Nekustamie īpašumi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; Krievijas Federācijas Prezidenta lietu pārvaldes Federālās budžeta valsts iestāde \"Atveseļošanas komplekss \"BOR\"\": asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "lv-sanction-4077140c0f19062776603b1ade238cc839659a94",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Nekustamie īpašumi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-e6ea240183847ab4d1e2cd4a39cb9155c200333e"
+    },
+    "flags": []
+   },
+   {
+    "id": "E16",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-f19f7d17b39ee590f901ed4dfbfd85616e1d2a7a",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> Товариство з обмеженою відповідальністю \"В Контакте\"",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to Товариство з обмеженою відповідальністю \"В Контакте\" (id NK-FENs6DchkjSfqUxYEzkw4f) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; Товариство з обмеженою відповідальністю \"В Контакте\": asset.frozen, sanction.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-FENs6DchkjSfqUxYEzkw4f",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-f19f7d17b39ee590f901ed4dfbfd85616e1d2a7a"
+    },
+    "flags": []
+   },
+   {
+    "id": "E17",
+    "kind": "relationship",
+    "source": "opensanctions:lv-sanction-f2f8021c9942bc76e1388c784372acc1b10c965e",
+    "title": "UnknownLink: Vladimir Vladimirovich Putin -> MGL MY.COM (CYPRUS) LTD",
+    "snippet": "Vladimir Vladimirovich Putin (id Q7747) is linked to MGL MY.COM (CYPRUS) LTD (id NK-nGqXGThWRtVXC3NPSxm9GK) [source role: Līdzekļi]. Link type UnknownLink. Topics: Vladimir Vladimirovich Putin: export.control, sanction; MGL MY.COM (CYPRUS) LTD: asset.frozen.",
+    "url": null,
+    "data": {
+     "src": "Q7747",
+     "dst": "NK-nGqXGThWRtVXC3NPSxm9GK",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Līdzekļi",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "lv-sanction-f2f8021c9942bc76e1388c784372acc1b10c965e"
+    },
+    "flags": []
+   },
+   {
+    "id": "E18",
+    "kind": "relationship",
+    "source": "opensanctions:ch-seco-f701b0e84a6f7daca1573ec04e453867b7c110d2",
+    "title": "UnknownLink: Alexandr Semenovich BROD -> Vladimir Vladimirovich Putin",
+    "snippet": "Alexandr Semenovich BROD (id Q4096707) is linked to Vladimir Vladimirovich Putin (id Q7747) [source role: Associated individuals]. Link type UnknownLink. Topics: Alexandr Semenovich BROD: sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "Q4096707",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Associated individuals",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "ch-seco-f701b0e84a6f7daca1573ec04e453867b7c110d2"
+    },
+    "flags": []
+   },
+   {
+    "id": "E19",
+    "kind": "relationship",
+    "source": "opensanctions:ltfiu-56c3f649558be7aee58a4a5e36daf9ca95d86439",
+    "title": "UnknownLink: AB \"INTER RAO Lietuva\" -> Vladimir Vladimirovich Putin",
+    "snippet": "AB \"INTER RAO Lietuva\" (id NK-kogYwiSMy6g8LTB4d36DuS) is linked to Vladimir Vladimirovich Putin (id Q7747). Link type UnknownLink. Topics: AB \"INTER RAO Lietuva\": asset.frozen, sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "NK-kogYwiSMy6g8LTB4d36DuS",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": null,
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "ltfiu-56c3f649558be7aee58a4a5e36daf9ca95d86439"
+    },
+    "flags": []
+   },
+   {
+    "id": "E20",
+    "kind": "relationship",
+    "source": "opensanctions:ltfiu-d00bc896d2853cd82ccbc6099431d7d4374eb841",
+    "title": "UnknownLink: UAB „Vydmantai wind park“ -> Vladimir Vladimirovich Putin",
+    "snippet": "UAB „Vydmantai wind park“ (id ltfiu-11-uab-vydmantai-wind-park) is linked to Vladimir Vladimirovich Putin (id Q7747). Link type UnknownLink. Topics: UAB „Vydmantai wind park“: sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "ltfiu-11-uab-vydmantai-wind-park",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": null,
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "ltfiu-d00bc896d2853cd82ccbc6099431d7d4374eb841"
+    },
+    "flags": []
+   },
+   {
+    "id": "E21",
+    "kind": "relationship",
+    "source": "opensanctions:nz-ru-76881a64081018e368053754253f8aac4022902a",
+    "title": "UnknownLink: Viktor Volodymyrovich MEDVEDCHUK -> Vladimir Vladimirovich Putin",
+    "snippet": "Viktor Volodymyrovich MEDVEDCHUK (id Q1859524) is linked to Vladimir Vladimirovich Putin (id Q7747) [source role: Close associate of Vladimir PUTIN]. Link type UnknownLink. Topics: Viktor Volodymyrovich MEDVEDCHUK: poi, sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "Q1859524",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Close associate of Vladimir PUTIN",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "nz-ru-76881a64081018e368053754253f8aac4022902a"
+    },
+    "flags": []
+   },
+   {
+    "id": "E22",
+    "kind": "relationship",
+    "source": "opensanctions:ofac-5662f3a24734602d54e44cdb96da0696c401df64",
+    "title": "UnknownLink: O'Neill Assets Corporation -> Vladimir Vladimirovich Putin",
+    "snippet": "O'Neill Assets Corporation (id NK-3tMNRqkksxxj9JnrRs5Yyz) is linked to Vladimir Vladimirovich Putin (id Q7747) [source role: Providing support to]. Link type UnknownLink. Topics: O'Neill Assets Corporation: sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "NK-3tMNRqkksxxj9JnrRs5Yyz",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Providing support to",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "ofac-5662f3a24734602d54e44cdb96da0696c401df64"
+    },
+    "flags": []
+   },
+   {
+    "id": "E23",
+    "kind": "relationship",
+    "source": "opensanctions:ofac-5a163677ff9961fbab0b8e63e3ad385e00fae753",
+    "title": "UnknownLink: Ironstone Marine Investments -> Vladimir Vladimirovich Putin",
+    "snippet": "Ironstone Marine Investments (id NK-X4FaNTxfDZCw2YvPmLLMy2) is linked to Vladimir Vladimirovich Putin (id Q7747) [source role: Providing support to]. Link type UnknownLink. Topics: Ironstone Marine Investments: sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "NK-X4FaNTxfDZCw2YvPmLLMy2",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Providing support to",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "ofac-5a163677ff9961fbab0b8e63e3ad385e00fae753"
+    },
+    "flags": []
+   },
+   {
+    "id": "E24",
+    "kind": "relationship",
+    "source": "opensanctions:ofac-fee98f6dab3ab71e6b6ce98a971589d52f352259",
+    "title": "UnknownLink: JSC Argument -> Vladimir Vladimirovich Putin",
+    "snippet": "JSC Argument (id NK-eeV9BbnFCyjZxyEeVPeebX) is linked to Vladimir Vladimirovich Putin (id Q7747) [source role: Providing support to]. Link type UnknownLink. Topics: JSC Argument: sanction; Vladimir Vladimirovich Putin: export.control, sanction.",
+    "url": null,
+    "data": {
+     "src": "NK-eeV9BbnFCyjZxyEeVPeebX",
+     "dst": "Q7747",
+     "relation": "UnknownLink",
+     "kind": "association",
+     "link_role": "Providing support to",
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "ofac-fee98f6dab3ab71e6b6ce98a971589d52f352259"
+    },
+    "flags": []
+   },
+   {
+    "id": "E25",
+    "kind": "search_coverage",
+    "source": "agent:expand",
+    "title": "Relationship search coverage for Vladimir Vladimirovich Putin",
+    "snippet": "Searched the relationship graph of Vladimir Vladimirovich Putin (id Q7747) in the screening index: all direct relationships (fan-out cap 25) and ownership chains up to depth 2. Found 21 direct relationship(s), 11 with a sanctioned counterparty. Ownership rule result: none_found. Scope: this index only; relationships not recorded in the source lists cannot be ruled out.",
+    "url": null,
+    "data": {
+     "scope": "relationships",
+     "entity_id": "Q7747",
+     "direct_relationships": 21,
+     "sanctioned_counterparties": 11,
+     "ownership_status": "none_found",
+     "truncated": false
+    },
+    "flags": []
+   },
+   {
+    "id": "E26",
+    "kind": "search_coverage",
+    "source": "agent:policy",
+    "title": "Filings search not performed",
+    "snippet": "SEC filings were not searched for 'Wladimir Putin' (subject is not an organisation).",
+    "url": null,
+    "data": {
+     "scope": "filings",
+     "status": "not_applicable"
+    },
+    "flags": []
+   }
+  ],
+  "verification": {
+   "passed": true,
+   "checks": [
+    {
+     "name": "citations_exist",
+     "passed": true,
+     "detail": "all cited evidence ids exist"
+    },
+    {
+     "name": "claims_cited",
+     "passed": true,
+     "detail": "every claim cites evidence"
+    },
+    {
+     "name": "risk_at_least_floor",
+     "passed": true,
+     "detail": "memo risk high, policy floor high"
+    },
+    {
+     "name": "confirmed_matches_exact",
+     "passed": true,
+     "detail": "memo lists ['Q7747'], policy confirmed ['Q7747']"
+    },
+    {
+     "name": "sanctions_status_consistent",
+     "passed": true,
+     "detail": "memo status confirmed_match, expected confirmed_match"
+    },
+    {
+     "name": "quarantine_respected",
+     "passed": true,
+     "detail": "quarantined evidence not used as support"
+    },
+    {
+     "name": "no_unknown_entities",
+     "passed": true,
+     "detail": "all referenced entities are in evidence"
+    },
+    {
+     "name": "negative_claims_grounded",
+     "passed": true,
+     "detail": "negative findings cite the search that supports them"
+    },
+    {
+     "name": "claims_supported_llm",
+     "passed": true,
+     "detail": "all claims judged supported"
+    }
+   ],
+   "attempt": 1,
+   "repaired": false
+  },
+  "human_review": null,
+  "status": "final",
+  "model": "gemini-3.8-flash",
+  "prompt_versions": {
+   "assess": "assess/v2"
+  },
+  "generated_at": "2026-10-11T08:17:49+00:00",
+  "run_id": "demo-sanctioned-person",
+  "totals": {
+   "input_tokens": 6064,
+   "output_tokens": 2164,
+   "cost_usd": 0.012663,
+   "llm_calls": 2,
+   "tokens_estimated": false,
+   "tool_calls": {
+    "screen_entity": 1,
+    "expand_relationships": 1,
+    "get_entity": 22
+   },
+   "latency_ms": 13373.8
+  }
+ },
+ "trace": [
+  {
+   "node": "plan",
+   "ts": 1791706656.5079708,
+   "latency_ms": 0.2,
+   "tool_calls": {},
+   "summary": {
+    "new_evidence": [],
+    "is_org": false,
+    "input_warnings": []
+   }
+  },
+  {
+   "node": "screen",
+   "ts": 1791706657.065794,
+   "latency_ms": 557.3,
+   "tool_calls": {
+    "screen_entity": 1
+   },
+   "summary": {
+    "new_evidence": [
+     "E1",
+     "E2"
+    ],
+    "matches": 1,
+    "dispositions": [
+     {
+      "id": "Q7747",
+      "caption": "Vladimir Vladimirovich Putin",
+      "score": 0.9385,
+      "status": "confirmed",
+      "sanctioned": true
+     }
+    ],
+    "backend": "local-fallback",
+    "signals": [
+     {
+      "level": "high",
+      "reason": "Confirmed match to sanctioned entity Vladimir Vladimirovich Putin (Q7747)"
+     }
+    ]
+   }
+  },
+  {
+   "node": "expand",
+   "ts": 1791706657.0752,
+   "latency_ms": 8.4,
+   "tool_calls": {
+    "expand_relationships": 1,
+    "get_entity": 22
+   },
+   "summary": {
+    "new_evidence": [
+     "E3",
+     "E4",
+     "E5",
+     "E6",
+     "E7",
+     "E8",
+     "E9",
+     "E10",
+     "E11",
+     "E12",
+     "E13",
+     "E14",
+     "E15",
+     "E16",
+     "E17",
+     "E18",
+     "E19",
+     "E20",
+     "E21",
+     "E22",
+     "E23",
+     "E24",
+     "E25"
+    ],
+    "graph": {
+     "Q7747": {
+      "nodes": 22,
+      "edges": 21,
+      "truncated": false
+     }
+    },
+    "signals": []
+   }
+  },
+  {
+   "node": "policy",
+   "ts": 1791706657.0759103,
+   "latency_ms": 0.0,
+   "tool_calls": {},
+   "summary": {
+    "new_evidence": [
+     "E26"
+    ],
+    "floor": "high",
+    "confirmed_sanctioned": [
+     "Q7747"
+    ],
+    "possible_sanctioned": [],
+    "n_signals": 1
+   }
+  },
+  {
+   "node": "assess",
+   "ts": 1791706664.0518656,
+   "latency_ms": 6975.0,
+   "tool_calls": {},
+   "summary": {
+    "risk_level": "high",
+    "usage": [
+     {
+      "node": "assess",
+      "model": "gemini-3.8-flash",
+      "input_tokens": 3728,
+      "output_tokens": 1147,
+      "latency_ms": 6968.6,
+      "cost_usd": 0.007097,
+      "estimated": false
+     }
+    ]
+   }
+  },
+  {
+   "node": "verify",
+   "ts": 1791706669.8771496,
+   "latency_ms": 5824.5,
+   "tool_calls": {},
+   "summary": {
+    "passed": true,
+    "failed_checks": [],
+    "feedback": [],
+    "usage": [
+     {
+      "node": "verify",
+      "model": "gemini-3.8-flash",
+      "input_tokens": 2336,
+      "output_tokens": 1017,
+      "latency_ms": 5821.4,
+      "cost_usd": 0.005566,
+      "estimated": false
+     }
+    ]
+   }
+  },
+  {
+   "node": "finalize",
+   "ts": 1791706669.8794928,
+   "latency_ms": 0.6,
+   "tool_calls": {},
+   "summary": {
+    "risk_level": "high",
+    "status": "final",
+    "totals": {
+     "input_tokens": 6064,
+     "output_tokens": 2164,
+     "cost_usd": 0.012663,
+     "llm_calls": 2,
+     "tokens_estimated": false,
+     "tool_calls": {
+      "screen_entity": 1,
+      "expand_relationships": 1,
+      "get_entity": 22
+     },
+     "latency_ms": 13373.8
+    }
+   }
+  }
+ ]
+}

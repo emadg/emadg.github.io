@@ -1,0 +1,309 @@
+{
+ "title": "Same name, different person (birth date conflict)",
+ "subject": {
+  "name": "Igor Sechin",
+  "schema": "Person",
+  "birth_date": "1975-01-01",
+  "countries": [
+   "ca"
+  ]
+ },
+ "recorded_at": "2026-10-11T08:18:30+00:00",
+ "note": "Recorded with gemini-3.8-flash.",
+ "memo": {
+  "risk_level": "low",
+  "risk_rationale": {
+   "text": "Screening of the subject yielded no candidates above the threshold, resulting in a low risk floor.",
+   "evidence_ids": [
+    "E1"
+   ]
+  },
+  "summary": [
+   {
+    "text": "Screening of 'Igor Sechin' (birth date 1975-01-01, countries ['ca']) identified zero candidates above 0.5, zero confirmed identity matches, and zero possible matches.",
+    "evidence_ids": [
+     "E1"
+    ]
+   },
+   {
+    "text": "Relationship and ownership search was not performed because screening resolved no confirmed identity in the index, leaving relationships unknown.",
+    "evidence_ids": [
+     "E2"
+    ]
+   },
+   {
+    "text": "SEC filings were not searched because the subject is an individual, not an organisation.",
+    "evidence_ids": [
+     "E3"
+    ]
+   }
+  ],
+  "sanctions_exposure": {
+   "status": "no_match",
+   "matched_entity_ids": [],
+   "claims": [
+    {
+     "text": "The screening search against index fixture resolved 0 confirmed identity matches and 0 possible matches.",
+     "evidence_ids": [
+      "E1"
+     ]
+    }
+   ]
+  },
+  "ownership_exposure": {
+   "status": "not_applicable",
+   "claims": [
+    {
+     "text": "Relationship and ownership searches were not performed, so ownership details remain unknown rather than absent.",
+     "evidence_ids": [
+      "E2"
+     ]
+    }
+   ]
+  },
+  "key_relationships": [],
+  "filings_findings": [
+   {
+    "text": "SEC filings were not searched because the subject is not an organisation.",
+    "evidence_ids": [
+     "E3"
+    ]
+   }
+  ],
+  "open_questions": [
+   "Obtain additional identifying information or documentation to verify whether the individual has any relevant directorships or commercial ownerships."
+  ],
+  "subject": {
+   "name": "Igor Sechin",
+   "schema": "Person",
+   "birth_date": "1975-01-01",
+   "countries": [
+    "ca"
+   ]
+  },
+  "policy_floor": "low",
+  "evidence": [
+   {
+    "id": "E1",
+    "kind": "screening_summary",
+    "source": "screening:local-fallback",
+    "title": "Screening of 'Igor Sechin'",
+    "snippet": "Screened 'Igor Sechin' (schema Person, birth date 1975-01-01, countries ['ca']) against index fixture with matcher heuristic-fuzzy-v1: 0 candidate(s) above 0.5, 0 confirmed identity match(es), 0 possible match(es).",
+    "url": null,
+    "data": {
+     "index_version": "fixture",
+     "model_version": "heuristic-fuzzy-v1",
+     "latency_ms": 17.46,
+     "backend": "local-fallback"
+    },
+    "flags": []
+   },
+   {
+    "id": "E2",
+    "kind": "search_coverage",
+    "source": "agent:policy",
+    "title": "Relationship search not performed",
+    "snippet": "Relationship and ownership search was NOT performed for 'Igor Sechin' because screening resolved no confirmed identity in the index. The subject's relationships are unknown, not absent.",
+    "url": null,
+    "data": {
+     "scope": "relationships",
+     "status": "not_performed"
+    },
+    "flags": []
+   },
+   {
+    "id": "E3",
+    "kind": "search_coverage",
+    "source": "agent:policy",
+    "title": "Filings search not performed",
+    "snippet": "SEC filings were not searched for 'Igor Sechin' (subject is not an organisation).",
+    "url": null,
+    "data": {
+     "scope": "filings",
+     "status": "not_applicable"
+    },
+    "flags": []
+   }
+  ],
+  "verification": {
+   "passed": true,
+   "checks": [
+    {
+     "name": "citations_exist",
+     "passed": true,
+     "detail": "all cited evidence ids exist"
+    },
+    {
+     "name": "claims_cited",
+     "passed": true,
+     "detail": "every claim cites evidence"
+    },
+    {
+     "name": "risk_at_least_floor",
+     "passed": true,
+     "detail": "memo risk low, policy floor low"
+    },
+    {
+     "name": "confirmed_matches_exact",
+     "passed": true,
+     "detail": "memo lists [], policy confirmed []"
+    },
+    {
+     "name": "sanctions_status_consistent",
+     "passed": true,
+     "detail": "memo status no_match, expected no_match"
+    },
+    {
+     "name": "quarantine_respected",
+     "passed": true,
+     "detail": "quarantined evidence not used as support"
+    },
+    {
+     "name": "no_unknown_entities",
+     "passed": true,
+     "detail": "all referenced entities are in evidence"
+    },
+    {
+     "name": "negative_claims_grounded",
+     "passed": true,
+     "detail": "negative findings cite the search that supports them"
+    },
+    {
+     "name": "claims_supported_llm",
+     "passed": true,
+     "detail": "all claims judged supported"
+    }
+   ],
+   "attempt": 1,
+   "repaired": false
+  },
+  "human_review": null,
+  "status": "final",
+  "model": "gemini-3.8-flash",
+  "prompt_versions": {
+   "assess": "assess/v2"
+  },
+  "generated_at": "2026-10-11T08:18:30+00:00",
+  "run_id": "demo-near-miss",
+  "totals": {
+   "input_tokens": 1369,
+   "output_tokens": 831,
+   "cost_usd": 0.004143,
+   "llm_calls": 2,
+   "tokens_estimated": false,
+   "tool_calls": {
+    "screen_entity": 1
+   },
+   "latency_ms": 7368.1
+  }
+ },
+ "trace": [
+  {
+   "node": "plan",
+   "ts": 1791706703.2678115,
+   "latency_ms": 0.1,
+   "tool_calls": {},
+   "summary": {
+    "new_evidence": [],
+    "is_org": false,
+    "input_warnings": []
+   }
+  },
+  {
+   "node": "screen",
+   "ts": 1791706703.2868068,
+   "latency_ms": 17.7,
+   "tool_calls": {
+    "screen_entity": 1
+   },
+   "summary": {
+    "new_evidence": [
+     "E1"
+    ],
+    "matches": 0,
+    "dispositions": [],
+    "backend": "local-fallback",
+    "signals": []
+   }
+  },
+  {
+   "node": "policy",
+   "ts": 1791706703.2883282,
+   "latency_ms": 0.1,
+   "tool_calls": {},
+   "summary": {
+    "new_evidence": [
+     "E2",
+     "E3"
+    ],
+    "floor": "low",
+    "confirmed_sanctioned": [],
+    "possible_sanctioned": [],
+    "n_signals": 0
+   }
+  },
+  {
+   "node": "assess",
+   "ts": 1791706707.4590335,
+   "latency_ms": 4169.6,
+   "tool_calls": {},
+   "summary": {
+    "risk_level": "low",
+    "usage": [
+     {
+      "node": "assess",
+      "model": "gemini-3.8-flash",
+      "input_tokens": 719,
+      "output_tokens": 468,
+      "latency_ms": 4164.1,
+      "cost_usd": 0.002294,
+      "estimated": false
+     }
+    ]
+   }
+  },
+  {
+   "node": "verify",
+   "ts": 1791706710.6315403,
+   "latency_ms": 3171.0,
+   "tool_calls": {},
+   "summary": {
+    "passed": true,
+    "failed_checks": [],
+    "feedback": [],
+    "usage": [
+     {
+      "node": "verify",
+      "model": "gemini-3.8-flash",
+      "input_tokens": 650,
+      "output_tokens": 363,
+      "latency_ms": 3168.4,
+      "cost_usd": 0.001849,
+      "estimated": false
+     }
+    ]
+   }
+  },
+  {
+   "node": "finalize",
+   "ts": 1791706710.6332047,
+   "latency_ms": 0.3,
+   "tool_calls": {},
+   "summary": {
+    "risk_level": "low",
+    "status": "final",
+    "totals": {
+     "input_tokens": 1369,
+     "output_tokens": 831,
+     "cost_usd": 0.004143,
+     "llm_calls": 2,
+     "tokens_estimated": false,
+     "tool_calls": {
+      "screen_entity": 1
+     },
+     "latency_ms": 7368.1
+    }
+   }
+  }
+ ]
+}

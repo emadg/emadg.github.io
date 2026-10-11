@@ -1,0 +1,485 @@
+{
+ "title": "Not listed, but owned by a sanctioned conglomerate",
+ "subject": {
+  "name": "Myawady Football Club",
+  "schema": "Company"
+ },
+ "recorded_at": "2026-10-11T08:17:58+00:00",
+ "note": "Recorded with gemini-3.8-flash.",
+ "memo": {
+  "risk_level": "high",
+  "risk_rationale": {
+   "text": "The deterministic screening policy established a high risk floor due to recorded ownership by a sanctioned entity under presumed control criteria.",
+   "evidence_ids": [
+    "E4",
+    "E5"
+   ]
+  },
+  "summary": [
+   {
+    "text": "Myawady Football Club matched confirmed identity record NK-mjS7N8kB49H88xYFVAkigF in the screening index dataset gb_fcdo_sanctions, though it does not carry direct sanction topics itself.",
+    "evidence_ids": [
+     "E2",
+     "E3"
+    ]
+   },
+   {
+    "text": "The entity is recorded as owned by Myanma Economic Holdings Public Company Limited, an entity subject to export control and sanctions topics, with an unrecorded ownership percentage resulting in presumed control.",
+    "evidence_ids": [
+     "E4",
+     "E5"
+    ]
+   },
+   {
+    "text": "A search of SEC EDGAR found no matching registrant, so no SEC filings were reviewed.",
+    "evidence_ids": [
+     "E7"
+    ]
+   }
+  ],
+  "sanctions_exposure": {
+   "status": "no_match",
+   "matched_entity_ids": [],
+   "claims": [
+    {
+     "text": "Myawady Football Club is confirmed as matching record NK-mjS7N8kB49H88xYFVAkigF from the gb_fcdo_sanctions dataset but carries no sanction topics itself, and there are no confirmed direct sanctioned matches per the screening policy.",
+     "evidence_ids": [
+      "E2",
+      "E3"
+     ]
+    }
+   ]
+  },
+  "ownership_exposure": {
+   "status": "presumed_control",
+   "claims": [
+    {
+     "text": "The entity is linked via an ownership relationship from sanctioned entity Myanma Economic Holdings Public Company Limited, with an unrecorded percentage leading to an illustrative 50% rule evaluation of presumed control.",
+     "evidence_ids": [
+      "E4",
+      "E5",
+      "E6"
+     ]
+    }
+   ]
+  },
+  "key_relationships": [
+   {
+    "entity_id": "NK-kAM2M2rAgGVmT8jmqfxbcM",
+    "name": "Myanma Economic Holdings Public Company Limited",
+    "relation": "owner (percentage not recorded)",
+    "risk_note": "Counterparty is flagged with sanction and export.control topics; ownership percentage is unrecorded, triggering presumed control under the ownership analysis.",
+    "evidence_ids": [
+     "E4",
+     "E5"
+    ]
+   }
+  ],
+  "filings_findings": [
+   {
+    "text": "No matching registrant was found for 'Myawady Football Club' in the SEC EDGAR screening index fixture, meaning no filings were evaluated.",
+    "evidence_ids": [
+     "E7"
+    ]
+   }
+  ],
+  "open_questions": [
+   "Obtain official corporate registry records or shareholding documentation for Myawady Football Club to establish the exact ownership percentage held by Myanma Economic Holdings Public Company Limited.",
+   "Verify whether any other natural persons or entities hold direct or indirect ownership or exercise control over Myawady Football Club."
+  ],
+  "subject": {
+   "name": "Myawady Football Club",
+   "schema": "Company",
+   "birth_date": null,
+   "countries": []
+  },
+  "policy_floor": "high",
+  "evidence": [
+   {
+    "id": "E1",
+    "kind": "screening_summary",
+    "source": "screening:local-fallback",
+    "title": "Screening of 'Myawady Football Club'",
+    "snippet": "Screened 'Myawady Football Club' (schema Company, birth date n/a, countries n/a) against index fixture with matcher heuristic-fuzzy-v1: 2 candidate(s) above 0.5, 1 confirmed identity match(es), 0 possible match(es).",
+    "url": null,
+    "data": {
+     "index_version": "fixture",
+     "model_version": "heuristic-fuzzy-v1",
+     "latency_ms": 28.84,
+     "backend": "local-fallback"
+    },
+    "flags": []
+   },
+   {
+    "id": "E2",
+    "kind": "screening_match",
+    "source": "opensanctions:NK-mjS7N8kB49H88xYFVAkigF",
+    "title": "CONFIRMED match: Myawady Football Club",
+    "snippet": "Match 'Myawady Football Club' (Company, id NK-mjS7N8kB49H88xYFVAkigF) score 1.00; disposition confirmed (score 1.00; distinctive name match without secondary identifiers). Topics: none. Datasets: gb_fcdo_sanctions. Listed birth dates: n/a. Countries: n/a.",
+    "url": "https://www.opensanctions.org/entities/NK-mjS7N8kB49H88xYFVAkigF/",
+    "data": {
+     "disposition": {
+      "entity_id": "NK-mjS7N8kB49H88xYFVAkigF",
+      "caption": "Myawady Football Club",
+      "schema": "Company",
+      "score": 1.0,
+      "status": "confirmed",
+      "reasons": [
+       "score 1.00",
+       "distinctive name match without secondary identifiers"
+      ],
+      "sanctioned": false,
+      "other_risk": [],
+      "informational": [],
+      "datasets": [
+       "gb_fcdo_sanctions"
+      ]
+     },
+     "explanation": {
+      "name_similarity": 1.0,
+      "query_coverage": 1.0,
+      "candidate_coverage": 1.0,
+      "token_sort_ratio": 1.0,
+      "dob_agreement": 0.0,
+      "country_agreement": 0.0
+     }
+    },
+    "flags": []
+   },
+   {
+    "id": "E3",
+    "kind": "entity_record",
+    "source": "opensanctions:NK-mjS7N8kB49H88xYFVAkigF",
+    "title": "Entity record: Myawady Football Club",
+    "snippet": "Record NK-mjS7N8kB49H88xYFVAkigF: 'Myawady Football Club' (Company). Topics: none. Datasets: gb_fcdo_sanctions. 1 relationship(s) within depth 2.",
+    "url": null,
+    "data": {
+     "topics": [],
+     "datasets": [
+      "gb_fcdo_sanctions"
+     ]
+    },
+    "flags": []
+   },
+   {
+    "id": "E4",
+    "kind": "relationship",
+    "source": "opensanctions:NK-3F66KMrEBWSAPciLdqn259",
+    "title": "Ownership: Myanma Economic Holdings Public Company Limited -> Myawady Football Club",
+    "snippet": "Myanma Economic Holdings Public Company Limited (id NK-kAM2M2rAgGVmT8jmqfxbcM) owns Myawady Football Club (id NK-mjS7N8kB49H88xYFVAkigF) (percentage not recorded). Link type Ownership. Topics: Myanma Economic Holdings Public Company Limited: export.control, sanction; Myawady Football Club: none.",
+    "url": null,
+    "data": {
+     "src": "NK-kAM2M2rAgGVmT8jmqfxbcM",
+     "dst": "NK-mjS7N8kB49H88xYFVAkigF",
+     "relation": "Ownership",
+     "kind": "ownership",
+     "link_role": null,
+     "percentage": null,
+     "direction_known": true,
+     "link_id": "NK-3F66KMrEBWSAPciLdqn259"
+    },
+    "flags": []
+   },
+   {
+    "id": "E5",
+    "kind": "ownership_analysis",
+    "source": "policy:ownership-rule",
+    "title": "Ownership analysis for Myawady Football Club",
+    "snippet": "Illustrative 50% rule result: presumed_control. Aggregate share held by blocked parties: 50% (includes presumed stakes where percentage is not recorded). Chains: Myanma Economic Holdings Public Company Limited -> Myawady Football Club.",
+    "url": null,
+    "data": {
+     "status": "presumed_control",
+     "sanctioned_share": 50.0,
+     "paths": [
+      [
+       "NK-kAM2M2rAgGVmT8jmqfxbcM",
+       "NK-mjS7N8kB49H88xYFVAkigF"
+      ]
+     ],
+     "evidence_ids": [
+      "E4"
+     ],
+     "unknown_pct": true
+    },
+    "flags": []
+   },
+   {
+    "id": "E6",
+    "kind": "search_coverage",
+    "source": "agent:expand",
+    "title": "Relationship search coverage for Myawady Football Club",
+    "snippet": "Searched the relationship graph of Myawady Football Club (id NK-mjS7N8kB49H88xYFVAkigF) in the screening index: all direct relationships (fan-out cap 25) and ownership chains up to depth 2. Found 1 direct relationship(s), 1 with a sanctioned counterparty. Ownership rule result: presumed_control. Scope: this index only; relationships not recorded in the source lists cannot be ruled out.",
+    "url": null,
+    "data": {
+     "scope": "relationships",
+     "entity_id": "NK-mjS7N8kB49H88xYFVAkigF",
+     "direct_relationships": 1,
+     "sanctioned_counterparties": 1,
+     "ownership_status": "presumed_control",
+     "truncated": false
+    },
+    "flags": []
+   },
+   {
+    "id": "E7",
+    "kind": "search_coverage",
+    "source": "agent:filings",
+    "title": "Filings search coverage",
+    "snippet": "Searched SEC EDGAR (edgar-fixture) for 'Myawady Football Club': no matching registrant found, so no filings were reviewed (most private and non-US companies do not file).",
+    "url": null,
+    "data": {
+     "scope": "filings",
+     "status": "not_found",
+     "n_chunks": 0
+    },
+    "flags": []
+   }
+  ],
+  "verification": {
+   "passed": true,
+   "checks": [
+    {
+     "name": "citations_exist",
+     "passed": true,
+     "detail": "all cited evidence ids exist"
+    },
+    {
+     "name": "claims_cited",
+     "passed": true,
+     "detail": "every claim cites evidence"
+    },
+    {
+     "name": "risk_at_least_floor",
+     "passed": true,
+     "detail": "memo risk high, policy floor high"
+    },
+    {
+     "name": "confirmed_matches_exact",
+     "passed": true,
+     "detail": "memo lists [], policy confirmed []"
+    },
+    {
+     "name": "sanctions_status_consistent",
+     "passed": true,
+     "detail": "memo status no_match, expected no_match"
+    },
+    {
+     "name": "quarantine_respected",
+     "passed": true,
+     "detail": "quarantined evidence not used as support"
+    },
+    {
+     "name": "no_unknown_entities",
+     "passed": true,
+     "detail": "all referenced entities are in evidence"
+    },
+    {
+     "name": "negative_claims_grounded",
+     "passed": true,
+     "detail": "negative findings cite the search that supports them"
+    },
+    {
+     "name": "claims_supported_llm",
+     "passed": true,
+     "detail": "all claims judged supported"
+    }
+   ],
+   "attempt": 1,
+   "repaired": false
+  },
+  "human_review": null,
+  "status": "final",
+  "model": "gemini-3.8-flash",
+  "prompt_versions": {
+   "assess": "assess/v2"
+  },
+  "generated_at": "2026-10-11T08:17:58+00:00",
+  "run_id": "demo-ownership-presumed",
+  "totals": {
+   "input_tokens": 2779,
+   "output_tokens": 1284,
+   "cost_usd": 0.006899,
+   "llm_calls": 2,
+   "tokens_estimated": false,
+   "tool_calls": {
+    "screen_entity": 1,
+    "expand_relationships": 1,
+    "get_entity": 2,
+    "search_filings": 1
+   },
+   "latency_ms": 8908.2
+  }
+ },
+ "trace": [
+  {
+   "node": "plan",
+   "ts": 1791706669.8884795,
+   "latency_ms": 0.2,
+   "tool_calls": {},
+   "summary": {
+    "new_evidence": [],
+    "is_org": true,
+    "input_warnings": []
+   }
+  },
+  {
+   "node": "screen",
+   "ts": 1791706669.9204564,
+   "latency_ms": 29.2,
+   "tool_calls": {
+    "screen_entity": 1
+   },
+   "summary": {
+    "new_evidence": [
+     "E1",
+     "E2"
+    ],
+    "matches": 2,
+    "dispositions": [
+     {
+      "id": "NK-mjS7N8kB49H88xYFVAkigF",
+      "caption": "Myawady Football Club",
+      "score": 1.0,
+      "status": "confirmed",
+      "sanctioned": false
+     },
+     {
+      "id": "NK-Upu67HkiNKrL5bR5rZfaRp",
+      "caption": "JSC PFC CSKA",
+      "score": 0.561,
+      "status": "discounted",
+      "sanctioned": true
+     }
+    ],
+    "backend": "local-fallback",
+    "signals": []
+   }
+  },
+  {
+   "node": "expand",
+   "ts": 1791706669.9241407,
+   "latency_ms": 2.2,
+   "tool_calls": {
+    "expand_relationships": 1,
+    "get_entity": 2
+   },
+   "summary": {
+    "new_evidence": [
+     "E3",
+     "E4",
+     "E5",
+     "E6"
+    ],
+    "graph": {
+     "NK-mjS7N8kB49H88xYFVAkigF": {
+      "nodes": 2,
+      "edges": 1,
+      "truncated": false
+     }
+    },
+    "signals": [
+     {
+      "level": "high",
+      "reason": "Myawady Football Club has a recorded owner that is sanctioned or blocked; stake not recorded, control presumed"
+     }
+    ]
+   }
+  },
+  {
+   "node": "filings",
+   "ts": 1791706669.92562,
+   "latency_ms": 0.2,
+   "tool_calls": {
+    "search_filings": 1
+   },
+   "summary": {
+    "new_evidence": [
+     "E7"
+    ],
+    "status": "not_found",
+    "chunks": 0,
+    "quarantined": [],
+    "signals": []
+   }
+  },
+  {
+   "node": "policy",
+   "ts": 1791706669.9266548,
+   "latency_ms": 0.0,
+   "tool_calls": {},
+   "summary": {
+    "new_evidence": [],
+    "floor": "high",
+    "confirmed_sanctioned": [],
+    "possible_sanctioned": [],
+    "n_signals": 1
+   }
+  },
+  {
+   "node": "assess",
+   "ts": 1791706674.8788428,
+   "latency_ms": 4951.3,
+   "tool_calls": {},
+   "summary": {
+    "risk_level": "high",
+    "usage": [
+     {
+      "node": "assess",
+      "model": "gemini-3.8-flash",
+      "input_tokens": 1199,
+      "output_tokens": 745,
+      "latency_ms": 4947.0,
+      "cost_usd": 0.003693,
+      "estimated": false
+     }
+    ]
+   }
+  },
+  {
+   "node": "verify",
+   "ts": 1791706678.7889984,
+   "latency_ms": 3909.4,
+   "tool_calls": {},
+   "summary": {
+    "passed": true,
+    "failed_checks": [],
+    "feedback": [],
+    "usage": [
+     {
+      "node": "verify",
+      "model": "gemini-3.8-flash",
+      "input_tokens": 1580,
+      "output_tokens": 539,
+      "latency_ms": 3906.3,
+      "cost_usd": 0.003206,
+      "estimated": false
+     }
+    ]
+   }
+  },
+  {
+   "node": "finalize",
+   "ts": 1791706678.7936404,
+   "latency_ms": 0.9,
+   "tool_calls": {},
+   "summary": {
+    "risk_level": "high",
+    "status": "final",
+    "totals": {
+     "input_tokens": 2779,
+     "output_tokens": 1284,
+     "cost_usd": 0.006899,
+     "llm_calls": 2,
+     "tokens_estimated": false,
+     "tool_calls": {
+      "screen_entity": 1,
+      "expand_relationships": 1,
+      "get_entity": 2,
+      "search_filings": 1
+     },
+     "latency_ms": 8908.2
+    }
+   }
+  }
+ ]
+}
