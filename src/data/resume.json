@@ -80,10 +80,10 @@
       "location": "Toronto, Canada",
       "role": "Senior Machine Learning Engineer II (Research)",
       "period": "Jul 2021 - Present",
-      "description": "Applied ML at TR Labs for CLEAR, Thomson Reuters' due-diligence platform for KYC/AML screening and investigations, and the Checkpoint tax research platform. Built ML systems across the lifecycle — LLM features and agentic workflows, model-training pipelines, and secure data infrastructure — in a regulated environment.",
+      "description": "Applied ML at TR Labs for CLEAR, Thomson Reuters' due-diligence platform for KYC/AML screening and investigations, and the Checkpoint tax research platform. Built ML systems across the lifecycle in a regulated environment, including LLM features and agentic workflows, model-training pipelines, and secure data infrastructure.",
       "projects": [
         {
-          "name": "Entity Resolution Retraining & Snowflake Pipelines — CLEAR",
+          "name": "Entity Resolution Retraining & Snowflake Pipelines: CLEAR",
           "period": "2026",
           "stage": "internal",
           "description": "Designed and built an **on-demand model-retraining pipeline** on SageMaker Pipelines, turning researchers' feature-generation, training, and evaluation code into reusable DAG steps. Enabled **parallel experiments tracked in MLflow**, cutting experiment turnaround by an **estimated ~40%**. Built proof-of-concept Snowflake processing and training pipelines and assessed the gaps for migrating AWS research workflows to Snowflake.",
@@ -98,7 +98,7 @@
           ]
         },
         {
-          "name": "Agentic Investigation System — CLEAR Investigate",
+          "name": "Agentic Investigation System: CLEAR Investigate",
           "period": "2025 - 2026",
           "stage": "production",
           "description": "Contributed to **CLEAR Investigate, Thomson Reuters' commercially launched agentic AI product** for investigations. Built a **central configuration layer** in PydanticAI for agent system prompts, tool definitions, and agent/subagent wiring, so the team could **reconfigure investigation agents from one place** instead of editing definitions across many files. Migrated the LLM-as-judge evaluation suite into a reusable repository prepared for CI/CD.",
@@ -112,7 +112,7 @@
           ]
         },
         {
-          "name": "CLEAR Business AI — GenAI Report Summarization",
+          "name": "CLEAR Business AI: GenAI Report Summarization",
           "period": "2024",
           "stage": "production",
           "description": "Built the GenAI summary panel for CLEAR Business entity reports, **live in production processing hundreds of reports daily**. Designed selective XML extraction feeding **targeted per-section LLM calls** (business overview, key personnel, adverse media, liens and lawsuits), plus a Bing Search + LLM verification step that **filters false matches between same-named entities**, with each claim linked to its source in the report. Refined prompts and extraction logic through SME annotation rounds against product-manager exemplars.",
@@ -126,7 +126,7 @@
           ]
         },
         {
-          "name": "Entity Resolution Data Infrastructure — CLEAR KYC/AML",
+          "name": "Entity Resolution Data Infrastructure: CLEAR KYC/AML",
           "period": "2022 - 2024",
           "stage": "internal",
           "description": "Built the research data infrastructure for CLEAR's entity resolution system (~800M entities, billions of documents, 700 idents/second). Designed a **PII-isolated AWS research environment** with SageMaker Studio, CloudFormation, and per-researcher profiles; defined a **versioned schema reconciling two incompatible annotation sources**, with Spark and Python pipelines to merge records and surface label conflicts; and automated the manual workflow into **scheduled, repeatable SageMaker Pipelines**.",
@@ -138,10 +138,10 @@
           ]
         },
         {
-          "name": "Semantic Search Improvement — Checkpoint Tax Research",
+          "name": "Semantic Search Improvement: Checkpoint Tax Research",
           "period": "2021",
           "stage": "production",
-          "description": "Shipped a **sentence-embedding query-intent classifier** for Checkpoint, Thomson Reuters' tax research platform, separating broad conceptual queries from specific tax lookups to promote higher-level documents — **improving access to conceptual documents by 95%** within a **~100ms latency budget**. Identified the retrieval gap from SME and customer feedback.",
+          "description": "Shipped a **sentence-embedding query-intent classifier** for Checkpoint, Thomson Reuters' tax research platform, separating broad conceptual queries from specific tax lookups to promote higher-level documents. **Improved access to conceptual documents by 95%** within a **~100ms latency budget**. Identified the retrieval gap from SME and customer feedback.",
           "tech": [
             "Python",
             "Sentence Embeddings",
@@ -156,7 +156,7 @@
       "location": "Toronto, Canada",
       "role": "NLP & Machine Learning Engineer",
       "period": "Jul 2018 - Jun 2021",
-      "description": "Built NLP and language-understanding systems end to end — data preparation, model training, evaluation, and application integration — including transformer fine-tuning and research collaborations with university and industry partners.",
+      "description": "Built NLP and language-understanding systems end to end, covering data preparation, model training, evaluation, and application integration. Work included transformer fine-tuning and research collaborations with university and industry partners.",
       "projects": [
         {
           "name": "Automated Question Generation from Documents",

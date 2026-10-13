@@ -5,6 +5,7 @@
  *
  * Usage:
  *   npm run pdf
+ *   npm run pdf -- --ats                   # writes public/resume-ats.pdf
  *   npm run pdf -- --out ./build/my-cv.pdf
  *   npm run pdf -- --dir ./exports          # writes ./exports/resume.pdf
  *   npm run pdf -- ./build/my-cv.pdf        # same as --out (single positional)
@@ -15,7 +16,7 @@
  * The script starts its own Astro dev server on a dedicated port (so a running
  * `npm run dev` is never printed by mistake), renders /resume from
  * src/data/resume.json or the --data file, saves the PDF
- * (default: public/resume.pdf), and shuts everything down.
+ * (default: public/resume.pdf, or public/resume-ats.pdf with --ats), and shuts everything down.
  */
 
 import { spawn, execSync } from 'node:child_process';
@@ -26,32 +27,8 @@ import puppeteer from 'puppeteer-core';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
-const DEFAULT_OUTPUT = resolve(ROOT, 'public', 'resume.pdf');
 const DEFAULT_PORT = 4399;
 const MAX_WAIT_MS = 30_000;
-
-// ─── PDF spacing tuning ────────────────────────────────────────────────────
-// Tweak these values and re-run `npm run pdf` to adjust spacing in the PDF.
-// All values are in pixels (at 96 dpi; 1 inch ≈ 96 px).
-const SPACING = {
-  headerBottom: 12,   // gap below the name/contact header block
-  sectionBottom: 12,   // gap below each section (between sections)
-  entryBottom: 7,   // gap below each job / education entry
-  jobBottom: 10,  // gap below each job (after its last project)
-  projectBottom: 6,   // gap below each project box
-  projectIndent: 12,  // left indent of project boxes under their job
-  projectPadding: '5px 9px', // inner padding of each project box
-  pubBottom: 7,   // gap below each publication entry
-};
-
-const PDF_SPACING_CSS = `
-  header          { margin-bottom: ${SPACING.headerBottom}px  !important; }
-  section         { margin-bottom: ${SPACING.sectionBottom}px !important; }
-  .entry          { margin-bottom: ${SPACING.entryBottom}px   !important; }
-  .job            { margin-bottom: ${SPACING.jobBottom}px     !important; }
-  .project        { margin-bottom: ${SPACING.projectBottom}px !important; margin-left: ${SPACING.projectIndent}px !important; padding: ${SPACING.projectPadding} !important; }
-  .pub            { margin-bottom: ${SPACING.pubBottom}px     !important; }
-`;
 
 // ─── Auto-fit ──────────────────────────────────────────────────────────────
 // Before printing, the page is scaled very slightly (CSS zoom: fonts and
@@ -119,7 +96,7 @@ function resolveUserPath(p) {
 }
 
 /**
- * Parse --out/-o (file), --dir/-d (directory → resume.pdf inside), optional positional file,
+ * Parse --out/-o (file), --dir/-d (directory → layout-specific filename), optional positional file,
  * or PDF_OUT env (file path). --out and --dir must not both be set.
  */
 function parseArgs() {
@@ -131,6 +108,7 @@ function parseArgs() {
   let port;
   let fit = true;
   let zoom;
+  let ats = false;
 
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -141,10 +119,11 @@ function parseArgs() {
 
 Options:
   -o, --out <file>   Output PDF file path (parent directories are created)
-  -d, --dir <dir>    Output directory; writes resume.pdf inside (dir is created)
+  -d, --dir <dir>    Output directory; writes resume.pdf (resume-ats.pdf with --ats)
   --data <file>      Resume JSON to render instead of src/data/resume.json
+  --ats              Use a plain, left-aligned layout for automated processing
   --port <n>         Port for the temporary dev server (default: ${DEFAULT_PORT})
-  --no-fit           Disable auto-fit (slight scaling to avoid blank page ends)
+  --no-fit           Disable auto-fit (already disabled in ATS mode)
   --zoom <n>         Use a fixed scale instead of auto-fit, e.g. 0.97
   -h, --help         Show this message
 
@@ -154,7 +133,9 @@ Environment:
   PDF_OUT            Same as --out (file path)
   RESUME_DATA        Same as --data
 
-Default output: public/resume.pdf (under the project root).`);
+Default output: public/resume.pdf (public/resume-ats.pdf with --ats).
+Auto-fit is enabled for the default layout; ATS uses 100% unless --zoom is supplied.
+RESUME_LAYOUT=ats npm run dev previews ATS at /resume; this CLI selects layout by --ats.`);
       process.exit(0);
     }
     if (a === '-o' || a === '--out') {
@@ -175,6 +156,10 @@ Default output: public/resume.pdf (under the project root).`);
     }
     if (a === '--no-fit') {
       fit = false;
+      continue;
+    }
+    if (a === '--ats') {
+      ats = true;
       continue;
     }
     if (a === '--data' || a === '--port' || a === '--zoom') {
@@ -248,19 +233,21 @@ Default output: public/resume.pdf (under the project root).`);
     }
   }
 
+  const filename = ats ? 'resume-ats.pdf' : 'resume.pdf';
+  const defaultOutput = resolve(ROOT, 'public', filename);
   let output;
   if (outDir) {
     const dir = resolveUserPath(outDir);
     mkdirSync(dir, { recursive: true });
-    output = join(dir, 'resume.pdf');
+    output = join(dir, filename);
   } else if (outFile) {
     output = resolveUserPath(outFile);
     mkdirSync(dirname(output), { recursive: true });
   } else {
-    mkdirSync(dirname(DEFAULT_OUTPUT), { recursive: true });
-    output = DEFAULT_OUTPUT;
+    mkdirSync(dirname(defaultOutput), { recursive: true });
+    output = defaultOutput;
   }
-  return { output, data, port, fit, zoom };
+  return { output, data, port, fit: fit && !ats, zoom, layout: ats ? 'ats' : 'clean' };
 }
 
 /**
@@ -272,10 +259,11 @@ Default output: public/resume.pdf (under the project root).`);
 async function autoFit(page, fixedZoom) {
   return page.evaluate(({ fit, pageH, fixedZoom }) => {
     const root = document.documentElement;
-    // Blocks Chrome will not split (break-inside: avoid), in document order.
+    // Approximate print pagination in document order. Long projects can split,
+    // so measure their children rather than treating them as one block.
     // Section headings and job headers stay with the block that follows.
-    const ATOMS = 'header, section > h2, .summary, .skills-row, .job-head, .project, .entry, .pub';
-    const GLUED = (el) => el.matches('section > h2, .job-head');
+    const ATOMS = 'header, section > h2, .summary, .skills-row, .job-head, .project:not(.can-split), .project.can-split > .project-header, .project.can-split > .project-meta, .project.can-split > .project-desc, .project.can-split > .project-highlights > li, .project.can-split > .project-tech, .entry, .pub';
+    const GLUED = (el) => el.matches('section > h2, .job-head, .project-header, .project-meta');
 
     const paginate = () => {
       const units = [];
@@ -287,6 +275,7 @@ async function autoFit(page, fixedZoom) {
         if (!pending) units.push(unit);
       }
       if (pending) units.push(pending);
+      if (!units.length) return [pageH];
 
       const blanks = [];
       let pageTop = units[0].top;
@@ -296,6 +285,12 @@ async function autoFit(page, fixedZoom) {
           blanks.push(pageH - (lastBottom - pageTop));
           pageTop = u.top;
         }
+        // Paragraphs taller than one page flow across pages instead of
+        // producing negative blank-space estimates.
+        while (u.bottom - pageTop > pageH) {
+          blanks.push(0);
+          pageTop += pageH;
+        }
         lastBottom = u.bottom;
       }
       blanks.push(pageH - (lastBottom - pageTop));
@@ -303,6 +298,11 @@ async function autoFit(page, fixedZoom) {
     };
     const measure = (zoom) => {
       root.style.zoom = String(zoom);
+      for (const project of document.querySelectorAll('.project')) {
+        // Keeping a project taller than 30% of a page together can leave large
+        // gaps, particularly when a job header must stay with its first project.
+        project.classList.toggle('can-split', project.getBoundingClientRect().height > pageH * 0.3);
+      }
       return paginate();
     };
     // Blank space that matters: every page except the last.
@@ -310,7 +310,7 @@ async function autoFit(page, fixedZoom) {
     const round = (blanks) => blanks.map((b) => Math.round(b));
 
     const before = measure(1);
-    if (fixedZoom) {
+    if (fixedZoom !== undefined) {
       const after = measure(fixedZoom);
       return { zoom: fixedZoom, before: round(before), after: round(after) };
     }
@@ -319,10 +319,10 @@ async function autoFit(page, fixedZoom) {
     for (let z = fit.min; z <= fit.max + 1e-9; z += fit.step) {
       const zoom = Math.round(z * 1000) / 1000;
       const blanks = measure(zoom);
-      if (blanks.length > before.length) continue;
+      if (blanks.length > best.blanks.length) continue;
       const gain = waste(best.blanks) - waste(blanks);
       const closer = Math.abs(zoom - 1) < Math.abs(best.zoom - 1);
-      if (gain > 0.5 || (Math.abs(gain) <= 0.5 && closer && blanks.length <= best.blanks.length)) {
+      if (blanks.length < best.blanks.length || gain > 0.5 || (Math.abs(gain) <= 0.5 && closer)) {
         best = { zoom, blanks };
       }
     }
@@ -358,11 +358,11 @@ async function waitForServer(url, timeoutMs) {
 }
 
 async function main() {
-  const { output: OUTPUT, data: DATA, port: PORT, fit: FIT_ON, zoom: ZOOM } = parseArgs();
+  const { output: OUTPUT, data: DATA, port: PORT, fit: FIT_ON, zoom: ZOOM, layout: LAYOUT } = parseArgs();
   const DEV_URL = `http://localhost:${PORT}/resume`;
   await assertPortFree(PORT);
 
-  const chromePath = findChrome();
+  const chromePath = process.env.CHROME_PATH || findChrome();
   if (!chromePath) {
     console.error(
       'Could not find Chrome/Chromium. Install Google Chrome or set CHROME_PATH env var.\n' +
@@ -374,8 +374,9 @@ async function main() {
   console.log(`Using Chrome: ${chromePath}`);
 
   console.log(`Rendering ${DATA ?? 'src/data/resume.json'}`);
+  console.log(`Layout: ${LAYOUT}${LAYOUT === 'ats' ? ' (linear text flow)' : ''}`);
   console.log(`Starting Astro dev server on port ${PORT}…`);
-  const env = { ...process.env, FORCE_COLOR: '0' };
+  const env = { ...process.env, FORCE_COLOR: '0', RESUME_LAYOUT: LAYOUT };
   if (DATA) env.RESUME_DATA = DATA;
   else delete env.RESUME_DATA;
   // Run Astro's entry point with this Node directly (not via npx) so that
@@ -391,14 +392,15 @@ async function main() {
   server.stdout.on('data', (d) => { serverOutput += d.toString(); });
   server.stderr.on('data', (d) => { serverOutput += d.toString(); });
 
+  let browser;
   try {
     console.log('Waiting for dev server…');
     await waitForServer(DEV_URL, MAX_WAIT_MS);
     console.log('Dev server ready.');
 
-    const browser = await puppeteer.launch({
+    browser = await puppeteer.launch({
       headless: true,
-      executablePath: process.env.CHROME_PATH || chromePath,
+      executablePath: chromePath,
     });
     const page = await browser.newPage();
     // Lay the page out at the printable width so measurements match the PDF.
@@ -406,15 +408,17 @@ async function main() {
     await page.emulateMediaType('print');
     await page.goto(DEV_URL, { waitUntil: 'networkidle0' });
 
-    await page.addStyleTag({ content: PDF_SPACING_CSS });
     await page.evaluate(() => document.fonts.ready);
 
-    if (FIT_ON || ZOOM) {
-      const { zoom, before, after } = await autoFit(page, ZOOM);
+    // Also prepares long projects for splitting when auto-fit is off.
+    const { zoom, before, after } = await autoFit(page, ZOOM ?? (FIT_ON ? undefined : 1));
+    if (FIT_ON || ZOOM !== undefined) {
       const fmt = (b) => b.map((px) => `${(px / 96).toFixed(2)}in`).join(', ');
       console.log(`Blank space per page at 100%: ${fmt(before)}`);
       if (zoom !== 1) console.log(`Scaled to ${(zoom * 100).toFixed(1)}%: ${fmt(after)}`);
       else console.log('Kept 100% scale (no better fit within limits).');
+    } else {
+      console.log('Auto-fit disabled; using 100% scale.');
     }
 
     const inch = (n) => `${n}in`;
@@ -428,16 +432,18 @@ async function main() {
         right: inch(PAGE.margin.right),
       },
       printBackground: true,
+      displayHeaderFooter: false,
+      tagged: true,
     });
 
     console.log(`PDF saved to ${OUTPUT}`);
-    await browser.close();
   } catch (err) {
     console.error('PDF generation failed:', err.message);
     if (serverOutput) console.error('Server output:\n', serverOutput);
     process.exitCode = 1;
   } finally {
     server.kill('SIGTERM');
+    if (browser) await browser.close();
   }
 }
 
