@@ -586,16 +586,17 @@
           "period_approximate": true,
           "stage": "production",
           "stage_note": "Shipped.",
-          "personal_scope": "Designed and shipped the sentence-embedding query-intent classifier; worked with SMEs and customer feedback to identify the retrieval gap; integrated within search latency constraints.",
+          "personal_scope": "Designed and shipped the sentence-embedding query-intent classifier; worked with SMEs and customer feedback to identify the retrieval gap; integrated within search latency constraints. Also used clustering algorithms in this sentence-embedding/re-ranking project (confirmed 2026-10-13).",
           "team_context": "",
-          "notes": "Confirm individual component use for the stack.",
+          "notes": "Confirm individual component use for the stack. Clustering use confirmed 2026-10-13; algorithm names, component stage, and clustering-specific outcomes remain unspecified. Emad requested a standalone skill rather than expanding the public project narrative.",
           "bullets": [
             "Designed and shipped a sentence-embedding query-intent classifier that distinguished broad conceptual queries from specific tax lookups and promoted higher-level documents for users unfamiliar with specialist terminology.",
             "Worked with SMEs and customer feedback to identify the retrieval gap and integrate the change within search latency constraints."
           ],
           "stack": [
             "Python",
-            "Sentence embeddings"
+            "Sentence embeddings",
+            "Clustering models"
           ],
           "stack_unconfirmed": [
             "NLTK",
@@ -657,6 +658,25 @@
               },
               "skills": [
                 "Search relevance"
+              ]
+            },
+            {
+              "id": "kf-cp-clustering",
+              "claim": "Used clustering algorithms in the Checkpoint sentence-embedding and re-ranking project. Confirmed by Emad during the 2026-10-13 resume discussion.",
+              "strong_points": [
+                "Direct clustering experience tied to a concrete semantic-search project."
+              ],
+              "weak_points": [
+                "Specific algorithms, integration details, and clustering evaluation scores are not recorded.",
+                "No separate production status or numerical benefit is established for the clustering component.",
+                "Emad requested Clustering Models as a standalone resume skill; do not merge it with Sentence Embeddings or attribute the existing 95% outcome specifically to clustering."
+              ],
+              "status": "supported",
+              "skills": [
+                "Clustering models",
+                "Semantic search",
+                "Sentence embeddings",
+                "Re-ranking"
               ]
             }
           ]
@@ -894,7 +914,8 @@
         "knowledge representation",
         "LSTM",
         "text tagging",
-        "semi-automatic ontology generation"
+        "semi-automatic ontology generation",
+        "clustering models"
       ],
       "caveats": ""
     },
