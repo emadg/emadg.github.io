@@ -776,28 +776,31 @@
         },
         {
           "id": "inago-conversational-qa",
-          "name": "Conversational Question Answering",
+          "name": "Conversational Question Answering with NLP & LSTM Models",
           "product": "",
           "period": "2018",
           "period_approximate": true,
           "stage": "research",
           "stage_note": "Developed with an industry partner.",
-          "personal_scope": "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation. Used and experimented with knowledge graphs in INAGO research (confirmed 2026-10-13).",
+          "personal_scope": "Developed a conversational question-answering system using syntactic and semantic document analysis, LSTM-based text tagging, and semi-automatically generated ontologies to interpret user questions and identify intent. Also used and experimented with knowledge graphs in INAGO research.",
           "team_context": "Industry partner collaboration.",
-          "notes": "Emad confirmed INAGO knowledge-graph use and experimentation on 2026-10-13. Exact graph technology, integration details, and measured outcomes remain unspecified; do not infer graph-database or GraphRAG experience.",
+          "notes": "Clarified by Emad on 2026-10-13: the application title should emphasize NLP and deep RNN/LSTM models, not knowledge graphs. Ontology generation was semi-automatic. LSTM-based tagging processed text/user questions for question and intent interpretation with ontologies. Exact tagging labels, NER-specific model details, ontology construction steps, graph technology, and measured outcomes remain unspecified.",
           "bullets": [
-            "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation with an industry partner."
+            "Developed a conversational question-answering system combining syntactic and semantic document analysis with LSTM-based text tagging. Used semi-automatically generated ontologies to interpret user questions and identify intent, and experimented with knowledge graphs for knowledge representation in an industry research collaboration."
           ],
           "stack": [
             "Python",
             "spaCy",
-            "Knowledge graphs"
+            "Knowledge graphs",
+            "LSTM",
+            "Text tagging",
+            "Semi-automatic ontology generation"
           ],
           "stack_unconfirmed": [],
           "key_facts": [
             {
               "id": "kf-cqa-system",
-              "claim": "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation with an industry partner.",
+              "claim": "Developed a conversational question-answering system using syntactic and semantic document analysis and semi-automatic ontology generation with an industry partner. Semi-automatic scope clarified by Emad on 2026-10-13.",
               "strong_points": [
                 "Question answering and dialogue systems connect to today's conversational AI roles.",
                 "Continuation of M.Sc. thesis work on interactive QA."
@@ -827,6 +830,26 @@
               "skills": [
                 "Knowledge graphs",
                 "Knowledge representation"
+              ]
+            },
+            {
+              "id": "kf-cqa-lstm-tagging-ontology-intent",
+              "claim": "Used LSTM-based text tagging and semi-automatically generated ontologies to interpret user questions and identify intent in INAGO conversational-QA research. Clarified by Emad on 2026-10-13.",
+              "strong_points": [
+                "Concrete NLP mechanism linking neural text processing with ontology-based question interpretation.",
+                "Supports LSTM, text tagging, question answering, and ontology-generation skills without relying on generic graph keywords."
+              ],
+              "weak_points": [
+                "Exact tagging labels and named-entity-recognition-specific scope are not established.",
+                "No new deployment, adoption, or quantified quality result is recorded."
+              ],
+              "status": "supported",
+              "skills": [
+                "LSTM",
+                "Text tagging",
+                "Question answering",
+                "Intent understanding",
+                "Semi-automatic ontology generation"
               ]
             }
           ]
@@ -868,7 +891,10 @@
         "supervised learning",
         "evaluation and dataset preparation",
         "knowledge graphs",
-        "knowledge representation"
+        "knowledge representation",
+        "LSTM",
+        "text tagging",
+        "semi-automatic ontology generation"
       ],
       "caveats": ""
     },
