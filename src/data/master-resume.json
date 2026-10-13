@@ -2,7 +2,7 @@
   "$schema": "./schemas/master-resume.schema.json",
   "meta": {
     "purpose": "Comprehensive evidence source for tailoring applications. Intentionally longer than an application resume. Key facts are referenceable claims; strong_points say how far a claim can be pushed for fit, weak_points say what makes it hard to defend. Never paste notes, weak points, or claim checks into an application.",
-    "last_updated": "2026-10-09",
+    "last_updated": "2026-10-13",
     "tailoring_rule": "Lead with three or four projects most relevant to a role and choose the strongest defensible bullets. Keep role title, dates, model stage, metrics, team contribution, and personally implemented work consistent across the resume and interview.",
     "status_legend": {
       "supported": "Established from Emad's own account; usable in applications at the chosen framing level.",
@@ -782,15 +782,16 @@
           "period_approximate": true,
           "stage": "research",
           "stage_note": "Developed with an industry partner.",
-          "personal_scope": "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation.",
+          "personal_scope": "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation. Used and experimented with knowledge graphs in INAGO research (confirmed 2026-10-13).",
           "team_context": "Industry partner collaboration.",
-          "notes": "",
+          "notes": "Emad confirmed INAGO knowledge-graph use and experimentation on 2026-10-13. Exact graph technology, integration details, and measured outcomes remain unspecified; do not infer graph-database or GraphRAG experience.",
           "bullets": [
             "Developed a conversational question-answering system using syntactic and semantic document analysis and ontology generation with an industry partner."
           ],
           "stack": [
             "Python",
-            "spaCy"
+            "spaCy",
+            "Knowledge graphs"
           ],
           "stack_unconfirmed": [],
           "key_facts": [
@@ -810,6 +811,22 @@
                 "Dialogue systems",
                 "Ontology generation",
                 "spaCy"
+              ]
+            },
+            {
+              "id": "kf-cqa-knowledge-graphs",
+              "claim": "Used and experimented with knowledge graphs in INAGO research. Confirmed by Emad on 2026-10-13.",
+              "strong_points": [
+                "Direct knowledge-graph experimentation complements the established ontology and conversational-QA research."
+              ],
+              "weak_points": [
+                "Exact graph construction, algorithms, database technology, and measured outcomes are not recorded.",
+                "Research scope only; no production deployment, GraphRAG implementation, or graph-database experience is established."
+              ],
+              "status": "supported",
+              "skills": [
+                "Knowledge graphs",
+                "Knowledge representation"
               ]
             }
           ]
@@ -849,7 +866,9 @@
         "information retrieval",
         "language understanding",
         "supervised learning",
-        "evaluation and dataset preparation"
+        "evaluation and dataset preparation",
+        "knowledge graphs",
+        "knowledge representation"
       ],
       "caveats": ""
     },
