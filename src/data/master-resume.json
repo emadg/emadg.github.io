@@ -915,9 +915,15 @@
         "LSTM",
         "text tagging",
         "semi-automatic ontology generation",
-        "clustering models"
+        "clustering models",
+        "model training and evaluation",
+        "F1 score",
+        "ROC-AUC",
+        "MRR",
+        "MAP",
+        "Recall@k"
       ],
-      "caveats": ""
+      "caveats": "Evaluation metrics F1 score, ROC-AUC, MRR, MAP, and Recall@k were selected by Emad for skills on 2026-10-13. Treat them as working-knowledge claims; project-specific use and measured results are not established by that selection. Emad said he is unfamiliar with NDCG; exclude it. Do not add silhouette score or unconfirmed clustering algorithm names."
     },
     {
       "category": "LLM systems",
@@ -1114,6 +1120,14 @@
       "topic": "Position-specific skills",
       "detail": "Keep Kubernetes, production model-hosting services, direct RAG implementation, and unverified platform/leadership claims out of tailored applications until supported by examples.",
       "project_refs": []
+    },
+    {
+      "topic": "Evaluation metric skills and exclusions",
+      "detail": "Resolved 2026-10-13: Emad selected F1 score, ROC-AUC, MRR, MAP, and Recall@k for the Model Training & Evaluation skill. No specific project use, metric values, or evaluation-method ownership is established by this selection. Exclude NDCG (Emad is unfamiliar), silhouette score, and other unselected metrics. Keep outstanding entity-resolution evaluation ownership checks intact.",
+      "project_refs": [
+        "tr-er-retraining",
+        "tr-checkpoint-search"
+      ]
     }
   ]
 }
