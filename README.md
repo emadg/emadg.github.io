@@ -24,7 +24,7 @@ npm run preview
 |-------|------|---------|
 | Framework | [Astro](https://astro.build) | 5.x |
 | Styling | [TailwindCSS](https://tailwindcss.com) | 4.x |
-| Fonts | Inter (body), JetBrains Mono (code), PT Serif (resume page headings) | Google Fonts CDN |
+| Fonts | Inter + JetBrains Mono (site); Arial/Liberation Sans + Georgia (PDF) | Google Fonts CDN / local fonts |
 | Language | TypeScript (strict) | - |
 
 ## Project Structure
@@ -126,7 +126,7 @@ Grouped by category. The PDF shows one line per category near the top; the site 
 
 ### Projects
 
-Nested under the job they belong to. In the PDF, each is a titled box under its job: name, stage tag, and period on top, then the description, then a "Tech & Skills" line. The site also lists all projects together in a grid.
+Nested under the job they belong to. In the default PDF, each is a plain indented entry under its job: title followed by a bracketed stage label (e.g. `[PRODUCTION]`), a right-aligned period, description, optional bullets, and a "Tech & Skills" line. Each job introduces its projects with a "Work Projects" heading; standard bullet characters mark project titles, and a thin line separates employers. ATS also includes the "Work Projects" heading and simple bullets before project titles, while putting dates and stages below titles and removing indentation. The site also lists all projects together in a grid.
 
 `stage` is one of `production` (used by real customers), `internal`, `prototype`, `poc`, or `research`. `highlights` is optional and renders as bullets.
 
@@ -143,7 +143,7 @@ Nested under the job they belong to. In the PDF, each is a titled box under its 
 
 ### Publications
 
-Each entry appears in a list with a left accent border.
+Each publication appears as a title followed by venue, year, and an optional note in the PDF.
 
 ```json
 {
@@ -170,31 +170,38 @@ The PDF is auto-generated from `resume.json` via a print-optimized Astro page (`
 **Prerequisite:** Google Chrome (or Chromium) must be installed on your system. The script auto-detects common install locations on macOS, Linux, and Windows. You can also set `CHROME_PATH` to a custom location:
 
 ```bash
-# Uses system Chrome automatically
+# Balanced default layout: public/resume.pdf
 npm run pdf
+
+# Linear ATS layout: public/resume-ats.pdf
+npm run pdf -- --ats
 
 # Or specify a custom Chrome path
 CHROME_PATH="/path/to/chrome" npm run pdf
 
-# Custom output file or directory (--dir writes resume.pdf inside the folder)
+# Custom output file or directory (--dir uses resume-ats.pdf with --ats)
 npm run pdf -- --out ./build/my-cv.pdf
 npm run pdf -- --dir ./exports
+npm run pdf -- --ats --dir ./exports
 PDF_OUT=./out.pdf npm run pdf
 
 # Render a different (e.g. tailored) resume JSON without touching src/data/resume.json
 npm run pdf -- --data ./applications/acme/resume.json --out ./applications/acme/resume.pdf
+npm run pdf -- --ats --data ./applications/acme/resume.json --out ./applications/acme/resume-ats.pdf
 npm run pdf -- --help
 
-# Auto-fit is on by default; turn it off or pin the scale by hand
+# Auto-fit is on for the default layout; ATS uses 100% unless --zoom is supplied
 npm run pdf -- --no-fit
 npm run pdf -- --zoom 0.97
 ```
 
-**Auto-fit:** before printing, the script simulates where pages break and scales the whole page very slightly (between 94% and 103%) to remove blank space at the bottom of every page except the last, without adding pages. It prints the blank space per page before and after. Limits are in `FIT`, and gaps and indents are in `SPACING`, both at the top of `scripts/generate-pdf.mjs`.
+**Layouts:** the default PDF keeps contact icons, divider lines, section accents, inline bold emphasis, right-aligned dates, and plain stage labels after project titles. Projects have no boxes, shading, or enclosing borders. The ATS PDF uses a left-aligned text flow, a "Contact Info" block with bold colon labels (Email, GitHub, LinkedIn, Website, then Location), stacked dates, "Work Projects" headings, simple project-title bullets, no decorative rules or indentation, and plain text instead of inline emphasis. Both preserve all content and use local fonts. The default has a 24 pt name, 13 pt section headings, 11.5 pt job titles, 10.5 pt project/publication titles, 10 pt body text, and 9 pt metadata. ATS uses 14.5 pt section headings prefixed with a literal ASCII `>` (for example, `> Experience`), 11 pt body text, and 10 pt metadata. Both allow additional pages for readability. ATS mode improves text extraction; it does not guarantee compatibility with every vendor parser.
 
-This starts its own dev server on port 4399 (`--port` to change; it refuses to run if the port is busy), renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` by default, and shuts down. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+**Auto-fit:** for the default layout, before printing, the script simulates where pages break and scales the whole page very slightly (between 94% and 103%) to prefer fewer pages, then reduce blank space at the bottom of every page except the last, without adding pages. It prints the blank space per page before and after. Limits are in `FIT` in `scripts/generate-pdf.mjs`; typography, gaps, and indents live in `src/pages/resume.astro` and apply to both browser preview and PDF output. Projects taller than 30% of a printable page can split during PDF generation, avoiding large gaps while keeping shorter projects together.
 
-You can also preview the print layout in your browser at `http://localhost:4321/resume` while the dev server is running.
+This starts its own dev server on port 4399 (`--port` to change; it refuses to run if the port is busy), renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` (or `public/resume-ats.pdf` with `--ats`) by default, and shuts down. Explicit `--out`, positional output paths, and `PDF_OUT` keep their existing behavior. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
+
+Preview the default layout at `http://localhost:4321/resume` with `npm run dev`, or start `RESUME_LAYOUT=ats npm run dev` to preview ATS. The PDF command always chooses its layout through `--ats`, regardless of an inherited `RESUME_LAYOUT` value. PDFs contain selectable, tagged text and no browser-generated headers or footers.
 
 ## Adding a Blog Post
 

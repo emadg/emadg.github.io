@@ -79,25 +79,24 @@ Defines an Astro content collection called `blog` with a Zod schema:
 
 ### `src/pages/resume.astro`
 
-- Print-optimized HTML resume page. Data comes from `loadResume()` in `src/lib/resume.ts`: `resume.json` by default, or the file named by the `RESUME_DATA` env var (set by `npm run pdf -- --data`).
-- Uses vanilla CSS (no Tailwind) for precise print control: Inter + PT Serif fonts, Letter-size `@page` rule, proper margins.
-- **Contact row**: location plus clickable links with inline SVG icons for email, GitHub, LinkedIn, and website, all from `basics` in the JSON. Separated from name/title by a thin horizontal rule.
-- **Section headings**: PT Serif bold, uppercase, with a 2px × 11px vertical bar accent via CSS `::before` (no markup changes needed to add/remove sections).
-- **Entry format**: "Role at Company" for experience; "Degree, Institution" for education.
-- Single-column layout for ATS parsing. Section order: header (name + headline + contact), summary, technical skills (one line per category), experience (each job followed by its projects as titled boxes with a stage tag and a "Tech & Skills" footer), education, publications.
-- Page breaks: only small blocks (`.project`, `.entry`, `.pub`) avoid breaking inside, so long sections like Experience can span pages.
-- Accessible at `/resume` during development for previewing before PDF generation.
-- **Not linked from the main site navigation** — it exists solely as a PDF source.
+- Print-optimized HTML resume page using `loadResume()`: default JSON or `RESUME_DATA` for a tailored file.
+- `RESUME_LAYOUT=clean|ats` selects the presentation; the default is `clean`. Preview at `/resume` with `npm run dev` or `RESUME_LAYOUT=ats npm run dev`.
+- Shared vanilla CSS controls Letter paper, margins, local Arial/Liberation Sans fonts, layout-specific typography and spacing (default: 10 pt body / 9 pt metadata; ATS: 11 pt body / 10 pt metadata). No Google Fonts dependency for the PDF.
+- **Default layout:** contact icons, header/section divider lines, Georgia section headings with an accent bar, right-aligned dates, inline bold emphasis, and modest project indentation. Stage labels are literal bracketed uppercase text after project titles, such as `Project Title [PRODUCTION]`. A "Work Projects" subheading follows each job description, project titles use standard bullet characters, and a thin divider separates employers. The default uses a 24 pt name, 13 pt section headings, 11.5 pt job titles, and 10.5 pt project/publication titles. No project boxes, shading, or enclosing borders.
+- **ATS layout:** 14.5 pt section headings with a literal ASCII `>` prefix in the text (including Contact Info), left-aligned normal document flow, stacked headline and dates, a "Contact Info" block with bold colon labels (Email, GitHub, LinkedIn, Website, then Location), "Work Projects" subheadings, simple text bullets before project titles, project date and plain stage label below each title, no icons or decorative rules, no project indentation, and no inline emphasis. Contact details remain ordinary body content, not a repeating PDF header.
+- Both layouts preserve summary, technical skills, jobs with nested projects, education, and publications. The existing portfolio components and JSON schema are independent of PDF layout choices.
+- Headings and job headers stay with following content; small entries avoid page breaks. The renderer marks projects taller than 30% of a printable page `.can-split`, retaining heading/paragraph break controls.
+- Exists as a PDF source and is not linked from the main navigation.
 
 ### `scripts/generate-pdf.mjs`
 
-- Node.js script that generates a PDF from the `/resume` page (default path: `public/resume.pdf`).
-- Uses `puppeteer-core` (dev dependency) with the system's Chrome/Chromium — no bundled browser download.
-- Auto-detects Chrome on macOS, Linux, and Windows. Override with `CHROME_PATH` env var.
-- Workflow: starts its own Astro dev server on a dedicated port (default 4399, `--port`; fails if busy) → waits for it → opens headless Chrome → prints to PDF → shuts down.
-- Run via `npm run pdf`. Optional output: `npm run pdf -- --out ./build/cv.pdf`, `npm run pdf -- --dir ./exports` (writes `resume.pdf` in that folder), or `PDF_OUT=./out.pdf npm run pdf`. Optional input: `--data <file>` or `RESUME_DATA` renders another resume JSON. See `npm run pdf -- --help`.
-- `SPACING` at the top of the script tunes gaps (header, section, job, project box and its left indent, entry, publication).
-- **Auto-fit** (`autoFit()`): lays the page out at the printable width with print media, simulates pagination over the blocks that never split (`header`, `h2`, `.summary`, `.skills-row`, `.job-head`, `.project`, `.entry`, `.pub`; headings and job headers stay with the next block), then tries CSS `zoom` values within `FIT.min`–`FIT.max`. It picks the one with the least blank space on all pages but the last, keeping `FIT.safetyPx` spare and never adding a page. Gains under `FIT.minGainPx` keep 100%. `--no-fit` disables it; `--zoom <n>` pins a value.
+- Uses `puppeteer-core` with system Chrome/Chromium or `CHROME_PATH`; no bundled browser download.
+- Starts its own Astro dev server on port 4399 (`--port` overrides; a busy port fails), renders `/resume`, and closes Chrome and the server.
+- `npm run pdf` selects `clean` and defaults to `public/resume.pdf`. `npm run pdf -- --ats` selects `ats` and defaults to `public/resume-ats.pdf`. Layout is explicitly passed to the child server, overriding inherited `RESUME_LAYOUT`.
+- `--dir` creates the layout-specific filename. `--out`, a positional output path, and `PDF_OUT` retain their existing output behavior. `--data` or `RESUME_DATA` selects a tailored JSON input.
+- Emits Letter PDFs with selectable, tagged text, working links, and no browser-generated headers/footers. The site's existing download serves the default `resume.pdf`.
+- **Auto-fit:** simulates pagination at print width, trying zoom values in `FIT.min`–`FIT.max` to prefer fewer pages, then reduce blank space without adding pages. Long projects are measured through their children and allowed to split. This is an estimate; inspect actual PDFs when adjusting the layout.
+- Auto-fit runs only for the default layout. ATS and `--no-fit` use 100%; explicit `--zoom` takes precedence in either layout. Styling and spacing live entirely in the Astro page.
 
 ### `src/pages/blog/index.astro`
 
