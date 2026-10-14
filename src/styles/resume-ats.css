@@ -1,0 +1,57 @@
+/* ATS layout: original sans-serif font with compact, explicit hierarchy. */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+@page { size: Letter; margin: 0.45in 0.5in; }
+html {
+  font-family: Arial, 'Liberation Sans', sans-serif;
+  font-size: 11pt; line-height: 1.2; color: #000; background: #fff;
+  -webkit-print-color-adjust: exact; print-color-adjust: exact;
+}
+a { color: inherit; text-decoration: none; }
+strong, .category, .label { font-weight: 700; }
+header { margin-bottom: 9pt; break-inside: avoid; }
+.name-row { display: block; }
+h1 { font-size: 22pt; line-height: 1.15; flex-shrink: 0; }
+.title { display: block; font-size: 10pt; font-weight: 400; text-align: left; margin-top: 3pt; }
+.title-separator { display: inline-block; margin-inline: 6pt; }
+h2 { font-size: 15pt; font-weight: 700; line-height: 1.2; margin-bottom: 4pt; break-after: avoid; }
+.contact-info h2 { margin-top: 7pt; }
+/* Row-major source order, with two aligned columns and two rows. */
+.contact-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); row-gap: 2pt; font-size: 9.5pt; }
+.contact-row > * { min-width: 0; white-space: nowrap; }
+section { margin-bottom: 9pt; }
+.summary { orphans: 3; widows: 3; }
+.skills-row { margin-bottom: 2pt; break-inside: avoid; }
+.job { margin-bottom: 9pt; }
+.job-head { break-inside: avoid; break-after: avoid; margin-bottom: 4pt; }
+.entry-header, .project-header { break-inside: avoid; break-after: avoid; }
+h3, .projects-heading { font-size: 11.5pt; font-weight: 700; line-height: 1.2; }
+.inline-meta { font-size: 9.25pt; font-weight: 400; }
+.entry-desc { margin-top: 3pt; orphans: 3; widows: 3; }
+.projects-heading { margin-top: 5pt; }
+.project { margin-bottom: 6pt; break-inside: avoid; }
+.project.can-split { break-inside: auto; }
+.project-title { font-size: 11pt; font-weight: 700; line-height: 1.2; }
+.project-desc { margin-top: 2pt; orphans: 3; widows: 3; }
+.project-highlights { margin: 2pt 0 0 14pt; }
+.project-highlights li { orphans: 2; widows: 2; }
+.project-tech { font-size: 10pt; margin-top: 2pt; break-before: avoid; }
+.entry { margin-bottom: 6pt; break-inside: avoid; }
+.period, .entry-sub, .entry-note, .pub-meta { font-size: 10pt; font-weight: 400; }
+.period { display: block; }
+.entry-note { margin-top: 2pt; }
+.pub { margin-bottom: 5pt; break-inside: avoid; }
+.pub-title { font-size: 11pt; font-weight: 700; }
+
+/* Opt-in for longer resumes; preserve the regular ATS/default layouts. */
+.ats.compact { font-size: 10pt; line-height: 1.12; }
+.compact header, .compact section, .compact .job { margin-bottom: 6pt; }
+.compact h2 { margin-bottom: 3pt; }
+.compact .skills-row { margin-bottom: 1pt; }
+.compact .job-head { margin-bottom: 3pt; }
+.compact .projects-heading { margin-top: 4pt; }
+.compact .project { margin-bottom: 4pt; }
+.compact .project-tech { font-size: 9.5pt; }
+.compact .entry { margin-bottom: 4pt; }
+.compact .pub { margin-bottom: 3pt; }
+.compact .pub-title { font-size: 10pt; }
+.compact .pub-meta, .compact .entry-note { font-size: 9.5pt; }

@@ -24,7 +24,7 @@ npm run preview
 |-------|------|---------|
 | Framework | [Astro](https://astro.build) | 5.x |
 | Styling | [TailwindCSS](https://tailwindcss.com) | 4.x |
-| Fonts | Inter + JetBrains Mono (site); Arial/Liberation Sans + Georgia (PDF) | Google Fonts CDN / local fonts |
+| Fonts | Inter + JetBrains Mono (site); Arial/Liberation Sans (PDF text); Georgia/Liberation Serif (standard PDF sections) | Google Fonts CDN / locally installed fonts |
 | Language | TypeScript (strict) | - |
 
 ## Project Structure
@@ -126,7 +126,7 @@ Grouped by category. The PDF shows one line per category near the top; the site 
 
 ### Projects
 
-Nested under the job they belong to. In the default PDF, each is a plain indented entry under its job: title followed by a bracketed stage label (e.g. `[PRODUCTION]`), a right-aligned period, description, optional bullets, and a "Tech & Skills" line. Each job introduces its projects with a "Work Projects" heading; standard bullet characters mark project titles, and a thin line separates employers. ATS also includes the "Work Projects" heading and simple bullets before project titles, while putting dates and stages below titles and removing indentation. The site also lists all projects together in a grid.
+Nested under the job they belong to. Standard uses indented project titles with bracketed stage labels and right-aligned dates, followed by descriptions, optional bullets, and Tech & Skills lines. ATS puts smaller date/stage metadata inline after an em dash on each unindented title. Both introduce projects with a Work Projects heading. The site also lists all projects together in a grid.
 
 `stage` is one of `production` (used by real customers), `internal`, `prototype`, `poc`, or `research`. `highlights` is optional and renders as bullets.
 
@@ -167,7 +167,11 @@ Search for `href=` to find and update the URLs.
 
 The PDF is auto-generated from `resume.json` via a print-optimized Astro page (`src/pages/resume.astro`) and Puppeteer.
 
-**Prerequisite:** Google Chrome (or Chromium) must be installed on your system. The script auto-detects common install locations on macOS, Linux, and Windows. You can also set `CHROME_PATH` to a custom location:
+**Prerequisite:** Google Chrome (or Chromium) must be installed on your system. The script auto-detects common install locations on macOS, Linux, and Windows.
+
+PDF text uses Arial/Liberation Sans, with Georgia/Liberation Serif section headings in the default layout. ATS uses the sans-serif font throughout.
+
+You can also set `CHROME_PATH` to a custom location:
 
 ```bash
 # Balanced default layout: public/resume.pdf
@@ -175,6 +179,9 @@ npm run pdf
 
 # Linear ATS layout: public/resume-ats.pdf
 npm run pdf -- --ats
+
+# Compact ATS for longer content (10 pt body, tighter spacing)
+npm run pdf -- --ats --compact
 
 # Or specify a custom Chrome path
 CHROME_PATH="/path/to/chrome" npm run pdf
@@ -195,9 +202,9 @@ npm run pdf -- --no-fit
 npm run pdf -- --zoom 0.97
 ```
 
-**Layouts:** the default PDF keeps contact icons, divider lines, section accents, inline bold emphasis, right-aligned dates, and plain stage labels after project titles. Projects have no boxes, shading, or enclosing borders. The ATS PDF uses a left-aligned text flow, a "Contact Info" block with bold colon labels (Email, GitHub, LinkedIn, Website, then Location), stacked dates, "Work Projects" headings, simple project-title bullets, no decorative rules or indentation, and plain text instead of inline emphasis. Both preserve all content and use local fonts. The default has a 24 pt name, 13 pt section headings, 11.5 pt job titles, 10.5 pt project/publication titles, 10 pt body text, and 9 pt metadata. ATS uses 14.5 pt section headings prefixed with a literal ASCII `>` (for example, `> Experience`), 11 pt body text, and 10 pt metadata. Both allow additional pages for readability. ATS mode improves text extraction; it does not guarantee compatibility with every vendor parser.
+**Layouts:** default keeps the original DoorDash sans-serif/serif design. Regular ATS has 15 pt section headings, 11 pt body text, two-column contacts, stacked job dates/full locations, and inline project metadata. `--ats --compact` uses 10 pt body text and tighter spacing for longer content. ATS uses the same Arial/Liberation Sans font; no custom fonts are required. Default auto-fit remains 94-103%; ATS stays at 100% unless `--zoom` is specified.
 
-**Auto-fit:** for the default layout, before printing, the script simulates where pages break and scales the whole page very slightly (between 94% and 103%) to prefer fewer pages, then reduce blank space at the bottom of every page except the last, without adding pages. It prints the blank space per page before and after. Limits are in `FIT` in `scripts/generate-pdf.mjs`; typography, gaps, and indents live in `src/pages/resume.astro` and apply to both browser preview and PDF output. Projects taller than 30% of a printable page can split during PDF generation, avoiding large gaps while keeping shorter projects together.
+See [Resume PDF layouts](docs/resume-layouts.md) for the complete settings table, final TD/DoorDash outputs, and validation/reproduction guidance. Current results: TD default/ATS are two pages; DoorDash default is three pages and compact ATS is two pages, without ATS text cuts. [Application variants](applications/README.md) link the editable sources, notes, and final PDFs.
 
 This starts its own dev server on port 4399 (`--port` to change; it refuses to run if the port is busy), renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` (or `public/resume-ats.pdf` with `--ats`) by default, and shuts down. Explicit `--out`, positional output paths, and `PDF_OUT` keep their existing behavior. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
 

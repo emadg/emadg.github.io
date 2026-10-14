@@ -1,0 +1,218 @@
+{
+  "$schema": "../../src/data/schemas/resume.schema.json",
+  "basics": {
+    "name": "Emad Gohari",
+    "headline": "Senior Machine Learning Engineer · ML Systems, NLP, GenAI",
+    "location": "Toronto, ON, Canada",
+    "email": "E.Gohari.B@gmail.com",
+    "github": "github.com/emadg",
+    "linkedin": "linkedin.com/in/emad-gohari",
+    "website": "EmadGohari.com"
+  },
+  "summary": "Senior machine learning engineer with **8 years of experience** delivering ML, NLP, and LLM systems from research to production. At Thomson Reuters Labs, built **reproducible training pipelines and PII-isolated infrastructure**, shipped **production GenAI summarization and semantic search**, and contributed agent configuration and evaluation tooling to a commercially launched AI product. Collaborates with researchers, domain experts, and product engineers.",
+  "skills": [
+    {
+      "category": "ML & Deep Learning",
+      "items": [
+        "PyTorch",
+        "Hugging Face Transformers",
+        "scikit-learn",
+        "XGBoost",
+        "Transformer Fine-Tuning (T5)",
+        "LSTM",
+        "Clustering Models",
+        "Model Training & Evaluation (F1 Score, ROC-AUC, MRR, MAP, Recall@k)"
+      ]
+    },
+    {
+      "category": "MLOps, Data & Cloud",
+      "items": [
+        "AWS SageMaker (Studio, Pipelines)",
+        "MLflow",
+        "Apache Spark (PySpark)",
+        "Snowflake",
+        "AWS CloudFormation",
+        "Data Pipelines",
+        "DAG Orchestration",
+        "PII Handling"
+      ]
+    },
+    {
+      "category": "GenAI & NLP",
+      "items": [
+        "LLM Applications",
+        "Agentic Frameworks (PydanticAI)",
+        "Prompt & Context Engineering",
+        "LLM Evaluation (LLM-as-Judge, SME Review)",
+        "GPT-4",
+        "Claude",
+        "Sentence Embeddings",
+        "Semantic Search",
+        "Text Classification & Tagging",
+        "Knowledge Graphs & Ontologies"
+      ]
+    },
+    {
+      "category": "Languages & Libraries",
+      "items": [
+        "Python",
+        "Java",
+        "Scala",
+        "Bash",
+        "pandas",
+        "NumPy",
+        "spaCy"
+      ]
+    }
+  ],
+  "experience": [
+    {
+      "company": "Thomson Reuters",
+      "location": "Toronto, Canada",
+      "role": "Senior Machine Learning Engineer II (Research)",
+      "period": "Jul 2021 - Present",
+      "description": "Built ML systems at TR Labs for CLEAR's KYC/AML screening and investigations, and Checkpoint tax research. Worked with researchers, domain experts, and product engineers on data infrastructure and customer-facing features.",
+      "projects": [
+        {
+          "name": "Model Retraining & Experimentation Pipelines: CLEAR",
+          "period": "2026",
+          "stage": "internal",
+          "description": "Designed, implemented, and tested an **on-demand SageMaker retraining pipeline**, turning researchers' feature-generation, training, and evaluation code into reusable DAG steps. Enabled **parallel experiments tracked in MLflow**, cutting researcher time per round by an **estimated ~40%**. Extended reusable Python/PySpark components; built **Snowflake processing and training proofs of concept** and assessed migration gaps.",
+          "tech": [
+            "Python",
+            "AWS SageMaker Pipelines",
+            "MLflow",
+            "PySpark",
+            "Snowflake",
+            "XGBoost"
+          ]
+        },
+        {
+          "name": "GenAI Report Summarization: CLEAR Business AI",
+          "period": "2024",
+          "stage": "production",
+          "description": "Built an LLM summarization workflow **live in production processing hundreds of reports daily**, with selective XML extraction and targeted per-section calls. Integrated **Bing Search, LLM verification, and source links** to reduce same-name entity mismatches. Refined extraction and prompts through SME reviews; compared **GPT-4 and Claude Sonnet on quality, latency, and cost** to inform model selection.",
+          "tech": [
+            "Python",
+            "GPT-4",
+            "Claude Sonnet",
+            "Bing Search API",
+            "XML Processing",
+            "LLM Evaluation"
+          ]
+        },
+        {
+          "name": "Entity Resolution Data Infrastructure: CLEAR KYC/AML",
+          "period": "2022 - 2024",
+          "stage": "internal",
+          "description": "Built research infrastructure for an entity-resolution system spanning **~800M entities and billions of documents**. Designed a **PII-isolated SageMaker/CloudFormation environment** with researcher-specific profiles; defined a **versioned JSON schema** reconciling two annotation sources with Spark/Python normalization, merging, and conflict checks; and automated manual runs into **scheduled SageMaker Pipelines**.",
+          "tech": [
+            "Python",
+            "Apache Spark (PySpark)",
+            "AWS SageMaker",
+            "CloudFormation"
+          ]
+        },
+        {
+          "name": "Agent Configuration & Evaluation: CLEAR Investigate",
+          "period": "2025 - 2026",
+          "stage": "production",
+          "description": "Contributed to **commercially launched CLEAR Investigate**. Built a central PydanticAI layer for prompts, tool descriptions/availability, and agent/subagent wiring, enabling **agent reconfiguration from one place**. Migrated existing **LLM-as-judge tooling** into a repository for reuse and future CI/CD integration.",
+          "tech": [
+            "Python",
+            "PydanticAI",
+            "Claude",
+            "Agent Configuration",
+            "LLM-as-Judge"
+          ]
+        },
+        {
+          "name": "Semantic Search Query Understanding: Checkpoint",
+          "period": "2021",
+          "stage": "production",
+          "description": "Shipped a **sentence-embedding query-intent classifier** separating broad conceptual queries from specific tax lookups to promote higher-level documents. **Improved access to conceptual documents by 95%** within a **~100ms latency budget**, addressing a retrieval gap identified with SMEs and customer feedback.",
+          "tech": [
+            "Python",
+            "Sentence Embeddings",
+            "Text Classification",
+            "Semantic Search"
+          ]
+        }
+      ]
+    },
+    {
+      "company": "INAGO Inc.",
+      "location": "Toronto, Canada",
+      "role": "NLP & Machine Learning Engineer",
+      "period": "Jul 2018 - Jun 2021",
+      "description": "Built NLP systems across data preparation, training, evaluation, and application integration with research partners. Trained domain-specific Word2Vec embeddings and LSTM NLU models with interpretability testing.",
+      "projects": [
+        {
+          "name": "Transformer Fine-Tuning for Question Generation",
+          "period": "2020",
+          "stage": "research",
+          "description": "Fine-tuned **T5 in PyTorch/Hugging Face** to generate questions from documents, **cutting manual data-curation effort by 40%**. Experimented with input representations and evaluated output using BLEURT with university research partners.",
+          "tech": [
+            "Python",
+            "PyTorch",
+            "Hugging Face Transformers",
+            "T5",
+            "BLEURT"
+          ]
+        },
+        {
+          "name": "Conversational Question Answering with NLP & LSTM Models",
+          "period": "2018",
+          "stage": "research",
+          "description": "Developed **conversational question answering** combining document analysis and **LSTM-based text tagging**. Used semi-automatically generated ontologies to interpret questions and intent; experimented with knowledge graphs in an industry research collaboration.",
+          "tech": [
+            "Python",
+            "spaCy",
+            "LSTM",
+            "Text Tagging",
+            "Ontologies",
+            "Knowledge Graphs"
+          ]
+        }
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "York University",
+      "location": "Toronto, Canada",
+      "degree": "M.Sc. in Computer Science",
+      "grade": null,
+      "period": "2014 - 2018",
+      "note": "Thesis: Interactive Question Answering Using Frame-based Knowledge Representation"
+    },
+    {
+      "institution": "Amirkabir University of Technology",
+      "location": "Tehran, Iran",
+      "degree": "B.Sc. in Computer Engineering",
+      "grade": null,
+      "period": "2010 - 2014",
+      "note": null
+    }
+  ],
+  "publications": [
+    {
+      "title": "Question-worthy Sentence Selection for Question Generation",
+      "venue": "Canadian AI 2020",
+      "year": "2020",
+      "note": "co-authored"
+    },
+    {
+      "title": "Time Aware Topic-based Recommender System",
+      "venue": "Big Data & Information Analytics",
+      "year": "2016",
+      "note": "co-authored"
+    },
+    {
+      "title": "A Study on Prediction of User's Tendency Toward Purchases in Websites based on Behavior Models",
+      "venue": "Information and Knowledge Technology (IKT), 6th Conference, IEEE",
+      "year": "2014",
+      "note": "co-authored"
+    }
+  ]
+}

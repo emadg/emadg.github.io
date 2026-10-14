@@ -98,19 +98,32 @@ Once material inputs and claim decisions are resolved, present a concise plan co
 
 Then execute the plan in the same workflow. The request to create a tailored resume authorizes creation of local artifacts; do not add a routine plan-approval gate. If the user explicitly requests plan-only work or approval before execution, honor that boundary.
 
-Default deliverables are an editable `resume.md`, a submission-ready `resume.pdf`, and compact `application-notes.md` in the application directory. Use a readable one- or two-page resume based on relevant content, normally two pages for this career history. Follow a specified format or application page limit instead; create DOCX only if requested or required. The internal notes should capture the input settings, JD source or supplied text, plan, factual decisions, a concise final-claim/source mapping, omissions, and validation results. Keep these notes out of the submission resume.
+Default deliverables are an editable `resume.md`, a submission-ready PDF named as specified below, and compact `application-notes.md` in the application directory. Use a readable one- or two-page resume based on relevant content, normally two pages for this career history. Follow a specified format or application page limit instead; create DOCX only if requested or required. The internal notes should capture the input settings, JD source or supplied text, plan, factual decisions, a concise final-claim/source mapping, omissions, and validation results. Keep these notes out of the submission resume.
+
+### PDF filenames
+
+Unless Emad specifies another filename, name generated PDFs:
+
+- Standard: `EmadGohari_CV_<YYMM>v<N>.pdf`
+- ATS, when requested: `EmadGohari_CV_sp_<YYMM>v<N>.pdf`
+
+Use the generation date in Emad's local timezone for the two-digit year and month (`YYMM`), and a positive integer for `N`. Choose the next version after the highest existing version for that month across the repository's application directories, considering both patterns; start at `v1` if none exist. Standard and ATS exports of the same resume share the month and version, for example `EmadGohari_CV_2610v5.pdf` and `EmadGohari_CV_sp_2610v5.pdf`. Reuse the chosen names during rendering and QA of that revision; allocate a new version for a later revision unless Emad explicitly requests overwriting it. Keep editable sources named `resume.json` and `resume.md`, record the PDF names in `application-notes.md`, and deliver links to the named PDFs. Preserve existing files unless renaming or overwriting was requested.
 
 Write accomplishment bullets around personal action, relevant technical substance, and supported outcome. Use qualitative impact when numbers lack support. Include only useful, defensible keywords and preserve official titles, dates, qualifications, and employment relationships. Make the final resume coherent and interview-defensible across all modes.
 
 ### Rendering in this repository
+
+Read [the resume layout reference](../../../docs/resume-layouts.md) for final typography, spacing, structure, current TD/DoorDash results, and reproduction commands. Default styling remains the original DoorDash design. Regular ATS uses stacked job dates/full locations, inline project metadata, two-column contacts, and a spaced em dash between subtitle and location. Use `--ats --compact` for the longer DoorDash content; it uses 10 pt body text and tighter spacing without cutting text. Preserve the default and regular ATS styles when adjusting compact ATS. For a two-page target, adjust layout first; propose specific wording cuts for Emad's agreement before shortening/removing content. Verify every new PDF rather than assuming a profile guarantees length.
 
 Keep application variants separate from the public portfolio by default. A tailored application does not implicitly request replacing `src/data/resume.json`, the master resume, or `public/resume.pdf`, nor submitting, publishing, committing, or pushing files.
 
 Write the tailored content as a `resume.json`-shaped file in the application directory, valid against `src/data/schemas/resume.schema.json`: `basics.headline` and `summary` tailored to the role, `skills` grouped by category, and each job's selected `projects` nested under it with an honest `stage` (production, internal, prototype, poc, research), a what/how/impact `description` using `**bold**` on the key outcome, and `tech`. Then render it without touching source data:
 
 ```bash
-npm run pdf -- --data applications/<dir>/resume.json --out applications/<dir>/resume.pdf
+npm run pdf -- --data applications/<dir>/resume.json --out applications/<dir>/EmadGohari_CV_<YYMM>v<N>.pdf
 ```
+
+Substitute the chosen month and version before running the command. For a requested ATS export, add `--ats` and use `--out applications/<dir>/EmadGohari_CV_sp_<YYMM>v<N>.pdf` with the same month and version. Always pass `--out` explicitly so the renderer's generic default filename does not replace this convention.
 
 `--data` (or `RESUME_DATA`) selects the input; `--out` only sets the destination. The script starts its own dev server on a dedicated port (default 4399, `--port` to change) and refuses to run if that port is busy, so it never prints a different running site. Read the script before use in case this has changed. Use available PDF or document skills when needed for those artifacts; if unavailable, use installed rendering tools. Do not stop at Markdown when a PDF can reasonably be produced. If rendering is blocked, deliver the editable version and clearly state the missing format and concrete blocker without claiming completion.
 
