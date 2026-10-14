@@ -1,0 +1,33 @@
+---
+import type { Project } from '../../data/projects';
+import StatusBadge from './StatusBadge.astro';
+import ProjectLinks from './ProjectLinks.astro';
+
+interface Props {
+	project: Project;
+}
+
+const { project } = Astro.props;
+---
+
+<a
+	href="/projects/"
+	class="group mb-10 inline-flex items-center text-sm text-text-muted transition-colors hover:text-accent"
+>
+	<svg class="mr-1.5 h-4 w-4 transition-transform group-hover:-translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+		<path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7" />
+	</svg>
+	All projects
+</a>
+
+<header class="mb-10 border-b border-border-subtle pb-8">
+	<div class="mb-4"><StatusBadge status={project.status} label={project.statusLabel} /></div>
+	<h1 class="mb-4 text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">{project.title}</h1>
+	<p class="mb-6 max-w-3xl text-lg leading-relaxed text-text-secondary">{project.tagline}</p>
+	<div class="mb-6 flex flex-wrap gap-1.5">
+		{project.tech.map((t) => (
+			<span class="rounded-md border border-accent/30 bg-accent-bg px-2 py-0.5 text-sm text-accent">{t}</span>
+		))}
+	</div>
+	<ProjectLinks links={project.links} />
+</header>

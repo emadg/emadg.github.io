@@ -1,0 +1,558 @@
+---
+/**
+ * Static replay of recorded fincrime-investigator-agent runs.
+ * Loads public/demos/fincrime-agent/traces/index.json and the selected trace,
+ * then animates the graph, tool calls, evidence and final memo in the browser.
+ * No backend and no API keys: everything shown was recorded beforehand.
+ */
+const base = '/demos/fincrime-agent/traces/';
+---
+
+<div class="tr" data-base={base}>
+	<div class="tr-banner">
+		<span class="tr-dot" aria-hidden="true"></span>
+		<span>
+			<strong>Recorded run, replayed in your browser.</strong>
+			<span class="tr-banner-meta" data-tr="meta">Loading recorded runs…</span>
+		</span>
+	</div>
+
+	<div class="tr-cases" data-tr="cases" role="radiogroup" aria-label="Choose a case"></div>
+
+	<div class="tr-controls">
+		<button type="button" class="tr-btn tr-btn-primary" data-tr="play">Replay</button>
+		<button type="button" class="tr-btn" data-tr="step">Step</button>
+		<button type="button" class="tr-btn" data-tr="end">Skip to result</button>
+		<label class="tr-speed">
+			<input type="checkbox" data-tr="fast" /> 4× speed
+		</label>
+		<span class="tr-status" data-tr="status" aria-live="polite"></span>
+	</div>
+
+	<ol class="tr-graph" data-tr="graph" aria-label="Agent graph progress"></ol>
+
+	<div class="tr-cols">
+		<section class="tr-panel">
+			<h3 class="tr-h">Steps and tool calls</h3>
+			<ol class="tr-scroll tr-log" data-tr="log"></ol>
+		</section>
+		<section class="tr-panel">
+			<h3 class="tr-h">Evidence ledger <span class="tr-count" data-tr="evcount"></span></h3>
+			<ol class="tr-scroll tr-evidence" data-tr="evidence"></ol>
+		</section>
+	</div>
+
+	<section class="tr-panel tr-memo-panel">
+		<h3 class="tr-h">Final memo</h3>
+		<div data-tr="memo"><p class="tr-muted">The memo appears when the run reaches <code>finalize</code>.</p></div>
+	</section>
+
+	<noscript><p class="tr-muted">The replay needs JavaScript. The recorded runs are plain JSON files under {base}.</p></noscript>
+</div>
+
+<style is:global>
+	.tr { display: flex; flex-direction: column; gap: 1rem; font-size: 0.875rem; color: var(--text-secondary); }
+	.tr code { font-family: var(--font-mono); font-size: 0.8em; color: var(--accent); }
+	.tr-muted { color: var(--text-muted); }
+	.tr-banner { display: flex; gap: 0.6rem; align-items: flex-start; padding: 0.75rem 1rem; border-radius: 0.75rem; border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); background: var(--accent-bg); color: var(--text-primary); line-height: 1.5; }
+	.tr-banner-meta { display: block; color: var(--text-secondary); font-family: var(--font-mono); font-size: 0.75rem; margin-top: 0.15rem; overflow-wrap: anywhere; }
+	.tr-dot { flex: none; width: 0.5rem; height: 0.5rem; margin-top: 0.45rem; border-radius: 9999px; background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+
+	.tr-cases { display: grid; grid-template-columns: 1fr; gap: 0.5rem; }
+	@media (min-width: 640px) { .tr-cases { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	@media (min-width: 900px) { .tr-cases { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+	.tr-case { text-align: left; padding: 0.65rem 0.8rem; border-radius: 0.75rem; border: 1px solid var(--border-subtle); background: var(--bg-card); color: var(--text-primary); cursor: pointer; transition: border-color 150ms, box-shadow 150ms; min-width: 0; }
+	.tr-case:hover { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
+	.tr-case[aria-checked='true'] { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent), 0 0 18px var(--accent-bg); }
+	.tr-case-title { display: block; font-weight: 600; font-size: 0.8125rem; line-height: 1.35; }
+	.tr-case-sub { display: flex; gap: 0.4rem; align-items: center; margin-top: 0.3rem; color: var(--text-muted); font-size: 0.75rem; min-width: 0; }
+	.tr-case-sub > span:first-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
+	.tr-risk { flex: none; display: inline-block; padding: 0.05rem 0.45rem; border-radius: 9999px; font-family: var(--font-mono); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.03em; border: 1px solid currentColor; }
+	.tr-risk-high { color: #dc2626; }
+	.tr-risk-medium { color: #b45309; }
+	.tr-risk-low { color: #059669; }
+	:root.dark .tr-risk-high { color: #f87171; }
+	:root.dark .tr-risk-medium { color: #fbbf24; }
+	:root.dark .tr-risk-low { color: #34d399; }
+
+	.tr-controls { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: center; }
+	.tr-btn { padding: 0.45rem 0.9rem; border-radius: 0.6rem; border: 1px solid var(--border-strong); background: var(--bg-card); color: var(--text-primary); font-weight: 500; cursor: pointer; }
+	.tr-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+	.tr-btn:disabled { opacity: 0.45; cursor: default; }
+	.tr-btn-primary { border-color: var(--accent); color: var(--accent); background: var(--accent-bg); }
+	.tr-speed { display: inline-flex; gap: 0.35rem; align-items: center; color: var(--text-muted); cursor: pointer; }
+	.tr-speed input { accent-color: var(--accent); }
+	.tr-status { color: var(--text-muted); font-family: var(--font-mono); font-size: 0.75rem; }
+
+	.tr-graph { display: flex; flex-wrap: wrap; gap: 0.35rem; list-style: none; margin: 0; padding: 0; }
+	.tr-node { position: relative; padding: 0.3rem 0.6rem; border-radius: 0.5rem; border: 1px solid var(--border-strong); font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); background: var(--bg-card); transition: all 200ms; }
+	.tr-node[data-llm]::after { content: 'LLM'; margin-left: 0.35rem; font-size: 0.6rem; color: var(--accent); opacity: 0.8; }
+	.tr-node[data-state='active'] { color: var(--text-primary); border-color: var(--accent); box-shadow: 0 0 12px var(--accent-bg), 0 0 0 1px var(--accent); }
+	.tr-node[data-state='done'] { color: var(--text-primary); border-color: color-mix(in srgb, var(--accent) 60%, transparent); background: var(--accent-bg); }
+	.tr-node[data-state='skipped'] { opacity: 0.45; border-style: dashed; }
+	.tr-node[data-state='failed'] { border-color: #d97706; }
+	.tr-visits { margin-left: 0.3rem; color: #d97706; }
+
+	.tr-cols { display: grid; grid-template-columns: minmax(0, 1fr); gap: 1rem; }
+	@media (min-width: 900px) { .tr-cols { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	.tr-panel { border: 1px solid var(--border-subtle); background: var(--bg-card); border-radius: 0.9rem; padding: 0.9rem; min-width: 0; }
+	.tr-h { margin: 0 0 0.6rem; font-size: 0.75rem; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); font-weight: 500; }
+	.tr-count { color: var(--accent); }
+	.tr-scroll { list-style: none; margin: 0; padding: 0; max-height: 22rem; overflow-y: auto; display: flex; flex-direction: column; gap: 0.5rem; overscroll-behavior: contain; }
+
+	.tr-ev, .tr-step { border-left: 2px solid var(--border-strong); padding: 0.35rem 0 0.35rem 0.7rem; animation: trIn 300ms ease-out; }
+	.tr-step-head { display: flex; flex-wrap: wrap; gap: 0.4rem; align-items: baseline; color: var(--text-primary); }
+	.tr-step-node { font-family: var(--font-mono); font-weight: 500; }
+	.tr-step-ms { font-family: var(--font-mono); font-size: 0.7rem; color: var(--text-muted); }
+	.tr-step ul { margin: 0.25rem 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 0.15rem; }
+	.tr-step li { color: var(--text-secondary); line-height: 1.45; overflow-wrap: anywhere; }
+	.tr-step-fail { border-left-color: #d97706; }
+	.tr-step-pass { border-left-color: var(--accent); }
+	.tr-tool { display: inline-block; font-family: var(--font-mono); font-size: 0.7rem; padding: 0 0.35rem; border-radius: 0.3rem; background: var(--accent-bg); color: var(--accent); }
+	.tr-warn { color: #b45309; }
+	:root.dark .tr-warn { color: #fbbf24; }
+
+	.tr-ev-head { display: flex; gap: 0.4rem; align-items: baseline; flex-wrap: wrap; }
+	.tr-ev-id { font-family: var(--font-mono); font-weight: 600; color: var(--accent); }
+	.tr-ev-kind { font-family: var(--font-mono); font-size: 0.68rem; color: var(--text-muted); }
+	.tr-ev-title { color: var(--text-primary); font-weight: 500; overflow-wrap: anywhere; }
+	.tr-ev-snip { margin-top: 0.2rem; color: var(--text-muted); font-size: 0.8rem; line-height: 1.45; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+	.tr-ev a { color: var(--accent); font-size: 0.75rem; }
+	.tr-ev-flag { font-family: var(--font-mono); font-size: 0.68rem; padding: 0 0.35rem; border-radius: 0.3rem; border: 1px solid #d97706; color: #b45309; }
+	:root.dark .tr-ev-flag { color: #fbbf24; }
+	.tr-ev-hl { border-left-color: var(--accent); background: var(--accent-bg); border-radius: 0 0.4rem 0.4rem 0; }
+
+	.tr-memo-head { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; margin-bottom: 0.75rem; }
+	.tr-memo-head .tr-risk { font-size: 0.8rem; padding: 0.15rem 0.6rem; }
+	.tr-memo h4 { margin: 1rem 0 0.35rem; font-size: 0.8rem; color: var(--text-primary); font-weight: 600; }
+	.tr-memo p, .tr-memo li { line-height: 1.6; overflow-wrap: anywhere; }
+	.tr-memo ul { margin: 0; padding-left: 1.1rem; list-style: disc; display: flex; flex-direction: column; gap: 0.25rem; }
+	.tr-cite { display: inline-block; margin-left: 0.2rem; padding: 0 0.3rem; border-radius: 0.3rem; border: 1px solid color-mix(in srgb, var(--accent) 50%, transparent); color: var(--accent); background: transparent; font-family: var(--font-mono); font-size: 0.68rem; line-height: 1.4; cursor: pointer; vertical-align: 1px; }
+	.tr-cite:hover { background: var(--accent-bg); }
+	.tr-memo ul.tr-checks { display: grid; grid-template-columns: 1fr; gap: 0.2rem 1rem; list-style: none !important; padding-left: 0 !important; }
+	@media (min-width: 640px) { .tr-memo ul.tr-checks { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+	.tr-check { font-family: var(--font-mono); font-size: 0.75rem; }
+	.tr-check-ok::before { content: '✓ '; color: #059669; }
+	.tr-check-bad::before { content: '✗ '; color: #dc2626; }
+	.tr-totals { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem; margin-top: 1rem; }
+	@media (min-width: 640px) { .tr-totals { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
+	.tr-total { border: 1px solid var(--border-subtle); border-radius: 0.6rem; padding: 0.45rem 0.6rem; }
+	.tr-total b { display: block; font-family: var(--font-mono); color: var(--text-primary); font-weight: 500; }
+	.tr-total span { font-size: 0.7rem; color: var(--text-muted); }
+
+	@keyframes trIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+	@media (prefers-reduced-motion: reduce) { .tr-ev, .tr-step { animation: none; } }
+</style>
+
+<script>
+	type Evidence = {
+		id: string;
+		kind: string;
+		source: string;
+		title: string;
+		snippet: string;
+		url: string | null;
+		flags: string[];
+	};
+	type Claim = { text: string; evidence_ids: string[] };
+	type Memo = {
+		risk_level: string;
+		risk_rationale: Claim;
+		summary: Claim[];
+		sanctions_exposure: { status: string; claims: Claim[] };
+		ownership_exposure: { status: string; claims: Claim[] };
+		key_relationships: { name: string; relation: string; risk_note: string; evidence_ids: string[] }[];
+		filings_findings: Claim[];
+		open_questions: string[];
+		policy_floor: string;
+		evidence: Evidence[];
+		verification: { passed: boolean; attempt: number; repaired: boolean; checks: { name: string; passed: boolean; detail: string }[] };
+		status: string;
+		model: string;
+		prompt_versions: Record<string, string>;
+		totals: { input_tokens: number; output_tokens: number; cost_usd: number; llm_calls: number; tool_calls: Record<string, number>; latency_ms: number };
+	};
+	type Usage = { model: string; input_tokens: number; output_tokens: number; cost_usd: number };
+	type Signal = { level: string; reason: string };
+	type TraceEvent = {
+		node: string;
+		latency_ms: number;
+		tool_calls: Record<string, number>;
+		summary: Record<string, unknown> & {
+			new_evidence?: string[];
+			signals?: Signal[];
+			usage?: Usage[];
+		};
+	};
+	type Trace = { title: string; subject: Record<string, unknown>; recorded_at: string; note: string; memo: Memo; trace: TraceEvent[] };
+	type IndexEntry = { id: string; file: string; title: string; subject: { name: string; schema?: string }; recorded_at: string; model: string; risk_level: string };
+
+	const NODES = ['plan', 'screen', 'expand', 'filings', 'policy', 'assess', 'verify', 'repair', 'human_review', 'finalize'];
+	const LLM_NODES = new Set(['assess', 'verify']);
+
+	/** Tiny DOM helper: text only, never innerHTML (trace content is untrusted text). */
+	function h<K extends keyof HTMLElementTagNameMap>(
+		tag: K,
+		props: { class?: string; text?: string; attrs?: Record<string, string> } = {},
+		...children: (Node | string | null | undefined | false)[]
+	): HTMLElementTagNameMap[K] {
+		const el = document.createElement(tag);
+		if (props.class) el.className = props.class;
+		if (props.text !== undefined) el.textContent = props.text;
+		if (props.attrs) for (const [k, v] of Object.entries(props.attrs)) el.setAttribute(k, v);
+		for (const c of children) if (c) el.append(c);
+		return el;
+	}
+
+	const words = (s: string) => s.replace(/_/g, ' ');
+	const fmtMs = (ms: number) => (ms >= 1000 ? `${(ms / 1000).toFixed(1)} s` : `${Math.round(ms)} ms`);
+	const fmtDate = (iso: string) =>
+		new Date(iso).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', timeZone: 'UTC' });
+	const riskBadge = (level: string) => h('span', { class: `tr-risk tr-risk-${level}`, text: level });
+	const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+	function init(root: HTMLElement) {
+		const base = root.dataset.base ?? '';
+		const $ = <T extends HTMLElement>(name: string) => root.querySelector<T>(`[data-tr="${name}"]`)!;
+		const meta = $('meta');
+		const cases = $('cases');
+		const playBtn = $<HTMLButtonElement>('play');
+		const stepBtn = $<HTMLButtonElement>('step');
+		const endBtn = $<HTMLButtonElement>('end');
+		const fast = $<HTMLInputElement>('fast');
+		const status = $('status');
+		const graph = $('graph');
+		const log = $('log');
+		const evList = $('evidence');
+		const evCount = $('evcount');
+		const memoBox = $('memo');
+
+		const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		const cache = new Map<string, Trace>();
+		let entries: IndexEntry[] = [];
+		let current: Trace | null = null;
+		let cursor = 0; // next trace event to show
+		let runToken = 0; // invalidates an in-flight autoplay
+		let playing = false;
+		const shownEvidence = new Set<string>();
+		const visits = new Map<string, number>();
+
+		const nodeEls = new Map<string, HTMLLIElement>();
+		for (const n of NODES) {
+			const li = h('li', { class: 'tr-node', text: n === 'human_review' ? 'human review' : n });
+			if (LLM_NODES.has(n)) li.dataset.llm = '';
+			nodeEls.set(n, li);
+			graph.append(li);
+		}
+
+		function setNode(node: string, state: string, extra?: string) {
+			const el = nodeEls.get(node);
+			if (!el) return;
+			el.dataset.state = state;
+			el.querySelector('.tr-visits')?.remove();
+			if (extra) el.append(h('span', { class: 'tr-visits', text: extra }));
+		}
+
+		function reset() {
+			runToken++;
+			playing = false;
+			cursor = 0;
+			shownEvidence.clear();
+			visits.clear();
+			for (const n of NODES) setNode(n, 'idle');
+			log.replaceChildren();
+			evList.replaceChildren();
+			evCount.textContent = '';
+			memoBox.replaceChildren(h('p', { class: 'tr-muted' }, 'The memo appears when the run reaches ', h('code', { text: 'finalize' }), '.'));
+			updateButtons();
+		}
+
+		function updateButtons() {
+			const done = !current || cursor >= current.trace.length;
+			playBtn.textContent = playing ? 'Pause' : done && current ? 'Replay again' : 'Replay';
+			playBtn.disabled = !current;
+			stepBtn.disabled = !current || playing || done;
+			endBtn.disabled = !current || done;
+			status.textContent = current ? `step ${Math.min(cursor, current.trace.length)} / ${current.trace.length}` : '';
+		}
+
+		function addEvidence(ids: string[]) {
+			if (!current) return;
+			for (const id of ids) {
+				if (shownEvidence.has(id)) continue;
+				const ev = current.memo.evidence.find((e) => e.id === id);
+				if (!ev) continue;
+				shownEvidence.add(id);
+				const head = h('div', { class: 'tr-ev-head' },
+					h('span', { class: 'tr-ev-id', text: ev.id }),
+					h('span', { class: 'tr-ev-kind', text: words(ev.kind) }),
+					...ev.flags.map((f) => h('span', { class: 'tr-ev-flag', text: f === 'injection_redacted' ? 'injection quarantined' : words(f) })),
+				);
+				const li = h('li', { class: 'tr-ev', attrs: { 'data-ev': ev.id } },
+					head,
+					h('div', { class: 'tr-ev-title', text: ev.title }),
+					h('div', { class: 'tr-ev-snip', text: ev.snippet }),
+				);
+				if (ev.url && /^https:\/\//.test(ev.url)) {
+					li.append(h('a', { text: 'source', attrs: { href: ev.url, target: '_blank', rel: 'noopener noreferrer' } }));
+				}
+				evList.append(li);
+			}
+			evCount.textContent = shownEvidence.size ? `(${shownEvidence.size})` : '';
+			evList.scrollTop = evList.scrollHeight;
+		}
+
+		function highlightEvidence(id: string) {
+			const li = evList.querySelector<HTMLElement>(`[data-ev="${CSS.escape(id)}"]`);
+			if (!li) return;
+			for (const el of evList.querySelectorAll('.tr-ev-hl')) el.classList.remove('tr-ev-hl');
+			li.classList.add('tr-ev-hl');
+			// Scroll only the evidence box, not the page.
+			evList.scrollTop = li.offsetTop - evList.offsetTop - 8;
+		}
+
+		function describe(ev: TraceEvent): (Node | string)[] {
+			const s = ev.summary;
+			const out: (Node | string)[] = [];
+			const tools = Object.entries(ev.tool_calls ?? {});
+			if (tools.length) {
+				const p = h('span');
+				tools.forEach(([name, n], i) => {
+					if (i) p.append(' ');
+					p.append(h('span', { class: 'tr-tool', text: n > 1 ? `${name} ×${n}` : name }));
+				});
+				out.push(p);
+			}
+			switch (ev.node) {
+				case 'plan':
+					out.push(`Routed as ${s.is_org ? 'an organisation' : 'a person'}; no LLM call.`);
+					break;
+				case 'screen': {
+					const ds = (s.dispositions as { caption: string; score: number; status: string; sanctioned: boolean }[]) ?? [];
+					out.push(`${s.matches ?? 0} candidate(s) above threshold via ${s.backend ?? 'screening'}.`);
+					for (const d of ds.slice(0, 4)) {
+						out.push(`${d.caption}: score ${d.score.toFixed(2)}, ${d.status}${d.sanctioned ? ', sanctioned' : ''}`);
+					}
+					break;
+				}
+				case 'expand': {
+					const g = (s.graph as Record<string, { nodes: number; edges: number; truncated: boolean }>) ?? {};
+					for (const v of Object.values(g)) out.push(`Graph: ${v.nodes} nodes, ${v.edges} edges${v.truncated ? ' (truncated)' : ''}.`);
+					break;
+				}
+				case 'filings': {
+					const q = (s.quarantined as string[]) ?? [];
+					out.push(`Filings search: ${s.status}, ${s.chunks ?? 0} passage(s).`);
+					if (q.length) out.push(h('span', { class: 'tr-warn', text: `Quarantined as possible prompt injection: ${q.join(', ')}` }));
+					break;
+				}
+				case 'policy':
+					out.push(h('span', {}, 'Deterministic risk floor: ', riskBadge(String(s.floor))));
+					break;
+				case 'assess':
+					out.push(h('span', {}, 'Drafted memo at risk ', riskBadge(String(s.risk_level))));
+					break;
+				case 'verify': {
+					if (s.passed) out.push('All verifier checks passed.');
+					else {
+						out.push(h('span', { class: 'tr-warn', text: `Failed: ${((s.failed_checks as string[]) ?? []).join(', ')}. Sent back with feedback:` }));
+						for (const f of ((s.feedback as string[]) ?? []).slice(0, 3)) out.push(h('span', { class: 'tr-muted', text: f }));
+					}
+					break;
+				}
+				case 'repair':
+					out.push(h('span', { class: 'tr-warn', text: 'Deterministic repair: memo marked needs_review.' }));
+					break;
+				case 'finalize':
+					out.push(h('span', {}, 'Final risk ', riskBadge(String(s.risk_level)), ` (${s.status})`));
+					break;
+			}
+			for (const sig of s.signals ?? []) {
+				out.push(h('span', {}, 'Signal ', riskBadge(sig.level), ` ${sig.reason}`));
+			}
+			for (const u of s.usage ?? []) {
+				out.push(h('span', { class: 'tr-muted', text: `${u.model}: ${u.input_tokens.toLocaleString()} in / ${u.output_tokens.toLocaleString()} out tokens, $${u.cost_usd.toFixed(4)}` }));
+			}
+			return out;
+		}
+
+		function showEvent(i: number) {
+			if (!current) return;
+			const ev = current.trace[i];
+			const n = (visits.get(ev.node) ?? 0) + 1;
+			visits.set(ev.node, n);
+			const failed = ev.node === 'verify' && ev.summary.passed === false;
+			setNode(ev.node, failed ? 'failed' : 'done', n > 1 ? `×${n}` : undefined);
+			const cls = failed ? 'tr-step tr-step-fail' : ev.node === 'verify' ? 'tr-step tr-step-pass' : 'tr-step';
+			const li = h('li', { class: cls },
+				h('div', { class: 'tr-step-head' },
+					h('span', { class: 'tr-step-node', text: ev.node }),
+					h('span', { class: 'tr-step-ms', text: fmtMs(ev.latency_ms) }),
+				),
+				h('ul', {}, ...describe(ev).map((d) => h('li', {}, d))),
+			);
+			log.append(li);
+			log.scrollTop = log.scrollHeight;
+			addEvidence(ev.summary.new_evidence ?? []);
+			if (ev.node === 'finalize') finish();
+		}
+
+		function finish() {
+			if (!current) return;
+			for (const n of NODES) if (!visits.has(n)) setNode(n, 'skipped');
+			addEvidence(current.memo.evidence.map((e) => e.id));
+			renderMemo(current.memo);
+		}
+
+		function claimItem(c: Claim, tag: 'li' | 'p' = 'li') {
+			const el = h(tag, { text: c.text });
+			for (const id of c.evidence_ids ?? []) {
+				const b = h('button', { class: 'tr-cite', text: id, attrs: { type: 'button', title: `Show evidence ${id}` } });
+				b.addEventListener('click', () => highlightEvidence(id));
+				el.append(b);
+			}
+			return el;
+		}
+
+		function section(title: string, ...body: (Node | null)[]) {
+			const frag = document.createDocumentFragment();
+			frag.append(h('h4', { text: title }), ...body.filter((b): b is Node => !!b));
+			return frag;
+		}
+
+		function renderMemo(m: Memo) {
+			const t = m.totals;
+			const toolCount = Object.values(t.tool_calls ?? {}).reduce((a, b) => a + b, 0);
+			const root = h('div', { class: 'tr-memo' },
+				h('div', { class: 'tr-memo-head' },
+					riskBadge(m.risk_level),
+					h('span', { class: 'tr-muted', text: `policy floor: ${m.policy_floor} · status: ${m.status} · verified on attempt ${m.verification.attempt}${m.verification.repaired ? ' (repaired)' : ''}` }),
+				),
+				claimItem(m.risk_rationale, 'p'),
+				section('Summary', h('ul', {}, ...m.summary.map((c) => claimItem(c)))),
+				section(`Sanctions exposure: ${words(m.sanctions_exposure.status)}`, h('ul', {}, ...m.sanctions_exposure.claims.map((c) => claimItem(c)))),
+				section(`Ownership exposure: ${words(m.ownership_exposure.status)}`, h('ul', {}, ...m.ownership_exposure.claims.map((c) => claimItem(c)))),
+				m.key_relationships.length
+					? section('Key relationships', h('ul', {}, ...m.key_relationships.map((r) => claimItem({ text: `${r.name} (${r.relation}): ${r.risk_note}`, evidence_ids: r.evidence_ids }))))
+					: null,
+				m.filings_findings.length ? section('Filings findings', h('ul', {}, ...m.filings_findings.map((c) => claimItem(c)))) : null,
+				m.open_questions.length ? section('Open questions', h('ul', {}, ...m.open_questions.map((q) => h('li', { text: q })))) : null,
+				section('Verification', h('ul', { class: 'tr-checks' }, ...m.verification.checks.map((c) =>
+					h('li', { class: `tr-check ${c.passed ? 'tr-check-ok' : 'tr-check-bad'}`, text: c.name, attrs: { title: c.detail } })))),
+				h('div', { class: 'tr-totals' },
+					...[
+						[`${t.llm_calls}`, 'LLM calls'],
+						[`${toolCount}`, 'tool calls'],
+						[`${(t.input_tokens / 1000).toFixed(1)}k / ${(t.output_tokens / 1000).toFixed(1)}k`, 'tokens in / out'],
+						[`$${t.cost_usd.toFixed(4)}`, 'cost (list price)'],
+						[fmtMs(t.latency_ms), 'wall time'],
+					].map(([v, l]) => h('div', { class: 'tr-total' }, h('b', { text: v }), h('span', { text: l }))),
+				),
+			);
+			memoBox.replaceChildren(root);
+		}
+
+		function delayFor(ev: TraceEvent) {
+			const ms = Math.min(1800, Math.max(450, ev.latency_ms / 5));
+			return fast.checked ? ms / 4 : ms;
+		}
+
+		async function play() {
+			if (!current) return;
+			if (cursor >= current.trace.length) reset();
+			const token = ++runToken;
+			playing = true;
+			updateButtons();
+			while (current && cursor < current.trace.length) {
+				const ev = current.trace[cursor];
+				setNode(ev.node, 'active', visits.get(ev.node) ? `×${(visits.get(ev.node) ?? 0) + 1}` : undefined);
+				await sleep(delayFor(ev));
+				if (token !== runToken) return;
+				showEvent(cursor++);
+				updateButtons();
+			}
+			playing = false;
+			updateButtons();
+		}
+
+		function pause() {
+			runToken++;
+			playing = false;
+			// Restore the node that was "active" to its real state.
+			if (current) for (const n of NODES) if (nodeEls.get(n)?.dataset.state === 'active') setNode(n, visits.has(n) ? 'done' : 'idle');
+			updateButtons();
+		}
+
+		function step() {
+			if (!current || cursor >= current.trace.length) return;
+			showEvent(cursor++);
+			updateButtons();
+		}
+
+		function skipToEnd() {
+			if (!current) return;
+			runToken++;
+			playing = false;
+			while (cursor < current.trace.length) showEvent(cursor++);
+			updateButtons();
+		}
+
+		async function select(entry: IndexEntry, autoplay: boolean) {
+			for (const b of cases.querySelectorAll<HTMLElement>('.tr-case')) b.setAttribute('aria-checked', String(b.dataset.id === entry.id));
+			reset();
+			current = null;
+			updateButtons();
+			let t = cache.get(entry.id);
+			if (!t) {
+				status.textContent = 'loading…';
+				const res = await fetch(base + entry.file);
+				if (!res.ok) {
+					status.textContent = `could not load ${entry.file}`;
+					return;
+				}
+				t = (await res.json()) as Trace;
+				cache.set(entry.id, t);
+			}
+			current = t;
+			meta.textContent = `${t.title} · recorded ${fmtDate(t.recorded_at)} with ${t.memo.model} (prompt ${Object.values(t.memo.prompt_versions).join(', ')}) · no live model calls, no API keys`;
+			updateButtons();
+			if (reduceMotion) skipToEnd();
+			else if (autoplay) void play();
+		}
+
+		playBtn.addEventListener('click', () => (playing ? pause() : void play()));
+		stepBtn.addEventListener('click', step);
+		endBtn.addEventListener('click', skipToEnd);
+
+		fetch(base + 'index.json')
+			.then((r) => r.json() as Promise<{ traces: IndexEntry[] }>)
+			.then(({ traces }) => {
+				entries = traces;
+				for (const e of entries) {
+					const b = h('button', { class: 'tr-case', attrs: { type: 'button', role: 'radio', 'aria-checked': 'false', 'data-id': e.id } },
+						h('span', { class: 'tr-case-title', text: e.title }),
+						h('span', { class: 'tr-case-sub' }, h('span', { text: `${e.subject.name}` }), riskBadge(e.risk_level)),
+					);
+					b.addEventListener('click', () => void select(e, true));
+					cases.append(b);
+				}
+				if (!entries.length) return;
+				// Load the first case; start playing the first time the demo scrolls into view.
+				void select(entries[0], false).then(() => {
+					const io = new IntersectionObserver((obs) => {
+						if (obs.some((o) => o.isIntersecting)) {
+							io.disconnect();
+							if (current && cursor === 0 && !playing) void play();
+						}
+					}, { threshold: 0.35 });
+					io.observe(graph);
+				});
+			})
+			.catch(() => {
+				meta.textContent = 'Could not load the recorded runs.';
+			});
+	}
+
+	for (const el of document.querySelectorAll<HTMLElement>('.tr')) init(el);
+</script>

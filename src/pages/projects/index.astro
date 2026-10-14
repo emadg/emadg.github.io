@@ -1,0 +1,69 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import StatusBadge from '../../components/projects/StatusBadge.astro';
+import { projects } from '../../data/projects';
+---
+
+<Layout
+	title="Projects | Emad Gohari"
+	description="Portfolio projects: a financial-crime investigation agent, a real-time sanctions screening service, and a fine-tuned small LLM for grounded extraction from SEC filings."
+	image="/og/projects.png"
+	imageAlt="Projects by Emad Gohari"
+>
+	<section class="w-full py-16 fade-in-up">
+		<div class="mb-12 max-w-3xl">
+			<h1 class="mb-3 text-3xl font-semibold tracking-tight text-text-primary sm:text-4xl">Projects</h1>
+			<p class="text-lg leading-relaxed text-text-secondary">
+				Three connected systems for financial-crime compliance, built on public data
+				(OpenSanctions and SEC EDGAR). Each one is written up with its architecture, measured results,
+				trade-offs and limitations. Every number on these pages comes from an evaluation or benchmark
+				file in the project's repository.
+			</p>
+		</div>
+
+		<div class="space-y-6">
+			{projects.map((project) => (
+				<a
+					href={`/projects/${project.slug}/`}
+					class="group block rounded-2xl border border-border-subtle bg-bg-card p-6 shadow-lg backdrop-blur-sm transition-all hover:border-accent/40 hover:bg-bg-card-hover hover:shadow-[0_0_20px_var(--color-accent-bg)] sm:p-8"
+				>
+					<div class="mb-3"><StatusBadge status={project.status} label={project.statusLabel} /></div>
+					<h2 class="mb-3 text-xl font-semibold text-text-primary transition-colors group-hover:text-accent sm:text-2xl">
+						{project.title}
+					</h2>
+					<p class="mb-5 leading-relaxed text-text-secondary">{project.tagline}</p>
+					<ul class="mb-5 space-y-1.5">
+						{project.highlights.map((h) => (
+							<li class="flex gap-2 text-sm text-text-muted">
+								<span class="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/70"></span>
+								<span>{h}</span>
+							</li>
+						))}
+					</ul>
+					<div class="flex flex-wrap items-center justify-between gap-4">
+						<div class="flex flex-wrap gap-1.5">
+							{project.tech.slice(0, 5).map((t) => (
+								<span class="rounded-md border border-border-subtle bg-bg-card px-2 py-0.5 text-xs text-text-muted">{t}</span>
+							))}
+						</div>
+						<span class="inline-flex items-center text-sm font-medium text-accent">
+							Read the write-up
+							<svg class="ml-1 h-4 w-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+							</svg>
+						</span>
+					</div>
+				</a>
+			))}
+		</div>
+
+		<p class="mt-12 text-sm leading-relaxed text-text-muted">
+			Data: sanctions and relationship data from
+			<a href="https://www.opensanctions.org/" target="_blank" rel="noopener noreferrer" class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">OpenSanctions</a>,
+			licensed <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer" class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">CC BY-NC 4.0</a>
+			(non-commercial use); company filings from
+			<a href="https://www.sec.gov/edgar" target="_blank" rel="noopener noreferrer" class="text-accent underline decoration-accent/40 underline-offset-2 hover:decoration-accent">SEC EDGAR</a>
+			(public domain). These are portfolio projects with illustrative compliance logic, not legal advice.
+		</p>
+	</section>
+</Layout>

@@ -1,0 +1,76 @@
+{
+  "traces": [
+    {
+      "id": "sanctioned-person",
+      "file": "sanctioned-person.json",
+      "title": "Direct sanctions hit (transliterated name)",
+      "subject": {
+        "name": "Wladimir Putin",
+        "schema": "Person"
+      },
+      "recorded_at": "2026-10-11T08:17:49+00:00",
+      "model": "gemini-3.8-flash",
+      "risk_level": "high",
+      "status": "final"
+    },
+    {
+      "id": "ownership-presumed",
+      "file": "ownership-presumed.json",
+      "title": "Not listed, but owned by a sanctioned conglomerate",
+      "subject": {
+        "name": "Myawady Football Club",
+        "schema": "Company"
+      },
+      "recorded_at": "2026-10-11T08:17:58+00:00",
+      "model": "gemini-3.8-flash",
+      "risk_level": "high",
+      "status": "final"
+    },
+    {
+      "id": "two-hop-injection",
+      "file": "two-hop-injection.json",
+      "title": "Two-hop 50% rule + prompt injection in a filing (synthetic)",
+      "subject": {
+        "name": "Polar Lantern Logistics Inc.",
+        "schema": "Company"
+      },
+      "recorded_at": "2026-10-11T08:18:23+00:00",
+      "model": "gemini-3.8-flash",
+      "risk_level": "high",
+      "status": "final"
+    },
+    {
+      "id": "near-miss",
+      "file": "near-miss.json",
+      "title": "Same name, different person (birth date conflict)",
+      "subject": {
+        "name": "Igor Sechin",
+        "schema": "Person",
+        "birth_date": "1975-01-01",
+        "countries": [
+          "ca"
+        ]
+      },
+      "recorded_at": "2026-10-11T08:18:30+00:00",
+      "model": "gemini-3.8-flash",
+      "risk_level": "low",
+      "status": "final"
+    },
+    {
+      "id": "injection-escalate",
+      "file": "injection-escalate.json",
+      "title": "Filing tries to inject a fake Wagner Group link (synthetic)",
+      "subject": {
+        "name": "Harbourline Analytics Inc.",
+        "schema": "Company",
+        "countries": [
+          "ca"
+        ]
+      },
+      "recorded_at": "2026-10-11T08:18:48+00:00",
+      "model": "gemini-3.8-flash",
+      "risk_level": "low",
+      "status": "final"
+    }
+  ]
+}

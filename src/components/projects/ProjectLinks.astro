@@ -1,0 +1,36 @@
+---
+import { isExternal, type ProjectLink } from '../../data/projects';
+
+interface Props {
+	links: ProjectLink[];
+}
+
+const { links } = Astro.props;
+// Links with an empty href are placeholders: shown as a disabled label, or hidden if they have none.
+const visible = links.filter((l) => l.href || l.pendingLabel);
+---
+
+<div class="flex flex-wrap gap-2">
+	{visible.map((link) =>
+		link.href ? (
+			<a
+				href={link.href}
+				{...(isExternal(link.href) ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+				class="inline-flex items-center gap-1.5 rounded-xl border border-border-subtle bg-bg-card px-4 py-2 text-sm font-medium text-text-primary shadow-lg backdrop-blur-sm transition-all hover:border-accent/50 hover:bg-bg-card-hover hover:shadow-[0_0_15px_var(--color-accent-bg)]"
+			>
+				{link.label}
+				<svg class="h-3.5 w-3.5 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7" />
+				</svg>
+			</a>
+		) : (
+			<span
+				aria-disabled="true"
+				title="Not available yet"
+				class="inline-flex cursor-not-allowed items-center rounded-xl border border-dashed border-border-strong px-4 py-2 text-sm text-text-muted"
+			>
+				{link.pendingLabel}
+			</span>
+		)
+	)}
+</div>

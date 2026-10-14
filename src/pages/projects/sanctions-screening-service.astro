@@ -1,0 +1,216 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectHeader from '../../components/projects/ProjectHeader.astro';
+import SanctionsDiagram from '../../components/projects/diagrams/SanctionsDiagram.astro';
+import { getProject } from '../../data/projects';
+
+const project = getProject('sanctions-screening-service');
+---
+
+<Layout
+	title={`${project.title} | Emad Gohari`}
+	description={project.description}
+	image={project.ogImage}
+	imageAlt={project.title}
+	type="article"
+>
+	<article class="w-full py-16 fade-in-up">
+		<ProjectHeader project={project} />
+
+		<div class="mb-10 rounded-xl border border-amber-500/40 bg-amber-500/10 px-5 py-4 text-sm leading-relaxed text-text-secondary">
+			<strong class="text-text-primary">Work in progress.</strong>
+			The service, evaluation, load test, Kubernetes and Airflow runs are done and verified locally. CI has not run
+			on GitHub yet and nothing is deployed. The numbers below are a snapshot of the repo's results files from
+			11 October 2026 and may still change.
+		</div>
+
+		<div class="prose">
+			<h2>The problem</h2>
+			<p>
+				Sanctions screening checks a name against roughly a quarter of a million listed names and aliases, in
+				real time, and has to tolerate typos, transliteration ("Wladimir Poutine"), reordered tokens, initials and
+				names in other scripts. A missed match is a regulatory failure; too many false alerts bury analysts. So the
+				matcher needs high recall at a usable alert rate, and its score should mean something: a calibrated
+				probability an analyst and a downstream policy can reason about.
+			</p>
+			<p>
+				It also has to behave like a production service: low, predictable latency on small hardware, metrics and
+				alerts, and a daily data refresh that cannot silently publish a broken index.
+			</p>
+
+			<h2>What I built</h2>
+			<ul>
+				<li>
+					An index over the OpenSanctions consolidated <code>sanctions</code> collection: 73k screenable people,
+					companies, vessels and aircraft with 245k distinct names and aliases, plus 12k relationship links.
+				</li>
+				<li>
+					<strong>Candidate generation</strong> with an exact character 3-gram TF-IDF index plus phonetic keys, and
+					a <strong>LightGBM matcher</strong> with monotone constraints and isotonic calibration over pairwise and
+					listwise features, with per-feature explanations (SHAP on request).
+				</li>
+				<li>
+					A <strong>FastAPI</strong> service (<code>/v1/screen</code>, <code>/v1/entities/&#123;id&#125;</code>,
+					<code>/healthz</code>, <code>/metrics</code>) that implements the contract the
+					<a href="/projects/fincrime-investigator-agent/">investigation agent</a> calls; Prometheus metrics, JSON
+					logs, Grafana and alert rules.
+				</li>
+				<li>
+					A Docker image, <strong>Kubernetes</strong> manifests (kustomize, probes, PDB, HPA, hardened security
+					context) verified on a local kind cluster, and a Cloud Run deploy script.
+				</li>
+				<li>
+					<strong>Drift detection</strong> for both the index (snapshot to snapshot) and live queries and scores,
+					and an <strong>Airflow</strong> refresh DAG that only publishes a new index if validation, drift and
+					metric gates pass.
+				</li>
+			</ul>
+
+			<h2>Architecture</h2>
+			<SanctionsDiagram />
+
+			<h2>Results</h2>
+			<p>
+				Index <code>20261011014706-fxx</code>, model <code>lgbm-20261011-9e07c741</code>.
+			</p>
+
+			<h3>End-to-end screening on a frozen query set</h3>
+			<p>
+				2,494 queries for listed parties (typos, romanisation variants, reordered tokens, initials, dropped tokens,
+				raw non-Latin script, and real aliases <em>removed from the index</em>) and 812 non-listed names from
+				company registries and PEP lists. Each model at its recommended threshold (validation recall of at least
+				95%).
+			</p>
+			<!-- Source: sanctions-screening-service/results/RESULTS.md section 2 (also README.md "Results") -->
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Model</th>
+							<th class="num">Recall</th>
+							<th class="num">Top-1 accuracy</th>
+							<th class="num">Alerts per listed-party query</th>
+							<th class="num">Non-listed names alerting</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td><strong>LightGBM + isotonic</strong> (threshold 0.05)</td><td class="num"><strong>95.3%</strong></td><td class="num"><strong>90.4%</strong></td><td class="num"><strong>1.41</strong></td><td class="num"><strong>30.7%</strong></td></tr>
+						<tr><td>rapidfuzz baseline + isotonic (threshold 0.01)</td><td class="num">90.6%</td><td class="num">83.2%</td><td class="num">5.04</td><td class="num">55.5%</td></tr>
+						<tr><td>LightGBM at threshold 0.5</td><td class="num">86.3%</td><td class="num"></td><td class="num"></td><td class="num">4.9%</td></tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h3>Matcher on 10,000 held-out human judgements</h3>
+			<p>
+				OpenSanctions <code>pairs.json</code>, split by connected component so no entity cluster is in both
+				training and test.
+			</p>
+			<!-- Source: sanctions-screening-service/results/RESULTS.md section 3 and results/nomenklatura_summary.json -->
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Matcher</th>
+							<th class="num">PR-AUC</th>
+							<th class="num">Precision at 95% recall</th>
+							<th class="num">Calibration error (ECE)</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td><strong>LightGBM + isotonic (this project)</strong></td><td class="num"><strong>0.931</strong></td><td class="num"><strong>83.0%</strong></td><td class="num">0.036</td></tr>
+						<tr><td>nomenklatura <code>logic-v2</code> (yente's default)</td><td class="num">0.891</td><td class="num">65.8%</td><td class="num">n/a</td></tr>
+						<tr><td>rapidfuzz WRatio</td><td class="num">0.880</td><td class="num">68.6%</td><td class="num">n/a</td></tr>
+						<tr><td>rapidfuzz baseline + isotonic</td><td class="num">0.872</td><td class="num">65.9%</td><td class="num">0.344</td></tr>
+					</tbody>
+					<caption>The LightGBM model trains on other components of the same file, so it is in-distribution here and nomenklatura is not.</caption>
+				</table>
+			</div>
+
+			<h3>Retrieval, latency and weak spots</h3>
+			<!-- Source: sanctions-screening-service/results/RESULTS.md sections 1, 2 and 6; results/ann_benchmark.json;
+			     results/loadtest/summary.md; results/k8s/kind_verification.md -->
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr><th>Measurement</th><th class="num">Value</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>Candidate recall @1 / @30 / @100 (3-gram index)</td><td class="num">84.1% / 95.4% / 97.1%</td></tr>
+						<tr><td>Candidate recall, served union with phonetic keys</td><td class="num">96.7%</td></tr>
+						<tr><td>FAISS HNSW over SVD-reduced n-grams, recall @30</td><td class="num">88.7%</td></tr>
+						<tr><td>Server-side latency p50 / p95 / p99 at ~47 req/s (1 vCPU, 768 MB)</td><td class="num">7.2 / 19.2 / 27.6 ms</td></tr>
+						<tr><td>Client-side latency p50 / p95 / p99, 0 errors</td><td class="num">12 / 32 / 40 ms</td></tr>
+						<tr><td>Saturation throughput per vCPU</td><td class="num">~195 req/s</td></tr>
+						<tr><td>Resident memory under load</td><td class="num">~246 MiB</td></tr>
+						<tr><td>Recall: typos / transliteration / reordering / dropped tokens</td><td class="num">97.5% / 98.4% / 99.7% / 99.1%</td></tr>
+						<tr><td>Recall: held-out Latin aliases / cross-script aliases / initials</td><td class="num">76.2% / 72.0% / 81.7%</td></tr>
+						<tr><td>Kubernetes (kind): HPA scale-out under load</td><td class="num">1 → 2 pods, 0 failures</td></tr>
+					</tbody>
+				</table>
+			</div>
+
+			<h2>Key design decisions and trade-offs</h2>
+			<!-- Sources: sanctions-screening-service/README.md "Design decisions"; results/ablation_listwise.json,
+			     results/latency_ablation.json, results/ann_benchmark.json, results/data_stats.json, results/airflow/dag_test.md -->
+			<ul>
+				<li>
+					<strong>Exact sparse retrieval instead of ANN.</strong> At about 245k names an inverted index over character
+					3-grams is exact, takes about 2 ms and 48 MB. The dense alternative lost 7 points of recall@30 at three
+					times the latency and five times the memory.
+				</li>
+				<li>
+					<strong>Listwise features.</strong> Whether a 0.9-similar name is a match depends on the other
+					candidates. Rank, the gap to the best candidate and near-tied rivals halve the alerts per listed-party query
+					(2.89 to 1.41) and lift recall from 94.1% to 95.3%.
+				</li>
+				<li>
+					<strong>Monotone constraints and isotonic calibration.</strong> A closer name can never lower the score,
+					and scores are probabilities calibrated on the distribution the service actually scores (one query
+					against about 40 retrieved candidates).
+				</li>
+				<li>
+					<strong>Two kinds of training data, weighted on purpose.</strong> Human de-duplication judgements teach
+					"similar but a different person"; synthetic screening queries teach "similar means alert". The weight
+					between them is an ablation in the results.
+				</li>
+				<li>
+					<strong>Serving details that mattered</strong>: <code>OMP_NUM_THREADS=1</code> (with LightGBM's default
+					threading, the earlier 973-tree model had a p99 of 53.5 ms instead of 10.1 ms under a 1-CPU quota), and a
+					346-tree model instead of 973 trees at equal quality.
+				</li>
+				<li>
+					<strong>A refresh that can say no.</strong> On its first real run the Airflow gate blocked publication
+					because the negative alert rate (0.335) exceeded a placeholder limit (0.30). The gate was then set from
+					measured values plus a margin, and the second run published.
+				</li>
+				<li>
+					<strong>Lightweight drift</strong>: PSI, Jensen-Shannon and z-tests in numpy rather than a monitoring
+					framework, so the same checks run in the pipeline and in unit tests.
+				</li>
+			</ul>
+
+			<h2>Limitations</h2>
+			<ul>
+				<li>Cross-script aliases (72% recall) and initials-only queries (82%) are the main recall gaps.</li>
+				<li>Only names, birth dates, countries and schema are used; no identifiers such as registration numbers.</li>
+				<li>
+					The synthetic screening queries are of my own design. The human-judged pairs guard against overfitting to
+					them, but real alert outcomes would be a better test.
+				</li>
+				<li>Calibration is relative to the validation mixture. There is no authentication or multi-tenancy.</li>
+			</ul>
+
+			<h2>Data and attribution</h2>
+			<p>
+				Sanctions data and the <code>pairs.json</code> training judgements:
+				<a href="https://www.opensanctions.org/" target="_blank" rel="noopener noreferrer">OpenSanctions</a>,
+				licensed <a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>.
+				This is a non-commercial portfolio project; commercial use of the data requires a licence from
+				OpenSanctions. Baseline comparison uses the open-source
+				<a href="https://github.com/opensanctions/nomenklatura" target="_blank" rel="noopener noreferrer">nomenklatura</a>
+				matchers.
+			</p>
+		</div>
+	</article>
+</Layout>

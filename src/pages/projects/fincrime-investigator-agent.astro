@@ -1,0 +1,209 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectHeader from '../../components/projects/ProjectHeader.astro';
+import FincrimeDiagram from '../../components/projects/diagrams/FincrimeDiagram.astro';
+import TraceReplay from '../../components/projects/TraceReplay.astro';
+import { getProject } from '../../data/projects';
+
+const project = getProject('fincrime-investigator-agent');
+---
+
+<Layout
+	title={`${project.title} | Emad Gohari`}
+	description={project.description}
+	image={project.ogImage}
+	imageAlt={project.title}
+	type="article"
+>
+	<article class="w-full py-16 fade-in-up">
+		<ProjectHeader project={project} />
+
+		<div class="prose">
+			<h2>The problem</h2>
+			<p>
+				Given an entity (a name, optionally a type, birth date and countries), a compliance analyst needs a risk
+				memo they can trust: a risk level and why, sanctions exposure, ownership and control exposure including
+				indirect ownership, key relationships, what the company's filings say, and open questions.
+			</p>
+			<p>
+				Getting an LLM to write a plausible memo is easy. The hard part is making it <strong>reliably correct and
+				auditable</strong>: no invented relationships, no under-called risk, no obeying instructions hidden inside a
+				filing, every factual sentence traceable to evidence that was actually retrieved, and behaviour that is
+				measured on a fixed test set rather than eyeballed.
+			</p>
+
+			<h2>What I built</h2>
+			<ul>
+				<li>
+					An explicit <strong>LangGraph state machine</strong>: deterministic nodes screen the entity, walk the
+					ownership graph and search SEC filings; a <code>policy</code> node computes a <strong>risk floor</strong>
+					from rules; the LLM writes a structured memo that cites evidence ids; a verifier checks it.
+				</li>
+				<li>
+					A <strong>verifier</strong> with eight deterministic checks (citations exist, every claim is cited, risk is
+					at least the floor, confirmed matches equal the adjudicated set, the sanctions status is consistent with them, quarantined text is never used as
+					support, no unknown entities, absence claims cite the search that supports them) plus an LLM check that
+					each claim is supported by the text it cites. One retry with feedback, then a deterministic repair that
+					marks the memo <code>needs_review</code>.
+				</li>
+				<li>
+					<strong>Layered prompt-injection defences</strong>: input sanitising, paragraph-level redaction of
+					retrieved filing text, <code>&lt;untrusted_document&gt;</code> prompt structure, and a verifier that
+					ignores anything uncited.
+				</li>
+				<li>
+					Light <strong>RAG over SEC filings</strong>: SQLite FTS5 for BM25, embeddings computed lazily for the BM25
+					pool only, reciprocal rank fusion. No vector database to operate.
+				</li>
+				<li>
+					An <strong>MCP server</strong> exposing the same typed tools to Claude Code and Claude Desktop, a FastAPI
+					SSE backend with a replay UI, OpenTelemetry tracing with token and cost accounting, and a
+					<strong>63-case golden set</strong> with an eval runner and an LLM-as-judge calibrated against hand
+					labels.
+				</li>
+			</ul>
+
+			<h2>Architecture</h2>
+			<FincrimeDiagram />
+		</div>
+
+		<section id="demo" class="mt-14 scroll-mt-8">
+			<h2 class="mb-3 text-2xl font-semibold tracking-tight text-text-primary">Try it: replay a recorded investigation</h2>
+			<p class="mb-6 leading-7 text-text-secondary">
+				These are real runs of the agent with <code class="rounded border border-border-subtle bg-bg-card px-1.5 py-0.5 font-mono text-sm text-accent">gemini-3.8-flash</code>,
+				recorded on 11 October 2026 and replayed here step by step. Nothing runs on a server and no model is called
+				while you watch. Two of the cases use fictional companies and filings built to test the ownership rule and
+				prompt-injection handling; in two runs you can see the verifier reject a first draft and the model fix it.
+			</p>
+			<TraceReplay />
+		</section>
+
+		<div class="prose mt-14">
+			<h2>Results</h2>
+			<p>
+				All numbers are produced by the repo's eval runner on the 63-case golden set. "Scripted" replaces the LLM
+				with a deterministic baseline writer, so it measures the pipeline (screening, traversal, the ownership
+				rule, retrieval, injection handling, verification), not language quality.
+			</p>
+			<!-- Source: fincrime-investigator-agent/README.md "Results" and evals/results/20261011T083752Z-scripted.md,
+			     evals/results/20261011T083809Z-scripted-fullindex.md, evals/results/20261011T083639Z-gemini-3.8-flash.md -->
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>Metric</th>
+							<th class="num">Fixture index, scripted (CI)</th>
+							<th class="num">Full OpenSanctions index, scripted</th>
+							<th class="num">Fixture index, gemini-3.8-flash</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>Risk-level accuracy</td><td class="num">98.4% (62/63)</td><td class="num">96.8% (61/63)</td><td class="num">98.4% (62/63)</td></tr>
+						<tr><td>Under-calls / over-calls</td><td class="num">0 / 1</td><td class="num">0 / 2</td><td class="num">0 / 1</td></tr>
+						<tr><td>Sanctions-hit precision / recall</td><td class="num">96.2% / 100%</td><td class="num">96.2% / 100%</td><td class="num">96.2% / 100%</td></tr>
+						<tr><td>Entity resolution / ownership detection</td><td class="num">100% / 100%</td><td class="num">100% / 100%</td><td class="num">100% / 100%</td></tr>
+						<tr><td>Citation validity (deterministic)</td><td class="num">100%</td><td class="num">100%</td><td class="num">100%</td></tr>
+						<tr><td>Verified on first attempt / repaired</td><td class="num">100% / 0</td><td class="num">100% / 0</td><td class="num">87.3% / 1</td></tr>
+						<tr><td>Injection cases flagged / text leaks</td><td class="num">3/3 / 0</td><td class="num">3/3 / 0</td><td class="num">3/3 / 0</td></tr>
+						<tr><td>Groundedness, judge gemini-3.6-flash (1-5)</td><td class="num">n/a</td><td class="num">n/a</td><td class="num">4.81</td></tr>
+						<tr><td>Second judge gemini-3.8-flash: mean, exact agreement</td><td class="num">n/a</td><td class="num">n/a</td><td class="num">4.73, 86%</td></tr>
+						<tr><td>Tool calls / LLM calls per case</td><td class="num">8.3 / 1</td><td class="num">8.3 / 1</td><td class="num">8.3 / 2.2</td></tr>
+						<tr><td>Tokens in / out per case</td><td class="num">n/a</td><td class="num">n/a</td><td class="num">3,981 / 1,643</td></tr>
+						<tr><td>Cost per case (list price)</td><td class="num">$0</td><td class="num">$0</td><td class="num">$0.0091</td></tr>
+						<tr><td>Latency p50 / p95</td><td class="num">29 / 130 ms</td><td class="num">85 / 236 ms</td><td class="num">10.2 / 18.0 s</td></tr>
+					</tbody>
+					<caption>63 cases per column. Each real-model configuration was run once.</caption>
+				</table>
+			</div>
+			<ul>
+				<li>
+					The risk floor makes under-calls impossible by construction, so for the LLM run the accuracy number
+					mostly says the model never over-called. The interesting LLM metrics are groundedness, verification and
+					cost.
+				</li>
+				<li>
+					<strong>The verifier does real work.</strong> In the Gemini run, 8 of 63 first drafts failed
+					verification: 5 were caught by the in-loop LLM support check (for example a filing date taken from an
+					uncited item) and 3 by the absence-claim check. All but one passed on retry.
+				</li>
+				<li>
+					An earlier 24-case run, before the absence-claim check existed, had judge scores of 2 and 3 on no-match
+					cases: the model claimed "no ownership linkages" while citing only the screening summary. After adding
+					search-coverage evidence and the check, the lowest score in the full run is 3 (2 of 63 cases).
+				</li>
+				<li>
+					The one sanctions false positive in every run is Sberbank, because two listed entities carry the exact
+					name "Sberbank of Russia".
+				</li>
+			</ul>
+
+			<h2>Key design decisions and trade-offs</h2>
+			<ul>
+				<li>
+					<strong>Rules decide the floor, the model writes.</strong> In screening, a missed sanctioned owner is a
+					regulatory breach while an over-call costs an analyst a few minutes. A rule that cannot be argued out of a
+					decision by a prompt, or by text inside a filing, fits that asymmetry. It also makes the whole pipeline
+					testable in CI without a model.
+				</li>
+				<li>
+					<strong>Evidence ledger with short ids</strong> (<code>E1</code>…<code>En</code>) assigned as tools return.
+					The model cites ids; the verifier and the eval check them. Every search also records its coverage,
+					because a negative finding is only as good as the search behind it ("not performed" means unknown, not
+					absent).
+				</li>
+				<li>
+					<strong>Bounded, purposeful traversal</strong>: depth 1 for everything with capped fan-out, deeper only up
+					ownership chains, because that is what the aggregated 50%-style ownership rule needs. The result is 8.3
+					tool calls per case.
+				</li>
+				<li>
+					<strong>An explicit contract gap.</strong> The screening service's relationship data has no direction.
+					The agent normalises edges and refuses to use direction-less edges for the ownership rule, which makes it
+					more conservative rather than wrong.
+				</li>
+				<li>
+					<strong>Deterministic planning</strong> instead of an LLM planner: an investigation procedure is fixed,
+					and a planner adds cost and a failure mode without adding coverage.
+				</li>
+				<li>
+					<strong>Cost controls</strong>: low reasoning effort for the memo writer (the evidence is already
+					adjudicated), a replay mode for the public demo, and rate limits plus a daily cap for live mode.
+				</li>
+			</ul>
+
+			<h2>Limitations</h2>
+			<ul>
+				<li>
+					Eval labels follow a written, illustrative policy. The deterministic eval shows the system implements it
+					robustly, not that the policy is right.
+				</li>
+				<li>
+					A few thresholds were adjusted after looking at eval output. With 63 cases there is no clean held-out
+					split; the full-index run adds distractors that were never tuned on.
+				</li>
+				<li>
+					Public ownership data rarely has percentages, so most real ownership findings are "presumed control"
+					pending the actual stake.
+				</li>
+				<li>
+					Filing cases in the golden set are fictional. Live EDGAR retrieval is smoke-tested but has no labelled
+					real-filing cases yet.
+				</li>
+				<li>Real-model numbers come from one run per configuration, judged by Gemini models only.</li>
+			</ul>
+
+			<h2>Data and attribution</h2>
+			<p>
+				Sanctions, ownership and relationship data:
+				<a href="https://www.opensanctions.org/" target="_blank" rel="noopener noreferrer">OpenSanctions</a>
+				(<code>sanctions</code> collection, snapshot 2026-10-11), licensed
+				<a href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank" rel="noopener noreferrer">CC BY-NC 4.0</a>.
+				This is a non-commercial portfolio project; commercial use of the data requires a licence from
+				OpenSanctions. Company filings:
+				<a href="https://www.sec.gov/edgar" target="_blank" rel="noopener noreferrer">SEC EDGAR</a> (public domain),
+				accessed with a declared User-Agent within SEC's fair-access rate limit. Entities and filings marked
+				synthetic are fictional test fixtures. The compliance logic is illustrative, not legal advice.
+			</p>
+		</div>
+	</article>
+</Layout>

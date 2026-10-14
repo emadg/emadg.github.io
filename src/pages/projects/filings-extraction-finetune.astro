@@ -1,0 +1,193 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import ProjectHeader from '../../components/projects/ProjectHeader.astro';
+import FilingsDiagram from '../../components/projects/diagrams/FilingsDiagram.astro';
+import { getProject } from '../../data/projects';
+
+const project = getProject('filings-extraction-finetune');
+const pendingSystems = [
+	'Base Qwen3-4B, 2-shot',
+	'SFT (LoRA)',
+	'SFT + DPO',
+	'SFT + DPO, guided JSON',
+	'Teacher (gemini-3.8-flash)',
+];
+---
+
+<Layout
+	title={`${project.title} | Emad Gohari`}
+	description={project.description}
+	image={project.ogImage}
+	imageAlt={project.title}
+	type="article"
+>
+	<article class="w-full py-16 fade-in-up">
+		<ProjectHeader project={project} />
+
+		<div class="mb-10 rounded-xl border border-amber-500/40 bg-amber-500/10 px-5 py-4 text-sm leading-relaxed text-text-secondary">
+			<strong class="text-text-primary">GPU results pending.</strong>
+			The data pipeline, training, evaluation and serving code is written, tested and smoke-tested end to end on
+			CPU with a 135M model. The full-size fine-tuning and vLLM benchmarks still need GPU runs, so this page makes
+			no claim about fine-tuned quality yet. The only real-data numbers so far come from a teacher-labelling pilot
+			and a rule-based baseline.
+		</div>
+
+		<div class="prose">
+			<h2>The problem</h2>
+			<p>
+				US proxy statements (SEC form DEF 14A) contain a "Security Ownership of Certain Beneficial Owners and
+				Management" table: who owns how many shares of which class, and what percentage. It is exactly the data an
+				ownership graph needs, but the tables are messy HTML with footnotes, continuation rows, multi-line names
+				and inconsistent columns.
+			</p>
+			<p>
+				The goal is a <strong>small open model</strong> that turns that section into strict JSON (one record per
+				holder and share class, with shares, percent, officer or director flag and role) where every record carries
+				an <code>evidence_quote</code> that must be a <strong>verbatim substring of the filing</strong>, so that
+				every extracted number can be checked mechanically. The output feeds the ownership graph of the
+				<a href="/projects/fincrime-investigator-agent/">investigation agent</a>.
+			</p>
+
+			<h2>What I built</h2>
+			<ul>
+				<li>
+					An EDGAR pipeline that samples DEF 14A filings, converts HTML tables to one pipe-delimited row per line
+					and <strong>locates the ownership section by scoring headings</strong> by the numeric rows that follow
+					them, skipping tables of contents and "incorporated by reference" stubs.
+				</li>
+				<li>
+					<strong>Teacher distillation behind a verifier</strong>: a teacher LLM labels sections with a JSON schema,
+					and a deterministic verifier keeps a label only if every quote is a substring of the input, names and
+					numbers appear in their own quote, values are in range and there are no duplicates.
+				</li>
+				<li>
+					<strong>Training</strong> of Qwen3-4B-Instruct-2507 with LoRA / QLoRA SFT on a completion-only loss,
+					on-policy DPO pairs ranked by the verifier and F1, and an optional GRPO run with the verifier as reward.
+				</li>
+				<li>
+					<strong>Serving and evaluation</strong> with vLLM (merged weights, LoRA adapter, 4-bit; with and without
+					JSON-schema guided decoding), a benchmark client for throughput, TTFT and p95 latency against concurrency,
+					and an evaluation harness against the base model, the teacher and the rule-based parser.
+				</li>
+				<li>Colab notebooks for each GPU stage, and a CLI review tool for building a human-verified gold set.</li>
+			</ul>
+
+			<h2>Architecture</h2>
+			<FilingsDiagram />
+
+			<h2>Results so far</h2>
+
+			<h3>Teacher pilot on real filings</h3>
+			<!-- Source: filings-extraction-finetune/results/pilot/pilot_summary.json and results/pilot/label_stats_v1.json, label_stats_v2.json -->
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr><th>Measurement</th><th class="num">Value</th></tr>
+					</thead>
+					<tbody>
+						<tr><td>Random DEF 14A filings probed (2016-2025)</td><td class="num">50</td></tr>
+						<tr><td>Ownership section located</td><td class="num">45 / 50</td></tr>
+						<tr><td>Teacher</td><td class="num">gemini-3.8-flash, JSON schema</td></tr>
+						<tr><td>Verified labels, first run</td><td class="num">31 / 40</td></tr>
+						<tr><td>Verified labels after fixes (thinking budget, zero-width spaces)</td><td class="num">35 / 40</td></tr>
+						<tr><td>Re-verified after fixing a verifier false positive</td><td class="num">36 / 40</td></tr>
+						<tr><td>Mean tokens per document, in / out (incl. thinking)</td><td class="num">3,076 / 1,571</td></tr>
+						<tr><td>Teacher cost</td><td class="num">$0.33 for 40 docs ($8.20 per 1k)</td></tr>
+					</tbody>
+					<caption>Missed sections were investment-fund joint proxies and wrapper documents. Cost at the teacher's introductory price, October 2026.</caption>
+				</table>
+			</div>
+			<p>
+				The verifier caught real teacher errors that a schema check would accept: a number rewritten without
+				thousands separators, a quote from a continuation row that omits the holder, and <code>0</code> shares where
+				the filing shows <code>-</code>.
+			</p>
+
+			<h3>Extraction quality</h3>
+			<!-- Source: filings-extraction-finetune/results/pilot/heuristic_vs_teacher/metrics.json (heuristic row);
+			     other rows are pending GPU runs (README.md "Extraction quality") -->
+			<div class="table-wrap">
+				<table>
+					<thead>
+						<tr>
+							<th>System</th>
+							<th>Reference</th>
+							<th class="num">n</th>
+							<th class="num">JSON valid</th>
+							<th class="num">Verifier pass</th>
+							<th class="num">Holder F1</th>
+							<th class="num">Field F1</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr><td>Rule-based table parser (no ML)</td><td>teacher labels (pilot)</td><td class="num">35</td><td class="num">1.00</td><td class="num">0.74</td><td class="num">0.710</td><td class="num">0.637</td></tr>
+						{pendingSystems.map((s) => (
+							<tr><td>{s}</td><td>gold set</td><td class="num">150</td><td class="pending" colspan="4">pending GPU run</td></tr>
+						))}
+					</tbody>
+					<caption>The rule-based row is agreement with teacher labels on the 35 verified pilot documents, not accuracy against human gold labels (none exist yet).</caption>
+				</table>
+			</div>
+			<p>
+				Serving numbers (peak output tokens/s, TTFT and latency p95 at concurrency 8, JSON validity for merged
+				bf16, guided decoding, LoRA adapter and 4-bit variants) are also pending a GPU. The benchmark client is
+				tested against a mock OpenAI-compatible server, but mock numbers say nothing about vLLM, so none are shown
+				here.
+			</p>
+
+			<h2>Key design decisions and trade-offs</h2>
+			<ul>
+				<li>
+					<strong>Tables become one pipe-delimited row per line.</strong> A holder's name and numbers end up
+					adjacent, so the natural evidence quote is the row, and grounding becomes a substring check instead of
+					fuzzy matching.
+				</li>
+				<li>
+					<strong>Verifier before training data.</strong> The same deterministic check is the label filter, the DPO
+					ranker, the RL reward and an eval metric. It cannot check semantics (for example the total column versus
+					the owned-only column), which is why a human-verified gold set is part of the plan.
+				</li>
+				<li>
+					<strong>Model choice</strong>: Qwen3-4B-Instruct-2507 is Apache-2.0, ungated, a plain causal LM with
+					mature LoRA, vLLM and structured-output support. Other 3-4B models were compared on licence and
+					architecture.
+				</li>
+				<li>
+					<strong>On-policy DPO pairs</strong> from 8 SFT samples per prompt. When no sample is good the teacher
+					label is the chosen response; tied prompts are skipped. The reference model is the SFT model with the DPO
+					adapter disabled, so no second copy sits in GPU memory.
+				</li>
+				<li>
+					<strong>The RL reward has a coverage term</strong>, because an empty <code>&#123;"holders": []&#125;</code>
+					passes every verifier check. A test pins this.
+				</li>
+				<li>
+					<strong>Splits by company</strong>, so no issuer appears in both train and test, and over-length examples
+					are dropped rather than truncated.
+				</li>
+			</ul>
+
+			<h2>Limitations</h2>
+			<ul>
+				<li>GPU results are pending; nothing here claims a fine-tuned quality number yet.</li>
+				<li>
+					The verifier proves grounding, not correctness. Teacher mistakes that are grounded but wrong pass into
+					training. Until the gold set is reviewed, metrics are "agreement with the teacher".
+				</li>
+				<li>
+					Keeping only verified labels drops the hardest tables (continuation rows, multi-line names), so training
+					data is somewhat easier than the test set.
+				</li>
+				<li>Sections are capped at 16k characters, and investment-fund proxies are out of scope.</li>
+			</ul>
+
+			<h2>Data and attribution</h2>
+			<p>
+				Filings: <a href="https://www.sec.gov/edgar" target="_blank" rel="noopener noreferrer">SEC EDGAR</a> (public
+				domain), accessed under SEC's fair-access policy with a declared User-Agent, a request-rate limit and a
+				local cache. Models: Qwen3-4B-Instruct-2507 and SmolLM2-135M-Instruct (Apache-2.0). Teacher outputs are
+				subject to the model provider's terms; the repository ships only a handful of fixture labels.
+			</p>
+		</div>
+	</article>
+</Layout>
