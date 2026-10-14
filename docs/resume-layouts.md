@@ -52,12 +52,12 @@ Styles live in [resume-default.css](../src/styles/resume-default.css) and [resum
 
 ## Final TD and DoorDash results
 
-The existing filenames below were retained after local cleanup/renumbering. They identify the final artifacts rather than earlier rendering experiments. The matching JSON content was preserved during layout changes. `resume.json` is the editable source of truth; generate a Markdown resume copy only on explicit request. Application notes follow [the common notes structure](../.agents/skills/tailor-resume/references/application-notes-template.md).
+The results below record the reviewed local exports. Application sources, notes, job postings, and PDFs live in `applications/`, which is ignored by Git and is not included in the repository. The matching JSON content was preserved during layout changes. `resume.json` is the editable source of truth; generate a Markdown resume copy only on explicit request. Application notes follow [the common notes structure](../.agents/skills/tailor-resume/references/application-notes-template.md).
 
 | Application | Settings and positioning | Default result | ATS result |
 | --- | --- | --- | --- |
-| [TD / Layer 6](../applications/td-senior-machine-learning-engineer-2026-10-13/resume.json) | Lean alignment, confident framing; ML pipelines, sensitive-data infrastructure, production NLP/GenAI and research | [v6 PDF](../applications/td-senior-machine-learning-engineer-2026-10-13/EmadGohari_CV_2610v6.pdf), 2 pages, 100% | [v6 PDF](../applications/td-senior-machine-learning-engineer-2026-10-13/EmadGohari_CV_sp_2610v6.pdf), regular ATS, 2 pages, 100% |
-| [DoorDash / Agentic Foundations](../applications/doordash-senior-mle-agentic-foundations-2026-10-09/resume.json) | Optimize alignment, confident framing; grounded LLM/agent features, configuration/evaluation, quality/latency/cost tradeoffs | [v4 PDF](../applications/doordash-senior-mle-agentic-foundations-2026-10-09/EmadGohari_CV_2610v4.pdf), 3 pages, 103% | [v5 PDF](../applications/doordash-senior-mle-agentic-foundations-2026-10-09/EmadGohari_CV_sp_2610v5.pdf), compact ATS, 2 pages, 100% |
+| TD / Layer 6 | Lean alignment, confident framing; ML pipelines, sensitive-data infrastructure, production NLP/GenAI and research | v6 PDF, 2 pages, 100% | v6 PDF, regular ATS, 2 pages, 100% |
+| DoorDash / Agentic Foundations | Optimize alignment, confident framing; grounded LLM/agent features, configuration/evaluation, quality/latency/cost tradeoffs | v4 PDF, 3 pages, 103% | v5 PDF, compact ATS, 2 pages, 100% |
 
 DoorDash preserves its fuller project highlights, three INAGO projects, GPAs, and thesis publication. TD uses shorter descriptions, two INAGO projects with NLU detail in the role description, no GPAs, and the thesis only in Education. Neither ATS rendering removes content relative to its application JSON.
 
