@@ -1,25 +1,21 @@
-# Application notes: DoorDash, Senior MLE, New Verticals Agentic Foundations (internal)
+# DoorDash — Senior MLE, New Verticals Agentic Foundations (internal notes)
 
-- **Job:** Job ID 2728442, pasted into the conversation 2026-10-09. US locations (SF/Sunnyvale/Seattle/NYC). Emad is aware of the location issue and will handle it separately.
-- **Settings:** alignment `optimize`, framing `confident`.
-- **Positioning context recorded during tailoring:** "Ask DoorDash" conversational assistant, launched June 2026 for restaurant search and grocery cart-building from text, photos, and recipes ([TechCrunch](https://techcrunch.com/2026/06/11/doordashs-new-ai-chatbot-lets-you-order-with-prompts-and-photos/), [Grocery Dive](https://www.grocerydive.com/news/doordash-grocery-tools-conversational-shopping-assistant-agentic-ai/822735/)). Used for positioning only; not referenced in the resume.
+[Application](#application) · [Sources](#sources-and-evidence) · [Positioning](#positioning-and-selection) · [Decisions](#decisions) · [Gaps](#gaps-and-follow-ups) · [Outputs](#outputs-and-rendering) · [Validation](#validation)
 
-## Final positioning
-Theme: ships grounded, evaluated LLM and agent features, with judgment on quality, latency, and cost, on top of strong NLP and fine-tuning foundations.
-- Business AI was moved to the top and expanded into four labelled highlights that map to the JD (context engineering, tool use and verification, eval-driven iteration, quality/latency/cost).
-- Investigate is second (agents, tool descriptions, LLM-as-judge).
-- Checkpoint is third (query understanding, latency budget).
-- ER retraining and ER infrastructure are compressed.
-- INAGO leads with T5 fine-tuning, the only open-weights fine-tuning evidence.
-- The Publications section now lists the recommender and purchase-prediction papers second and third, for relevance to generative recommendation.
+## Application
 
-## Factual decisions
-- Alignment and framing were chosen by Emad.
-- **Fine-tuning:** nothing beyond T5 (2020). No SFT/LoRA, DPO, or RL work beyond that.
-- **Model comparison (new, added to master as `kf-bai-model-comparison`):** in Business AI, Emad ran the summary sections on GPT-4 and Claude Sonnet and compared quality, latency, and cost to inform model selection. No winner, criteria detail, or numbers are recorded, so the resume states none.
-- **Investigate:** stays as recorded (config layer, judge migration, contributor framing on the launch). No eval-run iteration, topology comparison, or guardrails claims.
+- Role: Senior Machine Learning Engineer, New Verticals Agentic Foundations. Original pasted JD/listing: Job ID 2728442 (2026-10-09). Revision posting: Job ID 3524079 (retrieved 2026-10-13).
+- Location: US roles (SF/Sunnyvale/Seattle/NYC); Emad is aware and will handle eligibility/location separately.
+- Alignment / framing: `optimize` / `confident`, selected by Emad.
+- Constraints: preserve full content; default three-page format accepted, ATS maximum two pages.
+- Updated: 2026-10-14. Status: final PDFs validated; not submitted to the employer.
 
-## Claim → source map
+## Sources and evidence
+
+- Revision JD: [official role posting](https://careersatdoordash.com/jobs/senior-machine-learning-engineer-new-verticals-agentic-foundations/8279145/), retrieved 2026-10-13. Original job text was supplied in the conversation on 2026-10-09. The two job IDs above are recorded source identities, not a new check of availability.
+- Editable source: [resume.json](resume.json). Evidence: repository master plus the separate `master-resume-updates` worktree and Emad's clarifications. Model-comparison/clustering detail is recorded in that extended evidence; main master includes the confirmed INAGO graph/LSTM/ontology corrections.
+- Positioning context recorded during tailoring: Ask DoorDash conversational restaurant/grocery assistant ([TechCrunch](https://techcrunch.com/2026/06/11/doordashs-new-ai-chatbot-lets-you-order-with-prompts-and-photos/), [Grocery Dive](https://www.grocerydive.com/news/doordash-grocery-tools-conversational-shopping-assistant-agentic-ai/822735/)). Employer context only; not a claim about Emad's experience or text in the resume.
+
 | Resume claim | Source |
 |---|---|
 | Production, hundreds of reports/day | kf-bai-production (metric verified) |
@@ -36,26 +32,49 @@ Theme: ships grounded, evaluated LLM and agent features, with judgment on qualit
 | T5 fine-tune; 40% curation effort | kf-qg-t5 |
 | Title "Senior Machine Learning Engineer II (Research)", Jul 2021 – Present | claim_checks, Title and dates |
 
-## Omissions and gaps (intentional)
-- Excluded: caching cost savings (retracted), agent-topology comparison (needs verification), the XGBoost model outcome and label-imbalance work (team context), annotation scale (unverified), RAG, Kubernetes, model serving, and Docker (scope unconfirmed). Billions of documents and 700 idents/sec were dropped for space.
-- **JD gaps left visible:** preference optimization or RL; recent open-weights or SLM fine-tuning and deployment; an eval harness Emad owns, with measured agent-quality gains; grocery or retail domain; guardrails as an explicit component.
-- **Interview prep:**
-  - Be ready to explain the GPT-4 vs Sonnet comparison: method, criteria, and what was decided.
-  - For the post-training gap, consider a small LoRA/DPO side project on an open SLM. It could only go on the resume once it is completed and labelled as a project.
+Additional evidence: `kf-cqa-knowledge-graphs` and `kf-cqa-lstm-tagging-ontology-intent` support the INAGO research framing. Metric choices/clustering skills were clarified by Emad on 2026-10-13; they do not establish project-specific metric implementation.
 
-## Final content decisions
+## Positioning and selection
 
-- Revision role source: [Senior Machine Learning Engineer, New Verticals Agentic Foundations](https://careersatdoordash.com/jobs/senior-machine-learning-engineer-new-verticals-agentic-foundations/8279145/), retrieved 2026-10-13. The direct posting identified Job ID 3524079; the original pasted JD/listing identified 2728442. These are recorded source identities, not a new verification of current availability.
-- Retain agent harness/configuration wording for the established PydanticAI layer: prompts, tool descriptions/availability, and agent/subagent wiring. Evaluation is migration of existing LLM-as-judge tooling for reuse and future CI/CD, not original judge design or completed integration.
-- Emad selected evaluation skills F1 Score, ROC-AUC, MRR, MAP, and Recall@k, plus Clustering Models. These remain skill-level statements; no project-specific use, named clustering algorithms, or new outcomes are inferred. NDCG and silhouette score remain excluded.
-- Confirmed INAGO knowledge-graph experimentation is supporting research detail. The conversational-QA project leads with NLP/LSTM text tagging and semi-automatically generated ontologies for question/intent interpretation. No specific NER architecture, graph database, GraphRAG, or production graph deployment is asserted. Main master evidence records `kf-cqa-knowledge-graphs` and `kf-cqa-lstm-tagging-ontology-intent`.
-- Retain the established resume role/title and dates, all eight projects, GPAs, three paper entries plus the thesis, and the current skills wording. The default three-page format was accepted. The ATS limit is now two pages, achieved through layout only.
-- Model comparison and clustering details were established during the preceding resume work; some extended evidence is recorded in the separate master-resume-updates worktree. This consolidation preserves the approved application wording and promotes the related INAGO corrections currently in this checkout.
+- Theme: grounded, evaluated LLM/agent delivery with quality, latency, and cost judgment, supported by NLP and fine-tuning foundations.
+- Section order: Summary, Technical Skills, Experience with projects nested under each employer, Education, Publications.
+- TR projects: Business AI first with four highlights (context engineering, tools/verification, SME iteration, model comparisons); Investigate second; Checkpoint third; retraining and infrastructure afterward in shorter form.
+- INAGO: T5 fine-tuning, conversational QA with NLP/LSTM models, then domain-specific NLU. Retain all eight projects, GPAs, three papers plus thesis. Recommender and purchase-prediction papers are second/third for relevance to generative recommendation.
 
-## Final rendering and validation
+## Decisions
 
-- Default: [EmadGohari_CV_2610v4.pdf](EmadGohari_CV_2610v4.pdf), 3 Letter pages, original DoorDash sans-serif/serif design, 103% auto-fit.
-- ATS: [EmadGohari_CV_sp_2610v5.pdf](EmadGohari_CV_sp_2610v5.pdf), 2 Letter pages, `--ats --compact`, 100%. No content cuts. Filenames reflect retained artifacts after local renumbering.
-- [Shared layout settings](../../docs/resume-layouts.md) are authoritative for typography, spacing, contact/header structure, filename conventions, and reproduction. Default and regular ATS remain independent of the compact profile.
-- Final JSON/Markdown preserved during consolidation. All 167 nonempty source strings were verified with two PDF text extractors, along with section order, all four contact links, embedded Unicode font maps, and complete visual review. The default preserves bold descriptions; ATS removes inline emphasis while retaining title/label weights.
-- Public resume JSON/PDFs remain unchanged. These application PDFs contain no internal notes or unresolved claim questions. Nothing submitted to the employer.
+| ID | Topic | Final decision | Basis |
+| --- | --- | --- | --- |
+| F1 | Title and dates | Retain Senior Machine Learning Engineer II (Research), Jul 2021 - Present, and established employment chronology. | Previously resolved user choices; master claim checks. |
+| F2 | Fine-tuning | T5 (2020) is the supported open-weights fine-tuning experience; no SFT/LoRA, DPO, or RL claims. | Existing project evidence and Emad's clarification. |
+| F3 | Model comparison | GPT-4/Claude Sonnet comparison on quality, latency, and cost; no winner or unrecorded criteria/numbers. | Emad, 2026-10-09; `kf-bai-model-comparison`. |
+| F4 | Agent contribution | PydanticAI configuration of prompts/tools/agent wiring and migration of existing judge tooling for reuse/future CI/CD. Contributor to the commercial launch; no complete runtime ownership, original judge design, completed CI/CD, topology comparison, guardrails, tracing, or measured agent-quality gain. | `kf-inv-central-config`, `kf-inv-llm-judge-migration`, launch evidence. |
+| F5 | Evaluation/clustering skills | F1 Score, ROC-AUC, MRR, MAP, Recall@k and Clustering Models at skill level; no new project-specific metric use or named clustering algorithms. | Emad's selections, 2026-10-13. |
+| F6 | Conversational QA | Lead with NLP/LSTM text tagging and semi-automatic ontologies for question/intent interpretation; knowledge graphs remain supporting research. No NER-specific architecture, graph database, GraphRAG, or production graph scope. | Emad, 2026-10-13; confirmed INAGO fact IDs. |
+| C1 | Coverage | Keep full project highlights, skills wording, degrees/GPAs, three paper entries and thesis. | Accepted expanded DoorDash content. |
+| L1 | Default | Original sans-serif/serif design, 3 pages at 103% auto-fit. | Emad's default-style restoration and accepted length. |
+| L2 | ATS | Two pages via `--ats --compact`, 100%; no text cuts. Keep contact grid, subtitle/location separator, stacked job metadata and inline project metadata. | Emad's ATS decisions and two-page request; shared settings. |
+
+## Gaps and follow-ups
+
+- Deliberate omissions: retracted caching savings; unverified annotation volume; team-owned XGBoost outcomes/label-imbalance work; unestablished RAG, Kubernetes, model-serving and Docker scope. Billions of documents and 700 idents/sec omitted for space. NDCG and silhouette score excluded by user choice.
+- JD gaps: preference optimization/RL, recent open-model/SLM fine-tuning/deployment, an owned evaluation harness with measured agent gains, grocery/retail domain, and guardrails as an explicit component. Agent-topology comparison remains unverified.
+- Unresolved questions affecting final content: None; unsupported extensions remain excluded. Prepare location/eligibility separately.
+- Interview preparation: model-comparison method/criteria/decision; personal versus team scope; basis for search access improvement, T5 curation saving, and estimated retraining saving. A proposed LoRA/DPO side project is future work and may only enter a resume after completion, accurately labelled.
+
+## Outputs and rendering
+
+- Editable source: [resume.json](resume.json). Markdown is not required for future outputs; the existing copy is a legacy artifact.
+
+| PDF | Layout/profile | Pages / scale |
+| --- | --- | --- |
+| [EmadGohari_CV_2610v4.pdf](EmadGohari_CV_2610v4.pdf) | Default | 3 / 103% |
+| [EmadGohari_CV_sp_2610v5.pdf](EmadGohari_CV_sp_2610v5.pdf) | `--ats --compact` | 2 / 100% |
+
+[Shared layout settings and reproduction](../../docs/resume-layouts.md) define typography, spacing, metadata/contact structure, and filename conventions. Names reflect retained files after local renumbering. Default/regular ATS remain independent of compact ATS.
+
+## Validation
+
+- Content: schema passed; both PDF text extractors preserved all 167 nonempty source strings, section order, and all four contact links. No content cuts during ATS compression.
+- Layout: every final page visually reviewed; embedded Unicode font maps and selectable/searchable text verified. Fresh exports matched retained PDFs pixel-for-pixel across all five pages during PR consolidation.
+- Preservation/status: JSON/PDFs remain unchanged by this notes restructure. Public resume JSON/PDFs unchanged. Internal notes/unresolved claim prompts are absent from submission PDFs. Nothing submitted to DoorDash.

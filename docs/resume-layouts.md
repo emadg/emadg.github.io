@@ -52,7 +52,7 @@ Styles live in [resume-default.css](../src/styles/resume-default.css) and [resum
 
 ## Final TD and DoorDash results
 
-The existing filenames below were retained after local cleanup/renumbering. They identify the final artifacts rather than earlier rendering experiments. The matching JSON/Markdown content was preserved during layout changes.
+The existing filenames below were retained after local cleanup/renumbering. They identify the final artifacts rather than earlier rendering experiments. The matching JSON content was preserved during layout changes. `resume.json` is the editable source of truth; generate a Markdown resume copy only on explicit request. Application notes follow [the common notes structure](../.agents/skills/tailor-resume/references/application-notes-template.md).
 
 | Application | Settings and positioning | Default result | ATS result |
 | --- | --- | --- | --- |

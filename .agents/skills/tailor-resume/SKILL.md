@@ -98,7 +98,23 @@ Once material inputs and claim decisions are resolved, present a concise plan co
 
 Then execute the plan in the same workflow. The request to create a tailored resume authorizes creation of local artifacts; do not add a routine plan-approval gate. If the user explicitly requests plan-only work or approval before execution, honor that boundary.
 
-Default deliverables are an editable `resume.md`, a submission-ready PDF named as specified below, and compact `application-notes.md` in the application directory. Use a readable one- or two-page resume based on relevant content, normally two pages for this career history. Follow a specified format or application page limit instead; create DOCX only if requested or required. The internal notes should capture the input settings, JD source or supplied text, plan, factual decisions, a concise final-claim/source mapping, omissions, and validation results. Keep these notes out of the submission resume.
+Default deliverables are `resume.json` as the editable source of truth, submission-ready PDF(s) named as specified below, and structured `application-notes.md` in the application directory. Generate `resume.md` only if Emad explicitly requests a Markdown copy; do not require it or maintain a duplicate by default. Use a readable one- or two-page resume based on relevant content, normally two pages for this career history. Follow a specified format or application page limit instead; create DOCX only if requested or required. Keep internal notes out of the submission resume.
+
+### Application notes
+
+Use [the application-notes template](references/application-notes-template.md) with these headings in this order, so decisions are easy to locate across applications:
+
+| Section | What belongs here |
+| --- | --- |
+| Application | Company/role, requisition, location, alignment/framing, constraints, updated date, current status. |
+| Sources and evidence | JD URL or supplied text and retrieval date, base JSON/master sources, compact requirement/claim-to-source map with boundaries. |
+| Positioning and selection | Positioning theme, section/project order, career coverage, selection rationale. |
+| Decisions | Final factual, content, and layout decisions, with stable IDs, user/evidence basis, and scope. |
+| Gaps and follow-ups | Deliberate omissions and why, unresolved questions and their effect, interview preparation. |
+| Outputs and rendering | Current JSON/PDF links, page counts, layout/profile, scale, reproduction commands or shared settings link. |
+| Validation | Checks actually completed and outcomes, material limitations, publication/submission status. |
+
+Keep the notes a current decision reference rather than a transcript. Update a changed decision in place, retaining its ID and recording a brief dated supersession only when useful. Separate confirmed facts, presentation choices, and unresolved claims; moving a question to the notes does not authorize using an unsupported claim. Prefer links to shared layout settings over duplicating typography tables. Use `None` for empty gaps/follow-up categories; do not leave template prompts in finished notes. Record only validation actually performed and preserve meaningful evidence/claim boundaries when restructuring existing notes.
 
 ### PDF filenames
 
@@ -107,7 +123,7 @@ Unless Emad specifies another filename, name generated PDFs:
 - Standard: `EmadGohari_CV_<YYMM>v<N>.pdf`
 - ATS, when requested: `EmadGohari_CV_sp_<YYMM>v<N>.pdf`
 
-Use the generation date in Emad's local timezone for the two-digit year and month (`YYMM`), and a positive integer for `N`. Choose the next version after the highest existing version for that month across the repository's application directories, considering both patterns; start at `v1` if none exist. Standard and ATS exports of the same resume share the month and version, for example `EmadGohari_CV_2610v5.pdf` and `EmadGohari_CV_sp_2610v5.pdf`. Reuse the chosen names during rendering and QA of that revision; allocate a new version for a later revision unless Emad explicitly requests overwriting it. Keep editable sources named `resume.json` and `resume.md`, record the PDF names in `application-notes.md`, and deliver links to the named PDFs. Preserve existing files unless renaming or overwriting was requested.
+Use the generation date in Emad's local timezone for the two-digit year and month (`YYMM`), and a positive integer for `N`. Choose the next version after the highest existing version for that month across the repository's application directories, considering both patterns; start at `v1` if none exist. Standard and ATS exports of the same resume share the month and version, for example `EmadGohari_CV_2610v5.pdf` and `EmadGohari_CV_sp_2610v5.pdf`. Reuse the chosen names during rendering and QA of that revision; allocate a new version for a later revision unless Emad explicitly requests overwriting it. Keep the editable source named `resume.json`, record PDF names in `application-notes.md`, and deliver links to the named PDFs. Preserve existing files unless renaming or overwriting was requested.
 
 Write accomplishment bullets around personal action, relevant technical substance, and supported outcome. Use qualitative impact when numbers lack support. Include only useful, defensible keywords and preserve official titles, dates, qualifications, and employment relationships. Make the final resume coherent and interview-defensible across all modes.
 
@@ -144,6 +160,6 @@ Use $tailor-resume
 job: <paste JD, local path, or URL>
 alignment: optimize
 framing: selective-overfit
-constraints: Maximum two pages; PDF and editable Markdown.
+constraints: Maximum two pages; PDF and editable JSON.
 Ask me about material claim decisions, then plan and create the resume.
 ```
