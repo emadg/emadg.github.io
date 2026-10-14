@@ -28,7 +28,14 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 	<header>
 		<div class="name-row">
 			<h1>{contact.name}</h1>
-			<span class="title">{contact.headline}{ats && <><span class="title-separator"> — </span>{contact.location}</>}</span>
+			{compact ? (
+				<div class="header-details">
+					<span class="title">{contact.headline}</span>
+					<span class="header-location">{contact.location}</span>
+				</div>
+			) : (
+				<span class="title">{contact.headline}{ats && <><span class="title-separator"> — </span>{contact.location}</>}</span>
+			)}
 		</div>
 		{ats ? (
 			<div class="contact-info">
@@ -89,10 +96,13 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 			<div class="job">
 				<div class="job-head">
 					<div class="entry-header">
-						<h3>{job.role} at {job.company}</h3>
-						<span class="period">{job.period}</span>
+						{compact ? (
+							<h3>{job.role} at {job.company}<span class="inline-meta"> — {job.period} | {job.location}</span></h3>
+						) : (
+							<><h3>{job.role} at {job.company}</h3><span class="period">{job.period}</span></>
+						)}
 					</div>
-					<div class="entry-sub">{job.location}</div>
+					{!compact && <div class="entry-sub">{job.location}</div>}
 					<div class="entry-desc" set:html={inline(job.description)} />
 					{job.projects.length > 0 && <h4 class="projects-heading">Work Projects</h4>}
 				</div>
@@ -121,11 +131,23 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 		{resumeData.education.map((edu) => (
 			<div class="entry">
 				<div class="entry-header">
-					<h3>{edu.degree}, {edu.institution}</h3>
-					<span class="period">{edu.period}</span>
+					{compact ? (
+						<h3>{edu.degree}, {edu.institution}<span class="inline-meta"> — {edu.period} | {edu.location}</span></h3>
+					) : (
+						<><h3>{edu.degree}, {edu.institution}</h3><span class="period">{edu.period}</span></>
+					)}
 				</div>
-				<div class="entry-sub">{edu.location}{edu.grade ? ` · GPA: ${edu.grade}` : ''}</div>
-				{edu.note && <div class="entry-note">{edu.note}</div>}
+				{compact ? (
+					(edu.grade || edu.note) && <div class="education-details">
+						{edu.grade && <div>• GPA: {edu.grade}</div>}
+						{edu.note && <div>• {edu.note}</div>}
+					</div>
+				) : (
+					<>
+						<div class="entry-sub">{edu.location}{edu.grade ? ` · GPA: ${edu.grade}` : ''}</div>
+						{edu.note && <div class="entry-note">{edu.note}</div>}
+					</>
+				)}
 			</div>
 		))}
 	</section>
