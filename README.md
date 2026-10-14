@@ -202,7 +202,7 @@ npm run pdf -- --no-fit
 npm run pdf -- --zoom 0.97
 ```
 
-**Layouts:** default keeps the original DoorDash sans-serif/serif design. Regular ATS has 15 pt section headings, 11 pt body text, two-column contacts, stacked job dates/full locations, and inline project metadata. `--ats --compact` uses 10 pt body text and tighter spacing for longer content. ATS uses the same Arial/Liberation Sans font; no custom fonts are required. Default auto-fit remains 94-103%; ATS stays at 100% unless `--zoom` is specified.
+**Layouts:** default keeps the original DoorDash sans-serif/serif design. Regular ATS has 15 pt section headings, 11 pt body text, two-column contacts, stacked job dates/full locations, and inline project metadata. `--ats --compact` uses 10 pt body text, 9.5 pt project descriptions/highlights, and tighter spacing for longer content. Compact ATS places the headline/location beside the name, keeps job/education dates and locations inline with their titles, and displays GPA/education notes as bullets. ATS uses the same Arial/Liberation Sans font; no custom fonts are required. Default auto-fit remains 94-103%; ATS stays at 100% unless `--zoom` is specified.
 
 See [Resume PDF layouts](docs/resume-layouts.md) for the complete settings table, TD/DoorDash layout results, and validation/reproduction guidance. Current results: TD default/ATS are two pages; DoorDash default is three pages and compact ATS is two pages, without ATS text cuts. The `applications/` directory holds local editable sources, notes, job postings, and generated PDFs; the entire directory is ignored by Git and is not included in the repository.
 

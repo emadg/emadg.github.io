@@ -16,8 +16,10 @@ Sizes below are in points at 100% scale. Regular text uses weight 400; names, he
 | Project titles, bold | 10.5 | 11 | 11 |
 | Publication titles, bold | 10.5 | 11 | 10 |
 | Body text and bullets, regular | 10 | 11 | 10 |
+| Project descriptions and highlights, regular | 10 | 11 | 9.5 |
 | Contact details | 9 | 9.5 | 9.5 |
-| Job/education dates and locations | 9 | 10 | 10 |
+| Header location | 9 | 10 | 9.5 |
+| Job/education dates and locations | 9 | 10 | 9 |
 | Project dates and stages | 9 | 9.25 | 9.25 |
 | Tech & Skills | 9 | 10 | 9.5 |
 | Education notes and publication metadata | 9 | 10 | 9.5 |
@@ -31,9 +33,9 @@ All exports use Letter paper with 0.45-inch top/bottom and 0.5-inch side margins
 
 Default retains contact icons, divider lines, serif section headings, inline emphasis, indented projects, stage labels in brackets, right-aligned dates, and separate location lines. Work Projects headings are uppercase.
 
-ATS has no `>` heading prefixes or decorative rules. The subtitle is below the name, followed by an em dash with 6 pt extra spacing on each side and the full location. Contact Info has two equal columns and two rows: email/GitHub, then LinkedIn/website. Location is not repeated in that block. Source order follows the rows; the resume body remains a single column.
+ATS has no `>` heading prefixes or decorative rules. Regular ATS places the subtitle below the name, followed by an em dash with 6 pt extra spacing on each side and the full location. Compact ATS places the subtitle and a separate location line to the right of the name. Contact Info has two equal columns and two rows: email/GitHub, then LinkedIn/website. Location is not repeated in that block. Source order follows the rows; the resume body remains a single column.
 
-ATS job titles have dates and full locations on separate lines, retaining Canada. Project dates and deployment stages remain inline after an em dash in smaller regular type. Descriptions have no inline bold emphasis; titles and field labels remain bold. Compact ATS retains this structure and the heading hierarchy.
+Regular ATS job and education titles have dates and full locations on separate lines, retaining Canada. Compact ATS places dates and locations inline after each title, separated by an em dash and a vertical bar; GPA and education notes appear as separate bullets below the title. Project dates and deployment stages remain inline after an em dash in smaller regular type. Descriptions have no inline bold emphasis; titles and field labels remain bold. Compact ATS retains the heading hierarchy and uses 9.5 pt project descriptions/highlights.
 
 | Gap or margin, pt | Default | ATS | Compact ATS |
 | --- | --- | --- | --- |
@@ -81,4 +83,6 @@ New PDFs use `EmadGohari_CV_<YYMM>v<N>.pdf` and `EmadGohari_CV_sp_<YYMM>v<N>.pdf
 
 For a two-page ATS target, adjust spacing/profile first. Propose specific text cuts for Emad's agreement before shortening or removing content; do not force a fit with unreadable typography. Validate JSON, page count, every rendered page, full extracted text/reading order, embedded fonts, and links. The compact profile is not a page-count guarantee for different content.
 
-Consolidation validation: the Astro build and master/application JSON schemas passed. Fresh exports match all four retained PDFs pixel-for-pixel across all nine pages. Two text extractors preserve all 140 TD and 167 DoorDash source strings in each layout, with correct section order, embedded Unicode fonts, and all four contact links.
+Original consolidation validation (PR #5): the Astro build and master/application JSON schemas passed. Fresh exports matched all four retained PDFs pixel-for-pixel across all nine pages. Two text extractors preserved all 140 TD and 167 DoorDash source strings in each layout, with correct section order, embedded Unicode fonts, and all four contact links. The compact layout has since been refined as described above; those historical pixel comparisons apply to the original consolidation.
+
+Compact layout follow-up validation: the Astro build and whitespace checks passed. The current local DoorDash compact export remains two pages at 100%; both pages were visually reviewed, text extraction preserves all 159 rendered source strings with the expected section order, and Liberation Sans regular/bold fonts are embedded. Fresh default and regular ATS exports each match their corresponding `main` baseline across all three pages pixel-for-pixel at 110 dpi. Application files and QA exports remain outside source control.

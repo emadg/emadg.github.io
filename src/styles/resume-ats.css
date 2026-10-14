@@ -44,14 +44,21 @@ h3, .projects-heading { font-size: 11.5pt; font-weight: 700; line-height: 1.2; }
 
 /* Opt-in for longer resumes; preserve the regular ATS/default layouts. */
 .ats.compact { font-size: 10pt; line-height: 1.12; }
+.compact .name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12pt; }
+.compact .header-details { min-width: 0; text-align: right; }
+.compact .title { margin-top: 0; text-align: right; }
+.compact .header-location { display: block; font-size: 9.5pt; margin-top: 2pt; }
+.compact .entry-header .inline-meta { font-size: 9pt; }
 .compact header, .compact section, .compact .job { margin-bottom: 6pt; }
 .compact h2 { margin-bottom: 3pt; }
 .compact .skills-row { margin-bottom: 1pt; }
 .compact .job-head { margin-bottom: 3pt; }
 .compact .projects-heading { margin-top: 4pt; }
 .compact .project { margin-bottom: 4pt; }
+.compact .project-desc, .compact .project-highlights { font-size: 9.5pt; }
 .compact .project-tech { font-size: 9.5pt; }
 .compact .entry { margin-bottom: 4pt; }
+.compact .education-details { font-size: 9.5pt; margin-top: 2pt; }
 .compact .pub { margin-bottom: 3pt; }
 .compact .pub-title { font-size: 10pt; }
 .compact .pub-meta, .compact .entry-note { font-size: 9.5pt; }
