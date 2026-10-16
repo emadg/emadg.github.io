@@ -58,7 +58,7 @@ The motion button has the stable accessible name **Background motion**, an expli
 
 Reading feedback uses native section anchors and `aria-current="location"`; page navigation continues to use `aria-current="page"`. A throttled scroll handler updates the decorative progress rule and current story marker. A body ResizeObserver includes disclosure and footer-size changes. Feedback does not alter URL fragments, focus, or content visibility. Desktop section navigation is sticky as a main-level sibling, below the sticky header; phones retain the compact ordinary section links.
 
-`src/data/visual.ts` selects the branch's art direction. The `experiment/glass-lattice` and `experiment/glass-field` branches share the renderer, content, geometry, and tests. See [the comparison and plan](docs/visual-experiments.md) for review instructions and screenshots.
+`src/data/visual.ts` selects the branch's art direction. The `experiment/glass-field` branch retains the initial alternative snapshot; `experiment/glass-lattice` contains the selected direction's subsequent refinements. See [the comparison and plan](docs/visual-experiments.md) for review instructions and screenshots.
 
 Writing uses the same shell and a narrower reading column. Existing article text is preserved. Long code samples and tables scroll within their containers.
 
