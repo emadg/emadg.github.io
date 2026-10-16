@@ -26,6 +26,13 @@ pnpm-debug.log*
 # local job application materials
 /applications/
 
+# Local visual-review recordings (screenshots can be committed)
+/.local/visual-previews/
+*.mp4
+*.webm
+*.mov
+*.m4v
+
 # local assistant configuration and shared tailoring skill link
 .claude/
 /.agents/skills/tailor-resume

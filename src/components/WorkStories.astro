@@ -1,0 +1,98 @@
+---
+import { featuredWork } from "../data/portfolio";
+import { STAGE_LABEL, renderInline } from "../lib/resume";
+---
+
+<section
+  class="section-block"
+  id="selected-projects"
+  aria-labelledby="stories-title"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Selected projects</p>
+      <h2 id="stories-title">A closer look at the work.</h2>
+    </div>
+    <p class="section-description">
+      Three examples across production AI, research infrastructure, and agent
+      tooling.
+    </p>
+  </div>
+  <div class="story-list">
+    {featuredWork.map((work, index) => (
+      <article
+        class="work-story"
+        id={work.project.id}
+        aria-labelledby={`${work.project.id}-title`}
+      >
+        <div class="story-heading">
+          <span class="story-index" aria-hidden="true">
+            0{index + 1}
+          </span>
+          <div>
+            <p class="eyebrow">{work.discipline}</p>
+            <h3 id={`${work.project.id}-title`}>{work.title}</h3>
+            <div class="metadata">
+              <span>{work.project.employer}</span>
+              <span>{work.project.period}</span>
+              <span class="stage-label">{STAGE_LABEL[work.project.stage]}</span>
+            </div>
+          </div>
+        </div>
+        <div class="story-body">
+          <div>
+            <h4 class="small-label">My contribution</h4>
+            <p>{work.contribution}</p>
+          </div>
+          <aside class="story-outcome">
+            <span class="small-label">{work.resultLabel}</span>
+            <p>{work.result}</p>
+          </aside>
+        </div>
+        <ol
+          class="process-strip"
+          aria-label={
+            work.project.id === "agent-tooling"
+              ? "Areas of contribution"
+              : "Workflow overview"
+          }
+        >
+          {work.process.map((step, stepIndex) => (
+            <li>
+              <span class="process-number" aria-hidden="true">
+                0{stepIndex + 1}
+              </span>
+              <div>
+                <h4>{step.label}</h4>
+                <p>{step.text}</p>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <details class="technical-details">
+          <summary>
+            Explore the technical details{" "}
+            <span class="disclosure-icon" aria-hidden="true">
+              +
+            </span>
+          </summary>
+          <div class="details-content">
+            <p>{work.consideration}</p>
+            <p set:html={renderInline(work.project.description)} />
+            {work.project.highlights?.length ? (
+              <ul>
+                {work.project.highlights.map((highlight) => (
+                  <li set:html={renderInline(highlight)} />
+                ))}
+              </ul>
+            ) : null}
+            <p class="technology-line">
+              <strong>Tools & technologies:</strong>{" "}
+              {work.project.tech.join(" · ")}
+            </p>
+          </div>
+        </details>
+      </article>
+    ))}
+  </div>
+</section>

@@ -1,210 +1,93 @@
-# Developer Guide
+# Developer guide
 
-This document explains how the site is architected, how to modify its visual design, and how to extend it with new features.
+## Structure
 
-## Architecture Overview
+The site uses Astro static generation and Tailwind CSS v4. It does not need React, a client-side router, or a component framework. All routes render complete HTML at build time.
 
-The site is built with **Astro** in Static Site Generation (SSG) mode. Every page is pre-rendered to static HTML at build time, meaning zero JavaScript is shipped to the browser except for two small scripts that power the canvas animation and the flip-card interactions.
-
-```
-Browser Request
-     |
-     v
-  Static HTML + CSS  (from dist/)
-     |
-     +--> NetworkBackground.astro <script>  (Canvas particle animation, runs on load)
-     +--> Resume.astro <script>             (IntersectionObserver + hover flip logic)
-```
-
-### Key Design Decisions
-
-- **No React / Vue / Svelte dependency.** All components are `.astro` files (server-rendered HTML templates). The two `<script>` tags in `NetworkBackground.astro` and `Resume.astro` are vanilla TypeScript. This keeps the bundle tiny and avoids framework lock-in.
-- **Content separated from presentation.** Resume data lives in `src/data/resume.json`. Blog posts will live in `src/content/blog/` as Markdown files. The owner never needs to touch `.astro` or `.css` files to update content.
-- **TailwindCSS v4** is used via the Vite plugin (`@tailwindcss/vite`). There is no `tailwind.config.js`; configuration is done inline in `src/styles/global.css` using the `@theme` directive.
-- **Single-source PDF generation.** `src/pages/resume.astro` renders a print-optimized HTML page from `resume.json`. The `scripts/generate-pdf.mjs` script uses `puppeteer-core` (lightweight, no bundled browser) to print it to `public/resume.pdf` via the system's Chrome installation.
-
-## File-by-File Reference
-
-### `src/styles/global.css`
-
-- Imports Google Fonts (Inter + JetBrains Mono) and TailwindCSS.
-- Defines custom font families in the `@theme` block.
-- **Defines Semantic Color Tokens**: Maps generic names (e.g., `--color-bg-body`) to specific values for Light (`:root`) and Dark (`:root.dark`) modes.
-- Sets base body styles using these semantic tokens.
-- Defines the `fade-in-up` animation and sequential delay classes.
-- Defines 3D flip-card utilities and `.card-inner` grid stacking.
-- Defines the `.theme-transition` class for smooth color swapping.
-
-### `src/layouts/Layout.astro`
-
-- Accepts `title` and optional `description` props.
-- **Theme Logic**: Includes an inline `<script>` in `<head>` to prevent Flash of Wrong Theme (FOWT). It checks `localStorage` or `prefers-color-scheme` and applies the `.dark` class immediately.
-- Renders the `<NetworkBackground />` as a fixed full-screen layer.
-- Wraps content in a central frosted-glass panel using semantic background/border tokens.
-- Uses `transform-gpu` to ensure smooth rendering of the backdrop blur.
-
-### `src/components/NetworkBackground.astro`
-
-Two layers:
-1. A `<canvas>` element that renders animated particles.
-2. A `<div>` overlay with an inline SVG fractal noise texture.
-
-The `<script>` block:
-- Creates particles that drift and connect with lines.
-- **Theme Reactivity**: Observes the `<html>` element for class changes. When the theme toggles, it smoothly interpolates the particle colors (Cornflower Blue for dark, Darker Blue for light) over ~400ms.
-
-### `src/components/Hero.astro`
-
-- Renders a pulsing accent badge, headline, summary, and social links.
-- Uses semantic color tokens (e.g., `text-text-primary`, `text-text-muted`) to adapt to the active theme.
-
-### `src/components/Resume.astro`
-
-- Imports data from `src/data/resume.json`. Uses `allProjects()` and `allSkills()` from `src/lib/resume.ts` to flatten nested projects and skill categories, and `renderInline()` for `**bold**` text.
-- Builds the timeline, skills, and project sections using semantic tokens for backgrounds, borders, and text.
-- 3D Flip Logic remains the same, but card styles now adapt to light/dark mode.
-
-### `src/components/Nav.astro`
-
-- Top navigation bar.
-- **Theme Toggle**: Includes a sun/moon button that toggles the `.dark` class on `<html>`, saves the preference to `localStorage`, and triggers a temporary `.theme-transition` class for smooth animation.
-
-### `src/content/config.ts`
-
-Defines an Astro content collection called `blog` with a Zod schema:
-- `title` (string, required)
-- `description` (string, required)
-- `pubDate` (date, required)
-- `tags` (string array, optional)
-
-### `src/pages/resume.astro`
-
-- Print-optimized HTML resume page using `loadResume()`: default JSON or `RESUME_DATA` for a tailored file.
-- `RESUME_LAYOUT=clean|ats` selects the presentation; the default is `clean`. Preview at `/resume` with `npm run dev` or `RESUME_LAYOUT=ats npm run dev`.
-- Shared vanilla CSS controls Letter paper, margins, local Arial/Liberation Sans fonts, layout-specific typography and spacing (default: 10 pt body / 9 pt metadata; ATS: 11 pt body / 10 pt metadata). No Google Fonts dependency for the PDF.
-- **Default layout:** contact icons, header/section divider lines, Georgia section headings with an accent bar, right-aligned dates, inline bold emphasis, and modest project indentation. Stage labels are literal bracketed uppercase text after project titles, such as `Project Title [PRODUCTION]`. A "Work Projects" subheading follows each job description, project titles use standard bullet characters, and a thin divider separates employers. The default uses a 24 pt name, 13 pt section headings, 11.5 pt job titles, and 10.5 pt project/publication titles. No project boxes, shading, or enclosing borders.
-- **ATS layout:** 14.5 pt section headings with a literal ASCII `>` prefix in the text (including Contact Info), left-aligned normal document flow, stacked headline and dates, a "Contact Info" block with bold colon labels (Email, GitHub, LinkedIn, Website, then Location), "Work Projects" subheadings, simple text bullets before project titles, project date and plain stage label below each title, no icons or decorative rules, no project indentation, and no inline emphasis. Contact details remain ordinary body content, not a repeating PDF header.
-- Both layouts preserve summary, technical skills, jobs with nested projects, education, and publications. The existing portfolio components and JSON schema are independent of PDF layout choices.
-- Headings and job headers stay with following content; small entries avoid page breaks. The renderer marks projects taller than 30% of a printable page `.can-split`, retaining heading/paragraph break controls.
-- Exists as a PDF source and is not linked from the main navigation.
-
-### `scripts/generate-pdf.mjs`
-
-- Uses `puppeteer-core` with system Chrome/Chromium or `CHROME_PATH`; no bundled browser download.
-- Starts its own Astro dev server on port 4399 (`--port` overrides; a busy port fails), renders `/resume`, and closes Chrome and the server.
-- `npm run pdf` selects `clean` and defaults to `public/resume.pdf`. `npm run pdf -- --ats` selects `ats` and defaults to `public/resume-ats.pdf`. Layout is explicitly passed to the child server, overriding inherited `RESUME_LAYOUT`.
-- `--dir` creates the layout-specific filename. `--out`, a positional output path, and `PDF_OUT` retain their existing output behavior. `--data` or `RESUME_DATA` selects a tailored JSON input.
-- Emits Letter PDFs with selectable, tagged text, working links, and no browser-generated headers/footers. The site's existing download serves the default `resume.pdf`.
-- **Auto-fit:** simulates pagination at print width, trying zoom values in `FIT.min`–`FIT.max` to prefer fewer pages, then reduce blank space without adding pages. Long projects are measured through their children and allowed to split. This is an estimate; inspect actual PDFs when adjusting the layout.
-- Auto-fit runs only for the default layout. ATS and `--no-fit` use 100%; explicit `--zoom` takes precedence in either layout. Styling and spacing live entirely in the Astro page.
-
-### `src/pages/blog/index.astro`
-
-- Blog listing page at `/blog`.
-- Fetches all posts via `getCollection('blog')`, sorts newest first.
-- Each post renders as a card showing title, date, description, and tags.
-- Links to `/blog/[slug]/` (the `.md` extension is stripped from `post.id` for clean URLs).
-
-### `src/pages/blog/[slug].astro`
-
-- Dynamic route for individual blog posts.
-- Uses `getStaticPaths()` to generate one page per post.
-- Renders post content using Astro's `render()` function inside a `.prose` container.
-- Includes a "Back to blog" link, post header with title/date/tags, and the full rendered Markdown.
-
-## Common Tasks
-
-### Change the color accent
-
-The accent color is defined in `src/styles/global.css` under the `:root` and `:root.dark` blocks. Look for `--accent`, `--accent-hover`, and `--accent-bg`. Change the hex codes to your preferred color (e.g., Emerald, Violet).
-
-### Change the background color tone
-
-The page background is defined in `src/styles/global.css` as `--bg-body`.
-- **Light Mode**: Defaults to `#f1f5f9` (Slate 100).
-- **Dark Mode**: Defaults to `#020617` (Slate 950).
-Update these values to shift the tone (e.g., to Zinc or Neutral).
-
-### Adjust the frosted glass transparency
-
-In `src/styles/global.css`, adjust the `--bg-panel` variable:
-- **Light Mode**: `rgba(255, 255, 255, 0.4)`
-- **Dark Mode**: `rgba(15, 23, 42, 0.2)`
-To change the blur amount, edit `src/layouts/Layout.astro` and look for `backdrop-blur-[5px]`.
-
-### Add a new page
-
-Create a new `.astro` file in `src/pages/`, e.g. `src/pages/projects.astro`:
-
-```astro
----
-import Layout from '../layouts/Layout.astro';
----
-<Layout title="Projects">
-  <h1>My Projects</h1>
-</Layout>
+```text
+src/data/resume.json       shared public facts + full resume content
+src/data/portfolio.ts      website editorial content + stable project references
+src/lib/resume.ts          PDF helpers, stage labels, safe inline bold rendering
+src/layouts/Layout.astro  metadata, theme initialization, navigation, footer
+src/components/Hero.astro introduction and decorative native SVG
+src/components/WorkStories.astro  selected project stories + native details
+src/components/Resume.astro       career, expertise, education, publications
+src/components/Contact.astro      shared contact section
+src/pages/work.astro      My Work route and direct-project disclosure handling
+src/content/blog/         Markdown writing
+src/styles/global.css     website only: tokens, typography, responsive layouts
 ```
 
-It will automatically be available at `/projects`.
+Home is a landing page. My Work is the detailed web portfolio and resume download destination. `/resume` is reserved for PDF generation; its markup/styles and public PDF assets are independent of the website shell.
 
-### Add a new blog post
+## Sources and attribution
 
-Create a `.md` file in `src/content/blog/` with this frontmatter:
+Use `resume.json` for identity, contact addresses, dates, titles, stages, full descriptions, and skill inventories. `portfolio.ts` provides editorial structure without modifying the resume. Its project-name-to-ID mapping gives links stable targets and throws during the build when a source reference becomes invalid.
 
-```markdown
----
-title: "Your Post Title"
-description: "A short summary for the listing page."
-pubDate: 2026-03-01
-tags: ["tag-one", "tag-two"]
----
+Featured project copy must preserve personal contribution and team/product context. Internal research workflows and proofs of concept must retain those stages. Keep estimated outcomes qualified. Do not import the master evidence inventory or application notes into public components.
 
-Your Markdown content here...
-```
+Shared identity and links come from `identity` and `contactLinks` in `portfolio.ts`. Website-specific headlines and descriptive copy can vary by page. Change the general professional headline in `resume.json` to update the hero role. The source resume remains independent of `RESUME_DATA`, which selects tailored input only for the PDF route.
 
-The post will appear automatically on the `/blog` page and at `/blog/your-file-name/`. The "Blog" nav link will also appear once at least one post exists. Astro's built-in Shiki integration handles syntax-highlighted code blocks automatically.
+To add or rename a resume project:
 
-## Deployment
+1. Update `resume.json` and its employer association.
+2. Add/update its stable ID in `portfolio.ts`; preserve existing IDs when renaming.
+3. Update featured stories or expertise references when applicable.
+4. Run `npm run check:site` to verify all routes and anchors.
 
-The site builds to a `dist/` folder of pure static files. It is currently configured to deploy to **GitHub Pages** and **Cloudflare Pages** simultaneously from the same repo.
+The career view keeps every project accessible. Selected projects link to their stories; remaining projects have native disclosures. Grouped expertise shows representative tools first and preserves the remaining inventory in disclosures.
 
-### GitHub Pages (automatic)
+PomoCLI's public repository README was checked when it was featured. Additional personal projects need public source evidence and accurate descriptions. Keep private applications and finance projects out of public content unless explicitly authorized.
 
-A GitHub Actions workflow (`.github/workflows/deploy.yml`) handles this automatically:
+## Appearance and interactions
 
-1. Push to `main` → workflow triggers
-2. Installs deps, runs `npm run build`
-3. Deploys `dist/` to GitHub Pages
+Semantic color tokens live in `global.css`, mapped to Tailwind via `@theme`. Light and dark palettes share the same semantic roles. Button hover text retains its theme-specific contrast. The Home illustration is a decorative SVG representing general areas of work, not a proprietary system diagram. It is omitted on small phones to keep the main content close to the introduction.
 
-**One-time setup in GitHub:**
-1. Go to your repo → **Settings** → **Pages**
-2. Under "Build and deployment", set **Source** to **GitHub Actions**
-3. That's it — the next push to `main` will deploy to `https://emadg.github.io`
+Core content interactions remain small client scripts:
 
-The repo should be named `emadg.github.io` (matching your GitHub username) so the site is served at `https://emadg.github.io`.
+- `Nav.astro`: show the progressive theme button, toggle the `.dark` class, persist explicit preference when storage is available, and follow system changes when no preference is saved.
+- `work.astro`: open a native project disclosure when its ID is the direct URL fragment.
 
-### Cloudflare Pages (automatic)
+The inline theme initializer runs in the head to avoid a flash of the wrong theme. Storage failures are handled. With JavaScript disabled, the default light palette remains readable, the unavailable theme control is hidden, and content, navigation, downloads, email, and disclosures continue working.
 
-1. Log in to [Cloudflare Dashboard](https://dash.cloudflare.com/) → **Workers & Pages** → **Create**
-2. Connect your GitHub account and select this repo
-3. Configure the build:
-   - **Build command**: `npm run build`
-   - **Build output directory**: `dist`
-   - **Node.js version**: Set env var `NODE_VERSION` = `20`
-4. Click **Save and Deploy**
+The adjacent **Aa / Larger text** button uses a stable accessible name and `aria-pressed` state. It switches the root font between 100% and 125%, preserving browser font preferences and zoom. Website font sizes use `rem`; fluid heading clamps also scale their viewport term with `--text-scale`. Fixed layout dimensions remain independent. `text-size.ts` saves `text-size=normal|large` with guarded storage, follows changes in another tab, and restores the current preference on cached-page `pageshow`. The head initializer applies the saved size before content paints. Without JavaScript the unavailable control stays hidden; blocked storage still permits an in-page choice. The PDF route and files are independent.
 
-Cloudflare will auto-deploy on every push to `main`. Your site will be available at `<project-name>.pages.dev`.
+On narrow phones the brand/display controls sit above the page links. A header ResizeObserver keeps `--header-height` accurate after text or viewport changes so sticky section links and native anchors stay below the header. It does not drive header sizing, avoiding a resize loop. Use relative units for future typography; avoid introducing fixed pixel text that bypasses the preference.
 
-### Custom domain
+Avoid automatic flips, forced scrolling, hidden-until-animated content, and interactive styling on static labels. Use semantic headings, real links/buttons, native `details`/`summary`, visible keyboard focus, and readable text stage labels. The skip link focuses `main`. Reduced-motion CSS disables transitions and smooth scrolling. Background motion is an optional progressive enhancement with live reduced-motion, touch, visibility, and data-saving gates; a persistent pause control is available when motion can run.
 
-Both hosts support custom domains for free:
+The visual experiments add `Atmosphere.astro` and `ReadingProgress.astro`, backed by separate TypeScript modules and `styles/atmosphere.css`. The atmosphere uses deterministic square anchors, at most 1,000 points, a 5-megapixel backing-store budget, capped DPR, and at most about 30 actual canvas paints per second. Cursor links visit right/down neighbors; occasional currents can follow any immediate grid neighbor. A real mouse pointer event can establish fine input when a hybrid browser reports no pointer capability. Touch input never opts into motion. Hidden, paused, reduced-motion, and save-data states stop the painting loop. Canvas or JavaScript failure leaves a CSS dot-grid fallback.
 
-- **Cloudflare Pages**: Project settings → Custom domains → Add domain → update your DNS nameservers to Cloudflare
-- **GitHub Pages**: Repo settings → Pages → Custom domain → add a `CNAME` DNS record pointing to `emadg.github.io`
+The selected lattice gives each point an independent, continuous elliptical hover around its anchor: about 5px horizontal / 4px vertical reach with 7–9 second cycles. Faint CSS reference dots use the same pitch and origin, set only on resize. They sit above the frosted pane and below content, without a second canvas allocation. The cursor response spans 260px, enlarges nearby dots, and slightly reduces their orbit; the additional outward nudge is limited to 1.2px, and total displacement is capped at 6px. The response holds briefly after mouse/scroll activity and eases away over several seconds of inactivity. Idle hovering continues.
 
-### Other hosts
+`lattice-currents.ts` schedules one or occasionally two short traveling paths every 1.5–2 seconds using the existing animation clock. Each path visits 2–3 immediate grid edges, with at most three concurrent paths. Their glow and short gradient trail move across partial segments rather than flashing whole links. Static modes clear all currents, and the hidden-tab clock pauses without accumulating missed bursts. There are no independent timers.
 
-The `dist/` folder works with any static host:
+The reading plane restores the original design's 5px backdrop blur and low tint opacity (40% light / 24% dark). The header and key cards use stronger 14–16px blur with translucent fills. Opaque CSS fallbacks remain available when backdrop filtering is unsupported. Reference dots provide a quiet positional cue even when the moving layer is diffused by glass.
 
-- **Vercel**: `npx vercel` (auto-detects Astro)
-- **Netlify**: Set build command to `npm run build`, publish directory to `dist`
+The motion button has the stable accessible name **Background motion**, an explicit pressed/on state, and a next-action tooltip. Motion off clears the clock, currents, offsets, pointer position/strength, highlights, and links, and redraws a regular static grid. It never freezes an interaction frame. Motion on eases the anchored hover back in. Its off preference uses guarded optional storage. A narrow desktop reserves footer space so the floating control cannot cover contact links.
+
+Reading feedback uses native section anchors and `aria-current="location"`; page navigation continues to use `aria-current="page"`. A throttled scroll handler updates the decorative progress rule and current story marker. A body ResizeObserver includes disclosure and footer-size changes. Feedback does not alter URL fragments, focus, or content visibility. Desktop section navigation is sticky as a main-level sibling, below the sticky header; phones retain the compact ordinary section links.
+
+`src/data/visual.ts` selects the branch's art direction. The `experiment/glass-lattice` branch contains the user-selected direction and subsequent refinements. `experiment/glass-field` retains the initial alternative snapshot. See [the comparison and plan](docs/visual-experiments.md) for review instructions and screenshots.
+
+Writing uses the same shell and a narrower reading column. Existing article text is preserved. Long code samples and tables scroll within their containers.
+
+## Verification
+
+`npm run check:site` builds production output and runs `scripts/check-site.mjs` using the existing Puppeteer dependency. No browser download is bundled. Chrome discovery honors `CHROME_PATH` and common system installations. The test server binds an ephemeral loopback port and serves only files from `dist/`.
+
+Coverage includes four visible routes, four widths, two themes, internal destinations/fragments, actual PDF responses, unique headings/IDs, first-screen actions, keyboard skip/disclosure/theme controls, persisted theme, hover contrast, reduced motion, no-JavaScript content, and blocked storage. `scripts/check-text-size.mjs` adds all-route text scaling and reflow checks at 320, 390, 768, 1440, and 2560px in both themes, plus keyboard/persistence/cached-page/tab synchronization, blocked storage, no JavaScript, and a 200% root-font reflow check. The visual experiments also run `scripts/check-visuals.mjs`, which checks actual canvas pixels/paint calls, hovering with a stationary cursor, bounded displacement, exact reset to the same clean grid before/after reload, off-state persistence, live preferences, visibility/data-saving gates, touch/static behavior, allocation limits, missing canvas, and reading feedback. Optional `SITE_QA_SCREENSHOTS` retains screenshots in a chosen directory. Full QA artifacts should remain outside the repository; selected compressed review previews live in `docs/visual-previews/`.
+
+A successful automated run complements visual inspection; inspect Home/My Work desktop and mobile screenshots in both themes and an open project disclosure. No browser suite establishes all assistive-technology behavior.
+
+The existing full TypeScript command (`node node_modules/typescript/bin/tsc --noEmit`) can report the pre-existing Astro/Tailwind Vite plugin type mismatch in `astro.config.mjs` when the installed dependency tree includes different Vite versions. This is separate from the website data and production build. Record the actual result rather than masking it with a cast or changing dependency versions during a design change.
+
+## PDF generation
+
+`src/pages/resume.astro` imports its own raw layout CSS and uses `loadResume()` for public or tailored input. It does not import website components or `global.css`. Keep it independent.
+
+Use `npm run pdf`, `--ats`, `--ats --compact`, and `--data`/`--out` as documented in README. For detailed layout contracts and validation, see [docs/resume-layouts.md](docs/resume-layouts.md).
+
+## Hosting
+
+The existing GitHub Pages workflow deploys `dist/` on a push to `main`. Cloudflare Pages uses the same static build. This redesign adds `/work` without replacing existing blog routes, `/resume`, or PDF URLs. No new hosting service, runtime backend, account, or storage is required.

@@ -1,222 +1,162 @@
 ---
-import resumeData from '../data/resume.json';
-import { allProjects, allSkills, renderInline } from '../lib/resume';
+import { career, featuredWork, expertise, resume } from "../data/portfolio";
+import { STAGE_LABEL, renderInline } from "../lib/resume";
+const featuredIds = new Set(featuredWork.map((work) => work.project.id));
 ---
 
-<section class="py-16 fade-in-up delay-300 w-full relative">
-	<div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-16 gap-6">
-		<h2 class="text-3xl font-semibold tracking-tight text-text-primary">Experience</h2>
-		
-		<!-- Download PDF Button -->
-		<a 
-			href="/resume.pdf" 
-			download="EmadGohari_MLE_CV_2026.pdf"
-			class="inline-flex items-center px-5 py-2.5 text-sm font-medium text-text-primary bg-bg-card hover:bg-bg-card-hover rounded-xl transition-all border border-border-subtle hover:border-accent/50 shadow-lg hover:shadow-[0_0_15px_var(--color-accent-bg)] backdrop-blur-sm"
-		>
-			<svg class="w-4 h-4 mr-2 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-			</svg>
-			Download Resume PDF
-		</a>
-	</div>
-
-	<!-- Combined Timeline -->
-	<div class="relative">
-		<!-- Single continuous timeline line -->
-		<div class="absolute left-4 md:left-1/2 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-accent/20 to-transparent -translate-x-1/2"></div>
-
-		<div class="w-full max-w-4xl mx-auto">
-			{resumeData.experience.map((job, index) => {
-				const isLeft = index % 2 === 0;
-				return (
-					<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group flip-container" style="scroll-snap-align: center;">
-						
-						<!-- Dot on the line -->
-						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-accent rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-bg-body shadow-[0_0_12px_var(--color-accent)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
-						
-						<!-- Card Container -->
-						<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] perspective-1000 text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
-							
-						<!-- The Flipping Element -->
-						<div class="card-inner relative w-full min-h-48 md:min-h-56 transition-transform duration-700 transform-style-3d cursor-pointer">
-							
-							<!-- Front Side of Card -->
-							<div class="backface-hidden rounded-2xl border border-border-subtle bg-bg-card p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-accent/50">
-							<span class="text-accent text-sm md:text-base font-mono mb-2 block">{job.period}</span>
-							<h3 class="text-lg md:text-xl font-bold text-text-primary leading-tight">{job.role}</h3>
-							<p class="text-text-muted font-medium mt-1 text-base">{job.company}</p>
-							<p class="text-text-muted text-sm mt-0.5">{job.location}</p>
-							</div>
-							
-							<!-- Back Side of Card -->
-							<div class="backface-hidden rotate-y-180 rounded-2xl border border-accent/40 bg-bg-card-hover p-6 flex flex-col justify-center backdrop-blur-xl shadow-[0_0_25px_var(--color-accent-bg)] text-left">
-								<h4 class="text-accent font-semibold mb-2 text-base uppercase tracking-wider">Details & Impact</h4>
-								<p class="text-text-secondary text-base leading-relaxed" set:html={renderInline(job.description)} />
-							</div>
-								
-							</div>
-						</div>
-					</div>
-				)
-			})}
-		</div>
-
-		<!-- Education Section Header -->
-		<div class="my-8">
-			<h2 class="text-3xl font-semibold tracking-tight text-text-primary">Education</h2>
-		</div>
-
-		<div class="w-full max-w-4xl mx-auto pb-12">
-			{resumeData.education.map((edu, index) => {
-				const isLeft = (index + resumeData.experience.length) % 2 === 0;
-				return (
-					<div class="relative w-full flex items-center justify-between mb-12 md:mb-16 group" style="scroll-snap-align: center;">
-						
-						<!-- Dot on the line -->
-						<div class="absolute left-4 md:left-1/2 top-1/2 w-4 h-4 bg-accent rounded-full -translate-x-1/2 -translate-y-1/2 border-4 border-bg-body shadow-[0_0_12px_var(--color-accent)] z-20 transition-transform duration-500 group-hover:scale-150"></div>
-						
-						<!-- Education Card -->
-						<div class={`ml-12 w-[calc(100%-3rem)] md:ml-0 md:w-[calc(50%-2rem)] text-left ${isLeft ? 'md:mr-auto md:text-right' : 'md:ml-auto md:text-left'}`}>
-							<div class="rounded-2xl border border-border-subtle bg-bg-card p-6 flex flex-col justify-center backdrop-blur-md shadow-xl transition-colors group-hover:border-accent/50">
-								<span class="text-accent text-sm md:text-base font-mono mb-2 block">{edu.period}</span>
-								<h3 class="text-lg md:text-xl font-bold text-text-primary leading-tight">{edu.degree}</h3>
-								<p class="text-text-muted font-medium mt-1 text-base">{edu.institution}</p>
-								<p class="text-text-muted text-sm mt-0.5">{edu.location}</p>
-								{edu.grade && <p class="text-text-muted text-sm mt-2">GPA: {edu.grade}</p>}
-								{edu.note && <p class="text-text-secondary text-sm mt-2 italic leading-relaxed">{edu.note}</p>}
-							</div>
-						</div>
-					</div>
-				)
-			})}
-		</div>
-	</div>
-
-	<!-- Skills Section -->
-	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-300">
-		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Technical Skills</h2>
-		<div class="flex flex-wrap gap-3">
-			{allSkills(resumeData).map((skill) => (
-				<span class="px-3 py-1.5 text-base font-medium rounded-lg bg-bg-card text-text-secondary border border-border-subtle hover:border-accent/50 hover:text-text-primary hover:bg-bg-card-hover transition-all cursor-default shadow-sm backdrop-blur-sm">
-					{skill}
-				</span>
-			))}
-		</div>
-	</div>
-
-	<!-- Projects Section -->
-	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-200">
-		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Projects</h2>
-		<div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-			{allProjects(resumeData).map((project) => (
-				<div class="group relative rounded-2xl border border-border-subtle bg-bg-card p-6 hover:border-accent/50 hover:bg-bg-card-hover transition-all backdrop-blur-sm shadow-lg hover:shadow-[0_0_20px_var(--color-accent-bg)]">
-					<div class="flex items-start justify-between gap-2 mb-3">
-						<h3 class="font-semibold text-text-primary text-base leading-snug">{project.name}</h3>
-						<span class="font-mono text-accent/80 text-sm whitespace-nowrap">{project.period}</span>
-					</div>
-					<p class="text-text-muted text-base leading-relaxed mb-4" set:html={renderInline(project.description)} />
-					<div class="flex flex-wrap gap-1.5">
-						{project.tech.map((t) => (
-							<span class="px-2 py-0.5 text-sm rounded-md bg-accent-bg text-accent border border-accent/30">{t}</span>
-						))}
-					</div>
-				</div>
-			))}
-		</div>
-	</div>
-
-	<!-- Publications Section -->
-	<div class="mt-20 pt-16 border-t border-border-subtle w-full max-w-4xl mx-auto fade-in-up delay-200">
-		<h2 class="text-2xl font-semibold tracking-tight text-text-primary mb-8">Publications</h2>
-		<div class="space-y-5">
-			{resumeData.publications.map((pub) => (
-				<div class="group relative pl-4 border-l-2 border-border-strong hover:border-accent transition-colors">
-					<div class="absolute -left-[5px] top-1.5 w-2 h-2 rounded-full bg-border-strong group-hover:bg-accent transition-colors"></div>
-					<p class="text-text-primary text-base font-medium leading-snug">{pub.title}</p>
-					<div class="flex flex-col sm:flex-row sm:items-center sm:gap-3 mt-1">
-						<span class="text-text-muted text-sm">{pub.venue}</span>
-						<span class="font-mono text-accent/80 text-sm">{pub.year}{pub.note ? ` · ${pub.note}` : ''}</span>
-					</div>
-				</div>
-			))}
-		</div>
-	</div>
-
-	<!-- Back to Top Button -->
-	<div class="mt-20 flex justify-center">
-		<button
-			id="back-to-top"
-			class="group inline-flex items-center gap-2 px-6 py-3 text-sm font-medium text-text-muted hover:text-text-primary bg-bg-card hover:bg-bg-card-hover rounded-xl transition-all border border-border-subtle hover:border-accent/50 shadow-lg hover:shadow-[0_0_15px_var(--color-accent-bg)] backdrop-blur-sm cursor-pointer"
-		>
-			<svg class="w-4 h-4 transition-transform group-hover:-translate-y-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"></path>
-			</svg>
-			Back to Top
-		</button>
-	</div>
+<section
+  class="section-block"
+  id="experience"
+  aria-labelledby="experience-title"
+>
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Experience</p>
+      <h2 id="experience-title">The broader picture.</h2>
+    </div>
+    <p class="section-description">
+      Eight years working across research, product features, and the systems
+      that connect them.
+    </p>
+  </div>
+  <div class="career-list">
+    {career.map((job) => (
+      <article class="career-entry">
+        <header class="career-meta">
+          <p class="career-company">{job.company}</p>
+          <p class="quiet-metadata">{job.period}</p>
+          <p class="quiet-metadata">{job.location}</p>
+        </header>
+        <div class="career-content">
+          <h3>{job.role}</h3>
+          <p
+            class="career-description"
+            set:html={renderInline(job.description)}
+          />
+          <h4 class="small-label">Work projects</h4>
+          <div class="career-projects">
+            {job.projects.map((project) =>
+              featuredIds.has(project.id) ? (
+                <a class="career-project-link" href={`#${project.id}`}>
+                  <span>
+                    <strong>{project.name}</strong>
+                    <span class="metadata">
+                      <span>{project.period}</span>
+                      <span>{STAGE_LABEL[project.stage]}</span>
+                    </span>
+                  </span>
+                  <span class="career-project-action">
+                    Read story <span aria-hidden="true">↗</span>
+                  </span>
+                </a>
+              ) : (
+                <details class="career-project" id={project.id}>
+                  <summary>
+                    <span>
+                      <strong>{project.name}</strong>
+                      <span class="metadata">
+                        <span>{project.period}</span>
+                        <span>{STAGE_LABEL[project.stage]}</span>
+                      </span>
+                    </span>
+                    <span class="disclosure-icon" aria-hidden="true">
+                      +
+                    </span>
+                  </summary>
+                  <div class="details-content">
+                    <p set:html={renderInline(project.description)} />
+                    {project.highlights?.length ? (
+                      <ul>
+                        {project.highlights.map((highlight) => (
+                          <li set:html={renderInline(highlight)} />
+                        ))}
+                      </ul>
+                    ) : null}
+                    <p class="technology-line">
+                      <strong>Tools & technologies:</strong>{" "}
+                      {project.tech.join(" · ")}
+                    </p>
+                  </div>
+                </details>
+              ),
+            )}
+          </div>
+        </div>
+      </article>
+    ))}
+  </div>
 </section>
-
-<script>
-	document.addEventListener('DOMContentLoaded', () => {
-		const flipContainers = document.querySelectorAll('.flip-container');
-
-		// Back to Top button
-		document.getElementById('back-to-top')?.addEventListener('click', () => {
-			window.scrollTo({ top: 0, behavior: 'smooth' });
-		});
-		
-		// 1. Intersection Observer for flipping when entering the center of the screen
-		const observer = new IntersectionObserver((entries) => {
-			entries.forEach(entry => {
-				const cardInner = entry.target.querySelector('.card-inner');
-				if (entry.isIntersecting) {
-					// Only auto-flip if user hasn't manually pinned to front
-					if (!entry.target.dataset.pinnedFront) {
-						cardInner?.classList.add('rotate-y-180');
-					}
-				} else {
-					// Card left center — reset both flip and the override flag
-					cardInner?.classList.remove('rotate-y-180');
-					delete entry.target.dataset.pinnedFront;
-				}
-			});
-		}, {
-			// Trigger when the element crosses the very middle of the viewport
-			rootMargin: '-45% 0px -45% 0px'
-		});
-
-		flipContainers.forEach(container => {
-			observer.observe(container);
-
-			// 2. Click to toggle flip — allows reversing the flip on a centered card
-			container.addEventListener('click', () => {
-				const cardInner = container.querySelector('.card-inner');
-				if (cardInner?.classList.contains('rotate-y-180')) {
-					cardInner.classList.remove('rotate-y-180');
-					container.dataset.pinnedFront = 'true';
-				} else {
-					cardInner?.classList.add('rotate-y-180');
-					delete container.dataset.pinnedFront;
-				}
-			});
-
-			// 3. Mouse hover overriding (makes it flip on hover too)
-			container.addEventListener('mouseenter', () => {
-				const cardInner = container.querySelector('.card-inner');
-				delete container.dataset.pinnedFront;
-				cardInner?.classList.add('rotate-y-180');
-			});
-			
-			container.addEventListener('mouseleave', () => {
-				const cardInner = container.querySelector('.card-inner');
-				const rect = container.getBoundingClientRect();
-				const centerY = window.innerHeight / 2;
-				
-				// Only flip back if it's NOT currently in the center intersection zone
-				if (rect.top > centerY + 50 || rect.bottom < centerY - 50) {
-					cardInner?.classList.remove('rotate-y-180');
-				}
-			});
-		});
-	});
-</script>
+<section class="section-block" id="expertise" aria-labelledby="expertise-title">
+  <div class="section-heading">
+    <div>
+      <p class="eyebrow">Technical expertise</p>
+      <h2 id="expertise-title">Capabilities, with context.</h2>
+    </div>
+    <p class="section-description">
+      The tools matter most when they support a useful result.
+    </p>
+  </div>
+  <div class="expertise-grid">
+    {expertise.map((group) => (
+      <article class="expertise-group">
+        <h3>{group.category}</h3>
+        <p>{group.description}</p>
+        <p class="skill-list">{group.featured.join(" · ")}</p>
+        {group.more.length > 0 && (
+          <details class="skill-details">
+            <summary>
+              More tools & skills{" "}
+              <span class="disclosure-icon" aria-hidden="true">
+                +
+              </span>
+            </summary>
+            <p class="skill-list">{group.more.join(" · ")}</p>
+          </details>
+        )}
+        <a class="text-link" href={`#${group.evidence}`}>
+          {group.evidenceLabel} <span aria-hidden="true">→</span>
+        </a>
+      </article>
+    ))}
+  </div>
+</section>
+<section
+  class="section-block credentials-grid"
+  id="education"
+  aria-label="Education and publications"
+>
+  <div>
+    <p class="eyebrow">Education</p>
+    <h2 class="credentials-heading">Foundations.</h2>
+    <div class="education-list">
+      {resume.education.map((education) => (
+        <article>
+          <h3>{education.degree}</h3>
+          <p>{education.institution}</p>
+          <p class="quiet-metadata">
+            {education.period} · {education.location}
+          </p>
+          {education.note && <p class="education-note">{education.note}</p>}
+          {education.grade && (
+            <p class="quiet-metadata">GPA: {education.grade}</p>
+          )}
+        </article>
+      ))}
+    </div>
+  </div>
+  <div id="publications">
+    <p class="eyebrow">Publications</p>
+    <h2 class="credentials-heading">Research & writing.</h2>
+    <ol class="publication-list">
+      {resume.publications.map((publication) => (
+        <li>
+          <h3>{publication.title}</h3>
+          <p class="quiet-metadata">
+            {publication.venue} · {publication.year}
+            {publication.note ? ` · ${publication.note}` : ""}
+          </p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>

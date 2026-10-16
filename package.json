@@ -8,7 +8,8 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "pdf": "node scripts/generate-pdf.mjs"
+    "pdf": "node scripts/generate-pdf.mjs",
+    "check:site": "npm run build && node scripts/check-site.mjs"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.0",
