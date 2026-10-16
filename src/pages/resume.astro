@@ -1,9 +1,12 @@
 ---
 import { loadResume, renderInline, STAGE_LABEL, type Project } from '../lib/resume';
+import defaultStyles from '../styles/resume-default.css?raw';
+import atsStyles from '../styles/resume-ats.css?raw';
 
 const resumeData = loadResume();
 const contact = resumeData.basics;
 const ats = process.env.RESUME_LAYOUT === 'ats';
+const compact = ats && process.env.RESUME_DENSITY === 'compact';
 // Keep formatting decisions local to the PDF; the portfolio keeps its emphasis.
 const inline = (text: string | null | undefined) =>
 	renderInline(ats ? text?.replace(/\*\*(.+?)\*\*/g, '$1') : text);
@@ -17,110 +20,31 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 	<title>{contact.name} - Resume</title>
 	<meta name="author" content={contact.name} />
 	<meta name="description" content={contact.headline} />
-	<style>
-		*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-		@page { size: Letter; margin: 0.45in 0.5in; }
-		html {
-			font-family: Arial, 'Liberation Sans', sans-serif;
-			font-size: 11pt; line-height: 1.35; color: #000;
-			background: #fff;
-			-webkit-print-color-adjust: exact; print-color-adjust: exact;
-		}
-		a { color: inherit; text-decoration: none; overflow-wrap: anywhere; }
-		strong { font-weight: 700; }
-
-		/* All spacing lives here, shared by browser preview and PDF output. */
-		header { margin-bottom: 12pt; border-bottom: 1pt solid #000; padding-bottom: 8pt; break-inside: avoid; }
-		.name-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12pt; }
-		h1 { font-size: 22pt; line-height: 1.15; flex-shrink: 0; }
-		.title { font-size: 11pt; text-align: right; }
-		.contact-row { display: flex; flex-wrap: wrap; gap: 4pt 12pt; margin-top: 7pt; font-size: 10pt; }
-		.contact-row > * { display: inline-flex; align-items: baseline; gap: 4pt; min-width: 0; max-width: 100%; }
-		.contact-row svg { flex-shrink: 0; width: 9pt; height: 9pt; align-self: center; }
-
-		section { margin-bottom: 12pt; }
-		section h2 {
-			font-family: Georgia, 'Liberation Serif', serif; font-size: 13pt;
-			font-weight: 700; text-transform: uppercase; word-spacing: 0.12em;
-			border-bottom: 0.5pt solid #888; padding-bottom: 3pt; margin-bottom: 6pt;
-			display: flex; align-items: center; gap: 6pt; break-after: avoid;
-		}
-		section h2::before { content: ''; width: 2pt; height: 11pt; background: #000; flex-shrink: 0; }
-		.summary { orphans: 3; widows: 3; }
-		.skills-row { margin-bottom: 2pt; break-inside: avoid; }
-		.category, .label { font-weight: 700; }
-
-		.job { margin-bottom: 12pt; }
-		.job-head { break-inside: avoid; break-after: avoid; margin-bottom: 6pt; }
-		.entry { margin-bottom: 8pt; break-inside: avoid; }
-		.entry-header, .project-header { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 2pt 10pt; }
-		h3, h4, h5 { font-size: 11pt; font-weight: 700; min-width: 0; max-width: 100%; flex: 1 1 auto; }
-		.period { font-size: 10pt; white-space: nowrap; flex-shrink: 0; margin-left: auto; }
-		.entry-sub, .entry-note, .project-meta, .project-tech, .pub-meta { font-size: 10pt; }
-		.entry-desc { margin-top: 3pt; orphans: 3; widows: 3; }
-		.entry-note { margin-top: 2pt; }
-
-		/* Plain project entries: no container border, fill, or badge styling. */
-		.project { margin: 0 0 8pt 9pt; break-inside: avoid; }
-		.project.can-split { break-inside: auto; }
-		.project-header { break-inside: avoid; break-after: avoid; }
-		.stage { font-size: 10pt; font-weight: 400; }
-		.project-desc { margin-top: 3pt; orphans: 3; widows: 3; }
-		.project-highlights { margin: 3pt 0 0 14pt; }
-		.project-highlights li { orphans: 2; widows: 2; }
-		.project-tech { margin-top: 3pt; }
-		.pub { margin-bottom: 7pt; break-inside: avoid; }
-		.pub-title { font-weight: 700; }
-
-		.projects-heading { font-size: 10pt; font-weight: 700; margin-top: 7pt; }
-		.contact-info h2 { font-size: 11pt; margin-top: 7pt; margin-bottom: 3pt; }
-		.contact-info .contact-row { margin-top: 0; }
-
-		/* Default typography separates titles from descriptions and metadata. */
-		.clean { font-size: 10pt; line-height: 1.35; }
-		.clean h1 { font-size: 24pt; }
-		.clean .title { font-size: 11.5pt; line-height: 1.25; }
-		.clean .contact-row { font-size: 9pt; gap: 4pt 10pt; }
-		.clean .contact-row svg { width: 8pt; height: 8pt; }
-		.clean h3 { font-size: 11.5pt; }
-		.clean .project-title { font-size: 10.5pt; text-indent: -0.65em; }
-		.clean .period, .clean .entry-sub, .clean .entry-note,
-		.clean .project-tech, .clean .pub-meta, .clean .stage { font-size: 9pt; }
-		.clean .projects-heading { font-size: 9pt; text-transform: uppercase; margin-top: 7pt; }
-		.clean .job + .job > .job-head { border-top: 0.5pt solid #aaa; padding-top: 10pt; }
-		.clean .pub-title { font-size: 10.5pt; }
-
-		/* ATS uses a linear text flow; all contact information is in the body. */
-		.ats header { border: 0; padding: 0; }
-		.ats .name-row, .ats .contact-row, .ats .contact-row > *,
-		.ats .entry-header, .ats .project-header { display: block; }
-		.ats .title { display: block; text-align: left; margin-top: 3pt; }
-		.ats .contact-row > * { margin-bottom: 2pt; }
-		.ats h2 { font-family: inherit; font-size: 14.5pt; line-height: 1.25; border: 0; padding: 0; display: block; text-transform: none; word-spacing: normal; }
-		.ats .contact-info h2 { margin-bottom: 5pt; }
-		.ats h2::before { content: none; }
-		.ats .period { display: block; white-space: normal; margin-left: 0; }
-		.ats .project { margin-left: 0; }
-		.ats .project-meta { break-after: avoid; }
-	</style>
+	<style is:inline set:html={ats ? atsStyles : defaultStyles}></style>
 </head>
-<body class:list={{ ats, clean: !ats }} data-resume-layout={ats ? 'ats' : 'clean'}>
+<body class:list={{ ats, clean: !ats, compact }} data-resume-layout={ats ? 'ats' : 'clean'}>
 
 	<!-- Header -->
 	<header>
 		<div class="name-row">
 			<h1>{contact.name}</h1>
-			<span class="title">{contact.headline}</span>
+			{compact ? (
+				<div class="header-details">
+					<span class="title">{contact.headline}</span>
+					<span class="header-location">{contact.location}</span>
+				</div>
+			) : (
+				<span class="title">{contact.headline}{ats && <><span class="title-separator"> — </span>{contact.location}</>}</span>
+			)}
 		</div>
 		{ats ? (
 			<div class="contact-info">
-				<h2>&gt; Contact Info</h2>
+				<h2>Contact Info</h2>
 				<div class="contact-row">
 					<div><strong>Email:</strong> <a href={`mailto:${contact.email}`}>{contact.email}</a></div>
 					<div><strong>GitHub:</strong> <a href={`https://${contact.github}`}>{contact.github}</a></div>
 					<div><strong>LinkedIn:</strong> <a href={`https://${contact.linkedin}`}>{contact.linkedin}</a></div>
 					<div><strong>Website:</strong> <a href={`https://${contact.website}`}>{contact.website}</a></div>
-					<div><strong>Location:</strong> {contact.location}</div>
 				</div>
 			</div>
 		) : (
@@ -151,13 +75,13 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 
 	<!-- Summary -->
 	<section>
-		<h2>{ats && '> '}Summary</h2>
+		<h2>Summary</h2>
 		<p class="summary" set:html={inline(resumeData.summary)} />
 	</section>
 
 	<!-- Skills -->
 	<section>
-		<h2>{ats && '> '}Technical Skills</h2>
+		<h2>Technical Skills</h2>
 		{resumeData.skills.map((group) => (
 			<div class="skills-row">
 				<span class="category">{group.category}:</span> {group.items.join(', ')}
@@ -167,25 +91,27 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 
 	<!-- Experience: each job followed by its projects -->
 	<section>
-		<h2>{ats && '> '}Experience</h2>
+		<h2>Experience</h2>
 		{resumeData.experience.map((job) => (
 			<div class="job">
 				<div class="job-head">
 					<div class="entry-header">
-						<h3>{job.role} at {job.company}</h3>
-						<span class="period">{job.period}</span>
+						{compact ? (
+							<h3>{job.role} at {job.company}<span class="inline-meta"> — {job.period} | {job.location}</span></h3>
+						) : (
+							<><h3>{job.role} at {job.company}</h3><span class="period">{job.period}</span></>
+						)}
 					</div>
-					<div class="entry-sub">{job.location}</div>
+					{!compact && <div class="entry-sub">{job.location}</div>}
 					<div class="entry-desc" set:html={inline(job.description)} />
 					{job.projects.length > 0 && <h4 class="projects-heading">Work Projects</h4>}
 				</div>
 				{job.projects.map((project: Project) => (
 					<div class="project">
 						<div class="project-header">
-							<h5 class="project-title">• {project.name}{!ats && <> <span class="stage">[{stageLabel(project).toUpperCase()}]</span></>}</h5>
+							<h5 class="project-title">• {project.name}{ats ? <span class="inline-meta"> — {project.period} | {stageLabel(project)}</span> : <> <span class="stage">[{stageLabel(project).toUpperCase()}]</span></>}</h5>
 							{!ats && <span class="period">{project.period}</span>}
 						</div>
-						{ats && <div class="project-meta">{project.period} | {stageLabel(project)}</div>}
 						<div class="project-desc" set:html={inline(project.description)} />
 						{project.highlights?.length ? (
 							<ul class="project-highlights">
@@ -201,22 +127,34 @@ const stageLabel = (project: Project) => STAGE_LABEL[project.stage] ?? project.s
 
 	<!-- Education -->
 	<section>
-		<h2>{ats && '> '}Education</h2>
+		<h2>Education</h2>
 		{resumeData.education.map((edu) => (
 			<div class="entry">
 				<div class="entry-header">
-					<h3>{edu.degree}, {edu.institution}</h3>
-					<span class="period">{edu.period}</span>
+					{compact ? (
+						<h3>{edu.degree}, {edu.institution}<span class="inline-meta"> — {edu.period} | {edu.location}</span></h3>
+					) : (
+						<><h3>{edu.degree}, {edu.institution}</h3><span class="period">{edu.period}</span></>
+					)}
 				</div>
-				<div class="entry-sub">{edu.location}{edu.grade ? ` · GPA: ${edu.grade}` : ''}</div>
-				{edu.note && <div class="entry-note">{edu.note}</div>}
+				{compact ? (
+					(edu.grade || edu.note) && <div class="education-details">
+						{edu.grade && <div>• GPA: {edu.grade}</div>}
+						{edu.note && <div>• {edu.note}</div>}
+					</div>
+				) : (
+					<>
+						<div class="entry-sub">{edu.location}{edu.grade ? ` · GPA: ${edu.grade}` : ''}</div>
+						{edu.note && <div class="entry-note">{edu.note}</div>}
+					</>
+				)}
 			</div>
 		))}
 	</section>
 
 	<!-- Publications -->
 	<section>
-		<h2>{ats && '> '}Publications</h2>
+		<h2>Publications</h2>
 		{resumeData.publications.map((pub) => (
 			<div class="pub">
 				<div class="pub-title">{pub.title}</div>

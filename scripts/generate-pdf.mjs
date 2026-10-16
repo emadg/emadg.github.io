@@ -35,7 +35,7 @@ const MAX_WAIT_MS = 30_000;
 // spacing together) to minimize blank space at the bottom of every page but
 // the last. Disable with --no-fit, or pin a value with --zoom <n>.
 const FIT = {
-  min: 0.94,          // smallest allowed scale (6% smaller)
+  min: 0.94,          // original standard layout permits up to 6% smaller auto-fit
   max: 1.03,          // largest allowed scale (3% larger)
   step: 0.005,
   minGainPx: 20,      // ignore improvements smaller than this
@@ -47,10 +47,8 @@ const PAGE = {
   format: 'Letter',
   widthIn: 8.5,
   heightIn: 11,
-  margin: { top: 0.45, bottom: 0.45, left: 0.5, right: 0.5 }, // inches
+  margin: { top: 0.45, bottom: 0.45, left: 0.5, right: 0.5 }, // standard, inches
 };
-const PRINT_WIDTH_PX = (PAGE.widthIn - PAGE.margin.left - PAGE.margin.right) * 96;
-const PRINT_HEIGHT_PX = (PAGE.heightIn - PAGE.margin.top - PAGE.margin.bottom) * 96;
 // ──────────────────────────────────────────────────────────────────────────
 
 const CHROME_PATHS = {
@@ -109,6 +107,7 @@ function parseArgs() {
   let fit = true;
   let zoom;
   let ats = false;
+  let compact = false;
 
   for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -122,6 +121,7 @@ Options:
   -d, --dir <dir>    Output directory; writes resume.pdf (resume-ats.pdf with --ats)
   --data <file>      Resume JSON to render instead of src/data/resume.json
   --ats              Use a plain, left-aligned layout for automated processing
+  --compact          Use tighter ATS typography and spacing (requires --ats)
   --port <n>         Port for the temporary dev server (default: ${DEFAULT_PORT})
   --no-fit           Disable auto-fit (already disabled in ATS mode)
   --zoom <n>         Use a fixed scale instead of auto-fit, e.g. 0.97
@@ -160,6 +160,10 @@ RESUME_LAYOUT=ats npm run dev previews ATS at /resume; this CLI selects layout b
     }
     if (a === '--ats') {
       ats = true;
+      continue;
+    }
+    if (a === '--compact') {
+      compact = true;
       continue;
     }
     if (a === '--data' || a === '--port' || a === '--zoom') {
@@ -233,6 +237,10 @@ RESUME_LAYOUT=ats npm run dev previews ATS at /resume; this CLI selects layout b
     }
   }
 
+  if (compact && !ats) {
+    console.error('pdf: --compact requires --ats');
+    process.exit(1);
+  }
   const filename = ats ? 'resume-ats.pdf' : 'resume.pdf';
   const defaultOutput = resolve(ROOT, 'public', filename);
   let output;
@@ -247,7 +255,7 @@ RESUME_LAYOUT=ats npm run dev previews ATS at /resume; this CLI selects layout b
     mkdirSync(dirname(defaultOutput), { recursive: true });
     output = defaultOutput;
   }
-  return { output, data, port, fit: fit && !ats, zoom, layout: ats ? 'ats' : 'clean' };
+  return { output, data, port, fit: fit && !ats, zoom, layout: ats ? 'ats' : 'clean', compact };
 }
 
 /**
@@ -256,7 +264,7 @@ RESUME_LAYOUT=ats npm run dev previews ATS at /resume; this CLI selects layout b
  * the last, without adding pages. Returns { zoom, before, after } where
  * before/after are the blank px per page at zoom 1 and at the chosen zoom.
  */
-async function autoFit(page, fixedZoom) {
+async function autoFit(page, fixedZoom, printHeightPx) {
   return page.evaluate(({ fit, pageH, fixedZoom }) => {
     const root = document.documentElement;
     // Approximate print pagination in document order. Long projects can split,
@@ -331,7 +339,7 @@ async function autoFit(page, fixedZoom) {
     }
     measure(best.zoom);
     return { zoom: best.zoom, before: round(before), after: round(best.blanks) };
-  }, { fit: FIT, pageH: PRINT_HEIGHT_PX, fixedZoom });
+  }, { fit: FIT, pageH: printHeightPx, fixedZoom });
 }
 
 /** Fail fast if something is already listening on the port we want. */
@@ -358,7 +366,10 @@ async function waitForServer(url, timeoutMs) {
 }
 
 async function main() {
-  const { output: OUTPUT, data: DATA, port: PORT, fit: FIT_ON, zoom: ZOOM, layout: LAYOUT } = parseArgs();
+  const { output: OUTPUT, data: DATA, port: PORT, fit: FIT_ON, zoom: ZOOM, layout: LAYOUT, compact: COMPACT } = parseArgs();
+  const margins = PAGE.margin;
+  const printWidthPx = (PAGE.widthIn - margins.left - margins.right) * 96;
+  const printHeightPx = (PAGE.heightIn - margins.top - margins.bottom) * 96;
   const DEV_URL = `http://localhost:${PORT}/resume`;
   await assertPortFree(PORT);
 
@@ -376,7 +387,7 @@ async function main() {
   console.log(`Rendering ${DATA ?? 'src/data/resume.json'}`);
   console.log(`Layout: ${LAYOUT}${LAYOUT === 'ats' ? ' (linear text flow)' : ''}`);
   console.log(`Starting Astro dev server on port ${PORT}…`);
-  const env = { ...process.env, FORCE_COLOR: '0', RESUME_LAYOUT: LAYOUT };
+  const env = { ...process.env, FORCE_COLOR: '0', RESUME_LAYOUT: LAYOUT, RESUME_DENSITY: COMPACT ? 'compact' : 'normal' };
   if (DATA) env.RESUME_DATA = DATA;
   else delete env.RESUME_DATA;
   // Run Astro's entry point with this Node directly (not via npx) so that
@@ -404,14 +415,15 @@ async function main() {
     });
     const page = await browser.newPage();
     // Lay the page out at the printable width so measurements match the PDF.
-    await page.setViewport({ width: Math.round(PRINT_WIDTH_PX), height: Math.round(PRINT_HEIGHT_PX) });
+    await page.setViewport({ width: Math.round(printWidthPx), height: Math.round(printHeightPx) });
     await page.emulateMediaType('print');
     await page.goto(DEV_URL, { waitUntil: 'networkidle0' });
 
     await page.evaluate(() => document.fonts.ready);
+    console.log(LAYOUT === 'ats' ? 'Font: Arial/Liberation Sans.' : 'Fonts: Arial/Liberation Sans body; Georgia/Liberation Serif headings.');
 
     // Also prepares long projects for splitting when auto-fit is off.
-    const { zoom, before, after } = await autoFit(page, ZOOM ?? (FIT_ON ? undefined : 1));
+    const { zoom, before, after } = await autoFit(page, ZOOM ?? (FIT_ON ? undefined : 1), printHeightPx);
     if (FIT_ON || ZOOM !== undefined) {
       const fmt = (b) => b.map((px) => `${(px / 96).toFixed(2)}in`).join(', ');
       console.log(`Blank space per page at 100%: ${fmt(before)}`);
@@ -426,10 +438,10 @@ async function main() {
       path: OUTPUT,
       format: PAGE.format,
       margin: {
-        top: inch(PAGE.margin.top),
-        bottom: inch(PAGE.margin.bottom),
-        left: inch(PAGE.margin.left),
-        right: inch(PAGE.margin.right),
+        top: inch(margins.top),
+        bottom: inch(margins.bottom),
+        left: inch(margins.left),
+        right: inch(margins.right),
       },
       printBackground: true,
       displayHeaderFooter: false,
