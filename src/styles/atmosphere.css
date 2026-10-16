@@ -1,26 +1,26 @@
 /* The experiments share content, geometry, and one progressive motion engine. */
 :root {
   --field-rgb: 35, 114, 142;
-  --glass-panel: rgb(250 253 255 / 76%);
-  --reading-glass: rgb(250 253 255 / 62%);
-  --glass-header: rgb(247 251 253 / 86%);
-  --glass-tint: rgb(233 246 249 / 68%);
+  --glass-panel: rgb(255 255 255 / 60%);
+  --reading-glass: rgb(255 255 255 / 40%);
+  --glass-header: rgb(247 251 253 / 68%);
+  --glass-tint: rgb(233 246 249 / 45%);
   --glass-edge: rgb(150 185 200 / 34%);
   --glass-shine: rgb(255 255 255 / 88%);
-  --wash-a: rgb(107 194 210 / 16%);
-  --wash-b: rgb(142 167 211 / 13%);
+  --wash-a: rgb(107 194 210 / 24%);
+  --wash-b: rgb(142 167 211 / 20%);
   --header-height: 90px;
 }
 :root.dark {
   --field-rgb: 111, 201, 222;
-  --glass-panel: rgb(12 26 38 / 76%);
-  --reading-glass: rgb(12 26 38 / 62%);
-  --glass-header: rgb(12 25 36 / 88%);
-  --glass-tint: rgb(19 42 55 / 64%);
+  --glass-panel: rgb(15 23 42 / 40%);
+  --reading-glass: rgb(15 23 42 / 24%);
+  --glass-header: rgb(12 25 36 / 58%);
+  --glass-tint: rgb(19 42 55 / 40%);
   --glass-edge: rgb(112 173 196 / 20%);
-  --glass-shine: rgb(154 218 236 / 11%);
-  --wash-a: rgb(40 144 171 / 17%);
-  --wash-b: rgb(73 101 173 / 16%);
+  --glass-shine: rgb(154 218 236 / 16%);
+  --wash-a: rgb(40 144 171 / 22%);
+  --wash-b: rgb(73 101 173 / 20%);
 }
 body {
   position: relative;
@@ -34,7 +34,7 @@ body {
   pointer-events: none;
   overflow: hidden;
   background-image: radial-gradient(
-    circle,
+    circle at 17.5px 17.5px,
     rgba(var(--field-rgb), 0.3) 1.1px,
     transparent 1.6px
   );
@@ -67,7 +67,26 @@ body {
   pointer-events: none;
   background: var(--bg-body);
   border-inline: 1px solid var(--glass-edge);
-  box-shadow: 0 0 80px rgb(18 57 74 / 3%);
+  box-shadow:
+    inset 1px 0 0 var(--glass-shine),
+    inset -1px 0 0 var(--glass-shine),
+    0 0 70px rgb(7 35 48 / 8%);
+}
+/* A faint crisp reference stays legible over the deeper frost, below content. */
+.lattice-anchors {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background-image: radial-gradient(
+    circle at var(--anchor-origin, 17.5px) var(--anchor-origin, 17.5px),
+    rgba(var(--field-rgb), 0.1) 0.6px,
+    transparent 0.85px
+  );
+  background-size: var(--anchor-pitch, 50px) var(--anchor-pitch, 50px);
+}
+body[data-visual-style="field"] .lattice-anchors {
+  display: none;
 }
 .page-container,
 .site-footer {
@@ -195,8 +214,8 @@ html {
 ) {
   .glass-backplane {
     background: var(--reading-glass);
-    backdrop-filter: blur(1.1px) saturate(1.08);
-    -webkit-backdrop-filter: blur(1.1px) saturate(1.08);
+    backdrop-filter: blur(5px) saturate(1.15);
+    -webkit-backdrop-filter: blur(5px) saturate(1.15);
   }
   .site-header,
   .section-nav {
@@ -207,8 +226,8 @@ html {
   .system-sketch,
   .contact-section {
     background: linear-gradient(145deg, var(--glass-panel), var(--glass-tint));
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
   }
   .motion-toggle {
     background: var(--glass-header);
@@ -256,6 +275,9 @@ body[data-visual-style="field"] {
   }
   .glass-backplane {
     width: calc(100% - 12px);
+  }
+  .lattice-anchors {
+    opacity: 0.55;
   }
   .story-index::before {
     left: -8px;
@@ -305,6 +327,7 @@ body[data-visual-style="field"] {
 @media print {
   .ambient-scene,
   .glass-backplane,
+  .lattice-anchors,
   .motion-toggle,
   .reading-progress {
     display: none;

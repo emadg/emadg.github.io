@@ -3,6 +3,7 @@
   <canvas class="ambient-grid"></canvas>
 </div>
 <div class="glass-backplane" aria-hidden="true"></div>
+<div class="lattice-anchors" aria-hidden="true"></div>
 <button
   class="motion-toggle"
   type="button"
@@ -29,5 +30,6 @@
   import { initAtmosphere } from "../lib/atmosphere";
   const scene = document.querySelector<HTMLElement>(".ambient-scene");
   const toggle = document.querySelector<HTMLButtonElement>(".motion-toggle");
-  if (scene && toggle) initAtmosphere(scene, toggle);
+  const reference = document.querySelector<HTMLElement>(".lattice-anchors");
+  if (scene && toggle) initAtmosphere(scene, toggle, reference ?? undefined);
 </script>

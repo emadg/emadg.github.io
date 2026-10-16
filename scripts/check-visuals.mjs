@@ -17,6 +17,10 @@ export async function checkVisuals({
       strokes: 0,
       maxArcs: 0,
       maxStrokes: 0,
+      cursorStrokes: 0,
+      currentStrokes: 0,
+      maxCurrentStrokes: 0,
+      radius: 0,
       points: [],
     };
     window.__visualStats = stats;
@@ -29,16 +33,27 @@ export async function checkVisuals({
             stats.paints++;
             stats.arcs = 0;
             stats.strokes = 0;
+            stats.cursorStrokes = 0;
+            stats.currentStrokes = 0;
+            stats.radius = 0;
             stats.points = [];
           }
           if (method === "arc") {
             stats.arcs++;
             stats.maxArcs = Math.max(stats.maxArcs, stats.arcs);
             stats.points.push(args.slice(0, 3));
+            stats.radius = Math.max(stats.radius, args[2]);
           }
           if (method === "stroke") {
             stats.strokes++;
             stats.maxStrokes = Math.max(stats.maxStrokes, stats.strokes);
+            if (this.lineWidth > 1) {
+              stats.currentStrokes++;
+              stats.maxCurrentStrokes = Math.max(
+                stats.maxCurrentStrokes,
+                stats.currentStrokes,
+              );
+            } else stats.cursorStrokes++;
           }
         }
         return original.apply(this, args);
@@ -50,6 +65,8 @@ export async function checkVisuals({
     page.$eval(".ambient-grid", (canvas) => canvas.toDataURL());
   const state = () =>
     page.$eval(".ambient-scene", (scene) => scene.dataset.state);
+  // Earlier fallback tests open tabs; make visibility-gate checks deterministic.
+  await page.bringToFront();
   await page.setViewport({
     width: 1440,
     height: 1000,
@@ -87,6 +104,7 @@ export async function checkVisuals({
   await page.$eval(".motion-toggle", (button) => button.click());
   const restingGrid = await pixels();
   const anchors = await page.evaluate(() => window.__visualStats.points);
+  const baseRadius = anchors[0][2];
   check(
     anchors[0][1] === anchors[1][1] &&
       anchors.every((point) => point[2] === anchors[0][2]) &&
@@ -135,6 +153,72 @@ export async function checkVisuals({
     await page.screenshot({
       path: resolve(screenshots, "interaction-desktop-dark.png"),
     });
+  }
+  if (variant === "lattice") {
+    check(
+      await page.$eval(".lattice-anchors", (reference) => {
+        const style = getComputedStyle(reference);
+        return (
+          style.pointerEvents === "none" &&
+          reference.getAttribute("aria-hidden") === "true" &&
+          parseFloat(style.getPropertyValue("--anchor-pitch")) > 0
+        );
+      }),
+      "Fixed reference dots remain decorative and use the renderer's grid spacing",
+    );
+    await page.mouse.move(720, 650);
+    await delay(500);
+    const activeRadius = await page.evaluate(() => window.__visualStats.radius);
+    check(
+      activeRadius > baseRadius + 0.5,
+      "Nearby cursor makes the lattice dots visibly larger",
+    );
+    // A stationary pointer fades; idle hovering and occasional currents continue.
+    await delay(2500);
+    const fadingRadius = await page.evaluate(() => window.__visualStats.radius);
+    check(
+      fadingRadius > baseRadius + 0.05 && fadingRadius < activeRadius - 0.2,
+      "Cursor influence fades gradually rather than snapping off",
+    );
+    await page.waitForFunction(
+      (baseRadius) =>
+        window.__visualStats.radius < baseRadius + 0.05 &&
+        window.__visualStats.cursorStrokes === 0,
+      { timeout: 10000, polling: 100 },
+      baseRadius,
+    );
+    check(
+      true,
+      "Idle cursor highlights and links fade away while background hovering continues",
+    );
+    check(
+      await page.evaluate(
+        () =>
+          window.__visualStats.maxCurrentStrokes > 0 &&
+          window.__visualStats.maxCurrentStrokes <= 18,
+      ),
+      "Occasional traveling currents render with a bounded number of segments",
+    );
+    await page.evaluate(() => scrollTo({ top: 200, behavior: "instant" }));
+    await delay(450);
+    check(
+      await page.evaluate(
+        (baseRadius) =>
+          window.__visualStats.radius > baseRadius + 0.5 &&
+          window.__visualStats.cursorStrokes > 0,
+        baseRadius,
+      ),
+      "Scrolling revives the nearby cursor response without requiring pointer motion",
+    );
+    await page.mouse.move(730, 650);
+    await delay(400);
+    check(
+      await page.evaluate(
+        (baseRadius) => window.__visualStats.radius > baseRadius + 0.5,
+        baseRadius,
+      ),
+      "Pointer movement revives the faded local response",
+    );
   }
   await page.$eval(".motion-toggle", (button) => button.click());
   check(

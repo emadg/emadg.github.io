@@ -18,6 +18,20 @@ GPT Astra recommended two restrained directions, originally built on the same co
 
 ## Selected lattice refinement
 
+### Approved frost and motion revision
+
+The owner approved this revision after reviewing the local live preview. It is preserved as a separate commit before adding the text-size preference. No new videos were generated. Snapshots are local only in `.local/visual-previews/frost-review/`, relative to the repository root.
+
+- Restore the original site's glass approach: a low-opacity tint (40% light / 24% dark) over a 5px backdrop blur, plus more translucent header and card surfaces with stronger local blur.
+- Increase independent idle hovering to about 5px × 4px with 7–9 second cycles. A tiny fixed reference dot marks each anchor; this separate CSS layer stays faint but crisp over the frost.
+- Increase base dot radius to 1.8px and the cursor radius to 260px. Nearby dots grow to about 3.2px while their orbit contracts slightly. Additional cursor displacement is smaller; the combined 6px bound remains.
+- Hold the local cursor response briefly after activity, then fade it gradually while the cursor and scroll position stay still. Mouse movement and scrolling revive it. Idle hovering continues throughout.
+- Send one or occasionally two brief currents through 2–3 neighboring links every 1.5–2 seconds. A short moving gradient trail replaces abrupt whole-link flashes; at most three paths coexist. All static preferences and Motion off clear them.
+
+Verification passed: production build, targeted source TypeScript, formatting/whitespace checks, **43 focused visual checks**, and **329 full production browser checks**. The full suite covers both themes, four viewport widths, keyboard/native interactions, motion preferences, blocked storage, no JavaScript/canvas, idle fade, scroll/pointer reactivation, current rendering bounds, and clean reset. Astra approved desktop/mobile snapshots and source with no remaining findings.
+
+The previous committed refinement and verification record follow for context.
+
 - Every point continuously hovers around its own fixed anchor when motion is on, including when the cursor is elsewhere. The baseline ellipse has approximately 2.2px horizontal / 1.8px vertical reach and 10–13 second cycles, with independent phases.
 - A nearby cursor gently changes the orbit, nudges points outward and sideways, and reveals short links between immediate grid neighbors. Cursor position and strength ease over time; combined displacement is capped at 6px from each anchor.
 - **Motion off resets the whole scene:** exact regular anchors, uniform dot sizes, zero cursor highlights, and zero links. It clears the previous interaction and clock rather than freezing a frame. Turning motion on softly reintroduces hovering.
