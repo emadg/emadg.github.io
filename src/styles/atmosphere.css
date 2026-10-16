@@ -193,7 +193,7 @@ html {
   color: var(--text-secondary);
   border: 1px solid var(--glass-edge);
   border-radius: 20px;
-  font-size: 11px;
+  font-size: 0.6875rem;
   line-height: 1.4;
   box-shadow: 0 3px 15px rgb(7 35 48 / 5%);
 }
@@ -301,6 +301,11 @@ body[data-visual-style="field"] {
   html[data-background-motion="active"] .site-footer,
   html[data-background-motion="paused"] .site-footer {
     padding-bottom: 54px;
+  }
+}
+@media (max-width: 600px) {
+  :root {
+    --header-height: 120px;
   }
 }
 @media (max-width: 1100px) {

@@ -30,6 +30,21 @@ const links = [
           </a>
         );
       })}
+    </nav>
+    <div class="display-controls" role="group" aria-label="Display preferences">
+      <button
+        id="text-size-toggle"
+        class="text-size-toggle"
+        type="button"
+        aria-label="Larger text"
+        aria-pressed="false"
+        title="Use larger text"
+        hidden
+      >
+        <span aria-hidden="true" class="text-size-icon">
+          A<span>a</span>
+        </span>
+      </button>
       <button
         id="theme-toggle"
         class="theme-toggle"
@@ -63,10 +78,14 @@ const links = [
           <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" />
         </svg>
       </button>
-    </nav>
+    </div>
   </div>
 </header>
 <script>
+  import { initTextSize } from "../lib/text-size";
+  const textSizeButton =
+    document.querySelector<HTMLButtonElement>("#text-size-toggle");
+  if (textSizeButton) initTextSize(textSizeButton);
   const button = document.querySelector<HTMLButtonElement>("#theme-toggle");
   if (button) {
     const updateLabel = () =>

@@ -30,9 +30,10 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <title>{title}</title>
     <script is:inline>
-      let preference;
+      let preference, textSize;
       try {
         preference = localStorage.getItem("theme");
+        textSize = localStorage.getItem("text-size");
       } catch {
         /* Storage is optional. */
       }
@@ -41,6 +42,8 @@ const {
         (preference !== "light" &&
           window.matchMedia("(prefers-color-scheme: dark)").matches);
       document.documentElement.classList.toggle("dark", dark);
+      document.documentElement.dataset.textSize =
+        textSize === "large" ? "large" : "normal";
     </script>
   </head>
   <body data-visual-style={visualStyle}>

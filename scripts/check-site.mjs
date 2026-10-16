@@ -9,6 +9,7 @@ import { resolve, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
 import { checkVisuals } from "./check-visuals.mjs";
+import { checkTextSize } from "./check-text-size.mjs";
 
 const dist = fileURLToPath(new URL("../dist/", import.meta.url));
 const screenshots = process.env.SITE_QA_SCREENSHOTS;
@@ -439,6 +440,7 @@ try {
   );
   await blockedStorage.close();
 
+  await checkTextSize({ page, browser, base, check, errors });
   await checkVisuals({ page, browser, base, check, screenshots, errors });
 
   check(errors.length === 0, `No browser errors: ${errors.join("; ")}`);

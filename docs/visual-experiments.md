@@ -18,6 +18,12 @@ GPT Astra recommended two restrained directions, originally built on the same co
 
 ## Selected lattice refinement
 
+### Approved text-size preference
+
+The approved frost/motion work is committed separately as `6739e93`. The owner also approved the subsequent readability option for the PR. The **Aa** button beside the theme control switches all website typography between normal and 25% larger text, with a saved preference, keyboard support, and pressed-state feedback. Narrow headers reflow into two rows; measured header height preserves sticky navigation and anchor offsets. The PDF route and downloads keep their own layout. No videos are generated; snapshots are local in `.local/visual-previews/text-size-review/`.
+
+Verification passed: production build, targeted source TypeScript, formatting/whitespace checks, and **418 production browser checks**, including 89 text-size checks. Larger text was checked across all four routes at 320, 390, 768, 1440, and 2560px in both themes, plus keyboard operation, saved/cross-tab/restored-page preferences, blocked storage, no JavaScript, expanded details, and 200% root-font reflow. Astra approved desktop/mobile snapshots and the enlarged illustration labels with no remaining findings.
+
 ### Approved frost and motion revision
 
 The owner approved this revision after reviewing the local live preview. It is preserved as a separate commit before adding the text-size preference. No new videos were generated. Snapshots are local only in `.local/visual-previews/frost-review/`, relative to the repository root.

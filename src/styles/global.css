@@ -18,6 +18,8 @@
   --color-accent-bg: var(--accent-bg);
 }
 :root {
+  --text-scale: 1;
+  font-size: 100%;
   color-scheme: light;
   --bg-body: #f7f9fa;
   --bg-panel: #ffffff;
@@ -35,6 +37,10 @@
   --button-text: #ffffff;
   --terminal-bg: #101f2a;
   --terminal-text: #dce9ed;
+}
+:root[data-text-size="large"] {
+  --text-scale: 1.25;
+  font-size: 125%;
 }
 :root.dark {
   color-scheme: dark;
@@ -66,7 +72,7 @@
     background: var(--bg-body);
     color: var(--text-primary);
     font-family: var(--font-sans);
-    font-size: 16px;
+    font-size: 1rem;
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
   }
@@ -131,13 +137,15 @@
 .page-container {
   flex: 1;
   min-height: 65vh;
+  overflow-wrap: anywhere;
 }
 .site-header {
   border-bottom: 1px solid var(--border-subtle);
 }
 .header-inner {
   min-height: 90px;
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
@@ -150,7 +158,7 @@
 }
 .wordmark-initials {
   font-family: var(--font-mono);
-  font-size: 25px;
+  font-size: 1.5625rem;
   font-weight: 500;
   letter-spacing: -0.09em;
 }
@@ -158,19 +166,21 @@
   color: var(--accent);
 }
 .wordmark-name {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
 .site-header nav {
+  justify-self: end;
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 7px;
 }
 .site-header nav > a {
   padding: 9px 14px;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 0.875rem;
   white-space: nowrap;
   border-radius: 6px;
   transition:
@@ -182,10 +192,15 @@
   color: var(--accent);
   background: var(--accent-bg);
 }
-.theme-toggle {
+.display-controls {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.theme-toggle,
+.text-size-toggle {
   width: 42px;
   height: 42px;
-  margin-left: 10px;
   display: grid;
   place-items: center;
   color: var(--text-secondary);
@@ -193,9 +208,23 @@
   border-radius: 50%;
   background: transparent;
 }
-.theme-toggle:hover {
+.theme-toggle:hover,
+.text-size-toggle:hover {
   color: var(--accent);
   border-color: var(--accent);
+}
+.text-size-toggle[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+.text-size-icon {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  letter-spacing: -0.08em;
+}
+.text-size-icon > span {
+  font-size: 0.8em;
 }
 .theme-sun,
 .dark .theme-moon {
@@ -219,7 +248,7 @@
 }
 .eyebrow {
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 0.6875rem;
   font-weight: 400;
   letter-spacing: 0.075em;
   line-height: 1.7;
@@ -238,7 +267,7 @@
   padding-block: 86px 80px;
 }
 .hero-copy h1 {
-  font-size: clamp(46px, 5.5vw, 76px);
+  font-size: clamp(2.875rem, calc(5.5vw * var(--text-scale)), 4.75rem);
   letter-spacing: -0.055em;
   line-height: 1.06;
   margin-top: 26px;
@@ -246,13 +275,13 @@
 }
 .hero-role {
   margin-top: 29px;
-  font-size: 16px;
+  font-size: 1rem;
   font-weight: 600;
 }
 .hero-intro {
   max-width: 540px;
   margin-top: 12px;
-  font-size: 17px;
+  font-size: 1.0625rem;
   line-height: 1.75;
   color: var(--text-secondary);
 }
@@ -272,7 +301,7 @@
   padding: 11px 20px;
   border: 1px solid transparent;
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 550;
   line-height: 1.4;
   transition:
@@ -298,7 +327,7 @@
   align-items: center;
   gap: 12px;
   color: var(--accent);
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   text-underline-offset: 5px;
 }
@@ -309,7 +338,7 @@
   max-width: 400px;
   margin-top: 23px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.7;
 }
 .system-sketch {
@@ -323,7 +352,7 @@
 }
 .sketch-caption {
   padding: 23px 23px 0;
-  font-size: 10px;
+  font-size: 0.625rem;
   font-family: var(--font-mono);
   letter-spacing: 0.01em;
   display: flex;
@@ -350,7 +379,7 @@
 }
 .sketch-label {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .sketch-connections {
   opacity: 0.7;
@@ -366,7 +395,7 @@
   gap: 12px;
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 0.5625rem;
 }
 .section-block {
   padding-block: 60px 65px;
@@ -380,7 +409,7 @@
   margin-bottom: 32px;
 }
 .section-heading h2 {
-  font-size: clamp(27px, 3vw, 35px);
+  font-size: clamp(1.6875rem, calc(3vw * var(--text-scale)), 2.1875rem);
   margin-top: 10px;
 }
 .section-heading > .text-link {
@@ -388,7 +417,7 @@
   padding-bottom: 3px;
 }
 .section-description {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--text-muted);
   max-width: 295px;
   line-height: 1.7;
@@ -411,7 +440,7 @@
 .work-number {
   padding-top: 4px;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 0.6875rem;
   color: var(--text-muted);
 }
 .metadata {
@@ -419,7 +448,7 @@
   flex-wrap: wrap;
   gap: 6px 16px;
   align-items: center;
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.6;
 }
@@ -437,12 +466,12 @@
   background: currentColor;
 }
 .work-preview h3 {
-  font-size: 23px;
+  font-size: 1.4375rem;
   color: var(--text-primary);
   margin-top: 8px;
 }
 .work-preview p {
-  font-size: 15px;
+  font-size: 0.9375rem;
   color: var(--text-secondary);
   margin-top: 9px;
 }
@@ -450,11 +479,11 @@
   display: block;
   margin-top: 12px;
   color: var(--accent);
-  font-size: 13px;
+  font-size: 0.8125rem;
 }
 .preview-arrow {
   color: var(--accent);
-  font-size: 25px;
+  font-size: 1.5625rem;
   align-self: center;
 }
 .workbench {
@@ -465,19 +494,19 @@
   padding-block: 75px;
 }
 .workbench h2 {
-  font-size: 36px;
+  font-size: 2.25rem;
   margin-top: 16px;
 }
 .workbench-copy > p:not(.eyebrow) {
   margin-top: 19px;
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .workbench .text-link {
   margin-top: 24px;
 }
 .quiet-metadata {
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.7;
   color: var(--text-muted);
 }
@@ -489,7 +518,7 @@
   border-radius: 10px;
   box-shadow: 0 12px 32px #06182410;
   font-family: var(--font-mono);
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 .terminal-header {
   display: flex;
@@ -501,7 +530,7 @@
 }
 .terminal-header > :last-child {
   margin-left: auto;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 .terminal-dot {
   width: 6px;
@@ -515,7 +544,7 @@
 .terminal-comment {
   color: #9ab1be;
   margin-block: 15px 7px;
-  font-size: 10px;
+  font-size: 0.625rem;
 }
 .terminal-content code {
   font-family: inherit;
@@ -528,7 +557,7 @@
   border-top: 1px solid #304551;
   padding: 12px 20px;
   color: #adc1cd;
-  font-size: 9px;
+  font-size: 0.5625rem;
 }
 .approach-grid {
   display: grid;
@@ -538,17 +567,17 @@
 }
 .approach-index {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 0.625rem;
   color: var(--accent);
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 .approach-grid h3 {
-  font-size: 19px;
+  font-size: 1.1875rem;
   margin-top: 14px;
 }
 .approach-grid p {
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.8;
   color: var(--text-secondary);
   margin-top: 12px;
@@ -565,11 +594,11 @@
   gap: 60px;
 }
 .contact-section h2 {
-  font-size: 32px;
+  font-size: 2rem;
   margin-top: 12px;
 }
 .contact-section p:not(.eyebrow) {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--text-secondary);
   max-width: 520px;
   margin-top: 18px;
@@ -594,7 +623,7 @@
   gap: 25px;
   min-height: 100px;
   color: var(--text-muted);
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .footer-links {
   display: flex;
@@ -611,7 +640,7 @@
 }
 .work-intro h1 {
   margin-top: 20px;
-  font-size: clamp(38px, 4.6vw, 60px);
+  font-size: clamp(2.375rem, calc(4.6vw * var(--text-scale)), 3.75rem);
   line-height: 1.12;
   letter-spacing: -0.045em;
 }
@@ -627,7 +656,7 @@
 }
 .work-intro-bottom > p {
   max-width: 630px;
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.8;
   color: var(--text-secondary);
 }
@@ -639,7 +668,7 @@
   gap: 14px;
 }
 .secondary-download {
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .section-nav {
   display: flex;
@@ -648,12 +677,12 @@
   padding-block: 25px;
   margin-top: 40px;
   border-top: 1px solid var(--border-subtle);
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .section-nav > span {
   color: var(--text-muted);
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 0.625rem;
   text-transform: uppercase;
   align-self: center;
   margin-right: 8px;
@@ -684,12 +713,12 @@
 }
 .story-index {
   font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-muted);
   padding-top: 2px;
 }
 .story-heading h3 {
-  font-size: 28px;
+  font-size: 1.75rem;
   margin-top: 10px;
 }
 .story-heading .metadata {
@@ -705,7 +734,7 @@
 .small-label {
   display: block;
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 0.625rem;
   font-weight: 400;
   color: var(--text-muted);
   letter-spacing: 0.06em;
@@ -715,7 +744,7 @@
 .story-body > div > p {
   margin-top: 9px;
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.85;
 }
 .story-outcome {
@@ -723,7 +752,7 @@
   padding: 3px 0 3px 21px;
 }
 .story-outcome p {
-  font-size: 20px;
+  font-size: 1.25rem;
   line-height: 1.5;
   color: var(--accent);
   margin-top: 9px;
@@ -751,17 +780,17 @@
 .process-number {
   font-family: var(--font-mono);
   color: var(--accent);
-  font-size: 9px;
+  font-size: 0.5625rem;
   padding-top: 2px;
 }
 .process-strip h4 {
-  font-size: 13px;
+  font-size: 0.8125rem;
   font-weight: 600;
   letter-spacing: -0.01em;
   line-height: 1.5;
 }
 .process-strip p {
-  font-size: 12px;
+  font-size: 0.75rem;
   line-height: 1.65;
   color: var(--text-muted);
   margin-top: 4px;
@@ -783,13 +812,13 @@ summary::-webkit-details-marker {
   gap: 17px;
   width: fit-content;
   padding-block: 8px;
-  font-size: 13px;
+  font-size: 0.8125rem;
   color: var(--accent);
 }
 .disclosure-icon {
   font-family: var(--font-mono);
   color: var(--accent);
-  font-size: 18px;
+  font-size: 1.125rem;
   transition: transform 0.18s;
   flex-shrink: 0;
 }
@@ -800,7 +829,7 @@ details[open] > summary .disclosure-icon {
   padding-block: 12px 8px;
   max-width: 76ch;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.85;
 }
 .details-content p + p {
@@ -812,7 +841,7 @@ details[open] > summary .disclosure-icon {
   padding-left: 20px;
 }
 .technology-line {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-muted);
 }
 .career-entry {
@@ -826,18 +855,18 @@ details[open] > summary .disclosure-icon {
   padding-bottom: 0;
 }
 .career-company {
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: 600;
   letter-spacing: -0.02em;
   margin-bottom: 9px;
 }
 .career-content h3 {
-  font-size: 23px;
+  font-size: 1.4375rem;
 }
 .career-description {
   margin: 15px 0 25px;
   color: var(--text-secondary);
-  font-size: 14px;
+  font-size: 0.875rem;
   line-height: 1.85;
 }
 .career-projects {
@@ -863,19 +892,19 @@ details[open] > summary .disclosure-icon {
 }
 .career-project-link strong,
 .career-project > summary strong {
-  font-size: 14px;
+  font-size: 0.875rem;
   font-weight: 500;
   display: block;
   line-height: 1.6;
 }
 .career-projects .metadata {
   margin-top: 5px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 .career-project-action {
   color: var(--accent);
   white-space: nowrap;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 .career-project .details-content {
   padding-top: 0;
@@ -890,15 +919,15 @@ details[open] > summary .disclosure-icon {
   border-top: 1px solid var(--border-subtle);
 }
 .expertise-group h3 {
-  font-size: 20px;
+  font-size: 1.25rem;
 }
 .expertise-group > p:not(.skill-list) {
   margin-top: 13px;
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--text-secondary);
 }
 .skill-list {
-  font-size: 12px;
+  font-size: 0.75rem;
   color: var(--text-muted);
   line-height: 1.9;
   margin-top: 17px;
@@ -907,14 +936,14 @@ details[open] > summary .disclosure-icon {
   margin-top: 5px;
 }
 .skill-details > summary {
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 .skill-details .skill-list {
   margin-top: 6px;
 }
 .expertise-group > .text-link {
   margin-top: 16px;
-  font-size: 12px;
+  font-size: 0.75rem;
 }
 .credentials-grid {
   display: grid;
@@ -922,7 +951,7 @@ details[open] > summary .disclosure-icon {
   gap: 80px;
 }
 .credentials-heading {
-  font-size: 28px;
+  font-size: 1.75rem;
   margin-top: 12px;
   margin-bottom: 30px;
 }
@@ -931,12 +960,12 @@ details[open] > summary .disclosure-icon {
 }
 .education-list h3,
 .publication-list h3 {
-  font-size: 15px;
+  font-size: 0.9375rem;
   line-height: 1.55;
   font-weight: 550;
 }
 .education-list article > p:not(.quiet-metadata) {
-  font-size: 14px;
+  font-size: 0.875rem;
   color: var(--text-secondary);
   margin-top: 6px;
 }
@@ -944,7 +973,7 @@ details[open] > summary .disclosure-icon {
   margin-top: 4px;
 }
 .education-list article > .education-note {
-  font-size: 12px !important;
+  font-size: 0.75rem !important;
   line-height: 1.8;
   margin-block: 10px;
 }
@@ -963,7 +992,7 @@ details[open] > summary .disclosure-icon {
 }
 .publication-list .quiet-metadata {
   margin-top: 6px;
-  font-size: 11px;
+  font-size: 0.6875rem;
 }
 .writing-page,
 .article-page {
@@ -971,7 +1000,7 @@ details[open] > summary .disclosure-icon {
 }
 .writing-heading h1,
 .article-page h1 {
-  font-size: clamp(35px, 4vw, 52px);
+  font-size: clamp(2.1875rem, calc(4vw * var(--text-scale)), 3.25rem);
   line-height: 1.15;
   margin-top: 15px;
 }
@@ -989,14 +1018,14 @@ details[open] > summary .disclosure-icon {
   border-top: 1px solid var(--border-subtle);
 }
 .writing-card h2 {
-  font-size: 25px;
+  font-size: 1.5625rem;
   margin-top: 12px;
 }
 .writing-card p {
   margin-top: 15px;
   max-width: 650px;
   color: var(--text-secondary);
-  font-size: 15px;
+  font-size: 0.9375rem;
 }
 .writing-card:hover h2 {
   color: var(--accent);
@@ -1018,24 +1047,24 @@ details[open] > summary .disclosure-icon {
 }
 .prose {
   color: var(--text-secondary);
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.85;
 }
 .prose p {
   margin-block: 20px;
 }
 .prose h2 {
-  font-size: 26px;
+  font-size: 1.625rem;
   margin-block: 38px 17px;
   color: var(--text-primary);
 }
 .prose h3 {
-  font-size: 21px;
+  font-size: 1.3125rem;
   margin-block: 30px 15px;
   color: var(--text-primary);
 }
 .prose h4 {
-  font-size: 18px;
+  font-size: 1.125rem;
   margin-block: 25px 12px;
 }
 .prose a {
@@ -1068,7 +1097,7 @@ details[open] > summary .disclosure-icon {
   overflow-x: auto;
   margin-block: 25px;
   max-width: 100%;
-  font-size: 13px;
+  font-size: 0.8125rem;
   line-height: 1.8;
 }
 .prose :not(pre) > code {
@@ -1097,7 +1126,7 @@ details[open] > summary .disclosure-icon {
   max-width: 100%;
   border-collapse: collapse;
   margin-block: 25px;
-  font-size: 14px;
+  font-size: 0.875rem;
 }
 .prose th,
 .prose td {
@@ -1115,7 +1144,7 @@ details[open] > summary .disclosure-icon {
     gap: 35px;
   }
   .hero-copy h1 {
-    font-size: 60px;
+    font-size: 3.75rem;
   }
   .workbench {
     gap: 45px;
@@ -1150,11 +1179,10 @@ details[open] > summary .disclosure-icon {
   }
   .site-header nav > a {
     padding-inline: 10px;
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
   .theme-toggle {
     flex-shrink: 0;
-    margin-left: 6px;
   }
   .wordmark-name {
     display: none;
@@ -1165,15 +1193,15 @@ details[open] > summary .disclosure-icon {
     gap: 32px;
   }
   .hero-copy h1 {
-    font-size: clamp(46px, 9vw, 66px);
+    font-size: clamp(2.875rem, calc(9vw * var(--text-scale)), 4.125rem);
     margin-top: 20px;
   }
   .hero-role {
     margin-top: 24px;
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
   .hero-intro {
-    font-size: 16px;
+    font-size: 1rem;
   }
   .hero-note {
     max-width: none;
@@ -1211,19 +1239,19 @@ details[open] > summary .disclosure-icon {
     gap: 12px;
   }
   .work-preview h3 {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
   .work-preview p {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
   .preview-outcome {
-    font-size: 12px;
+    font-size: 0.75rem;
   }
   .preview-arrow {
-    font-size: 20px;
+    font-size: 1.25rem;
   }
   .metadata {
-    font-size: 11px;
+    font-size: 0.6875rem;
     gap: 5px 12px;
   }
   .workbench {
@@ -1231,7 +1259,7 @@ details[open] > summary .disclosure-icon {
     gap: 30px;
   }
   .workbench h2 {
-    font-size: 31px;
+    font-size: 1.9375rem;
   }
   .approach-grid {
     grid-template-columns: 1fr;
@@ -1252,7 +1280,7 @@ details[open] > summary .disclosure-icon {
     gap: 25px;
   }
   .contact-section h2 {
-    font-size: 27px;
+    font-size: 1.6875rem;
   }
   .contact-actions {
     gap: 17px;
@@ -1270,7 +1298,7 @@ details[open] > summary .disclosure-icon {
     padding-top: 44px;
   }
   .work-intro h1 {
-    font-size: clamp(35px, 7vw, 48px);
+    font-size: clamp(2.1875rem, calc(7vw * var(--text-scale)), 3rem);
   }
   .work-intro-bottom {
     flex-direction: column;
@@ -1279,7 +1307,7 @@ details[open] > summary .disclosure-icon {
     margin-top: 23px;
   }
   .work-intro-bottom > p {
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
   .resume-actions {
     flex-direction: row;
@@ -1298,7 +1326,7 @@ details[open] > summary .disclosure-icon {
     gap: 12px;
   }
   .story-heading h3 {
-    font-size: 25px;
+    font-size: 1.5625rem;
   }
   .work-story {
     padding-block: 30px;
@@ -1309,14 +1337,14 @@ details[open] > summary .disclosure-icon {
     gap: 22px;
   }
   .story-body > div > p {
-    font-size: 14px;
+    font-size: 0.875rem;
     line-height: 1.85;
   }
   .story-outcome {
     padding-left: 17px;
   }
   .story-outcome p {
-    font-size: 19px;
+    font-size: 1.1875rem;
   }
   .process-strip {
     margin-left: 0;
@@ -1347,7 +1375,7 @@ details[open] > summary .disclosure-icon {
     margin-bottom: 4px;
   }
   .career-content h3 {
-    font-size: 21px;
+    font-size: 1.3125rem;
   }
   .career-project-link {
     gap: 17px;
@@ -1356,7 +1384,7 @@ details[open] > summary .disclosure-icon {
     font-size: 0;
   }
   .career-project-action > span {
-    font-size: 19px;
+    font-size: 1.1875rem;
   }
   .expertise-grid,
   .credentials-grid {
@@ -1374,13 +1402,33 @@ details[open] > summary .disclosure-icon {
     padding-block: 44px 55px;
   }
   .writing-card h2 {
-    font-size: 23px;
+    font-size: 1.4375rem;
   }
   .prose {
-    font-size: 15px;
+    font-size: 0.9375rem;
   }
 }
 @media (max-width: 600px) {
+  .header-inner {
+    grid-template-columns: 1fr auto;
+    min-height: 120px;
+    padding-block: 12px;
+    gap: 8px 12px;
+  }
+  .display-controls {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .site-header nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    justify-self: stretch;
+  }
+  .site-header nav > a {
+    flex: 1;
+    padding-block: 7px;
+    text-align: center;
+  }
   .home-hero .system-sketch {
     display: none;
   }
@@ -1390,22 +1438,17 @@ details[open] > summary .disclosure-icon {
     gap: 0;
   }
   .site-header nav > a {
-    font-size: 12px;
+    font-size: 0.75rem;
     padding-inline: 9px;
   }
-  .theme-toggle {
-    margin-left: 6px;
-    width: 36px;
-    height: 36px;
-  }
   .home-hero .eyebrow {
-    font-size: 10px;
+    font-size: 0.625rem;
   }
   .hero-copy h1 {
-    font-size: 44px;
+    font-size: 2.75rem;
   }
   .hero-role {
-    font-size: 14px;
+    font-size: 0.875rem;
   }
   .action-row {
     gap: 20px;
@@ -1413,10 +1456,10 @@ details[open] > summary .disclosure-icon {
   .button {
     padding-inline: 16px;
     gap: 16px;
-    font-size: 13px;
+    font-size: 0.8125rem;
   }
   .text-link {
-    font-size: 13px;
+    font-size: 0.8125rem;
     gap: 8px;
   }
   .footer-location {
