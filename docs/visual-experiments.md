@@ -4,7 +4,7 @@ Base: `feat/home-and-work-portfolio` at `1f34888`. The approved content, storyte
 
 ## Direction and comparison
 
-GPT Astra recommended two restrained directions sharing the same content, geometry, and motion engine:
+GPT Astra recommended two restrained directions, originally built on the same content, geometry, and motion engine:
 
 |           | Anchored lattice (primary)                                              | Soft field (alternative)                                |
 | --------- | ----------------------------------------------------------------------- | ------------------------------------------------------- |
@@ -14,7 +14,19 @@ GPT Astra recommended two restrained directions sharing the same content, geomet
 | Glass     | Cool, clear frost with a readable central surface                       | Softer frost and a broader quiet color wash             |
 | Character | Precise and technical                                                   | Soft and atmospheric                                    |
 
-**Recommendation: Anchored lattice.** The matched browser renders and final GPT Astra visual/code review favor its precise character, clear frost, and local grid response. It develops the existing system illustration and directly expresses the requested square-grid idea. Soft field is complete as an alternative for a warmer, more atmospheric treatment. Both preserve the new content and its reading hierarchy.
+**Selected direction: Anchored lattice.** Emad selected the lattice after the initial comparison and requested more discoverable motion and glass depth. The lattice branch now contains the refinements below; Soft field remains the original alternative snapshot. Both preserve the new content and its reading hierarchy.
+
+## Selected lattice refinement
+
+- Every point continuously hovers around its own fixed anchor when motion is on, including when the cursor is elsewhere. The baseline ellipse has approximately 2.2px horizontal / 1.8px vertical reach and 10–13 second cycles, with independent phases.
+- A nearby cursor gently changes the orbit, nudges points outward and sideways, and reveals short links between immediate grid neighbors. Cursor position and strength ease over time; combined displacement is capped at 6px from each anchor.
+- **Motion off resets the whole scene:** exact regular anchors, uniform dot sizes, zero cursor highlights, and zero links. It clears the previous interaction and clock rather than freezing a frame. Turning motion on softly reintroduces hovering.
+- Desktop reading glass uses 62% fill and 1.1px blur, allowing the slightly larger dots (1.25px radius) to remain faintly visible beneath it. Header, illustration, and contact surfaces retain their stronger frost. Mobile keeps its quieter static treatment.
+- The independent Astra visual/code review approved both themes, including the cursor over body text, with no remaining findings.
+
+The current lattice screenshots replace its initial previews. The local recording demonstrates idle hovering, cursor response, and motion-off reset. Additional views: [cursor over text, light](visual-previews/lattice-reading-light.webp), [cursor over text, dark](visual-previews/lattice-reading-dark.webp), and [neutral motion-off grid](visual-previews/lattice-off-dark.webp).
+
+Refinement verification: the production build, targeted source TypeScript, and **322 production browser checks** passed. The added checks verify continuous hovering with a stationary cursor, displacement within 6px, and identical clean-grid pixels after interaction is turned off and after reload. The measured canvas paint frequency was 21.8/sec during this run, below the 30/sec cap; it is a browser-harness observation rather than a device performance benchmark.
 
 ## Phase 1 — Preserve and plan
 
@@ -32,7 +44,7 @@ GPT Astra recommended two restrained directions sharing the same content, geomet
 - [x] Add a restrained document-progress rule and active-section feedback on My Work, using `aria-current="location"`. Keep main navigation's `aria-current="page"`, keyboard focus, and passive URL fragments intact.
 - [x] Keep phone effects static and simplify blur there; retain contact, download, and disclosure behavior.
 
-Implementation budget: roughly 48–60px grid spacing, at most 1,000 anchored points, maximum 2px ambient displacement, 30 actual paints/sec, DPR capped at 1.5, and only right/down neighbor links near the pointer. No external animation dependencies.
+Implementation budget: roughly 48–60px grid spacing, at most 1,000 anchored points, roughly 2px idle hovering and at most 6px combined cursor displacement, 30 actual paints/sec, DPR capped at 1.5, and only right/down neighbor links near the pointer. No external animation dependencies.
 
 ## Phase 3 — Two visual experiments
 
@@ -51,7 +63,7 @@ Implementation budget: roughly 48–60px grid spacing, at most 1,000 anchored po
 
 ## Verification results
 
-Both production builds and **318 browser checks per direction** passed, including the original route/content/PDF matrix and the new motion, storage, canvas-fallback, allocation, and reading-feedback checks. Targeted source TypeScript and whitespace checks passed. The pre-existing full-repository Vite plugin type mismatch remains documented in the developer guide; no dependency versions were changed.
+The initial production builds and **318 browser checks per direction** passed, including the original route/content/PDF matrix and the motion, storage, canvas-fallback, allocation, and reading-feedback checks. Targeted source TypeScript and whitespace checks passed. The pre-existing full-repository Vite plugin type mismatch remains documented in the developer guide; no dependency versions were changed.
 
 | Check                             | Anchored lattice                     | Soft field                                    |
 | --------------------------------- | ------------------------------------ | --------------------------------------------- |
@@ -65,13 +77,13 @@ The browser matrix covers 320, 390, 768, and 1440px widths in both themes. Focus
 
 ## Review record
 
-Both directions have completed functional and visual review. GPT Astra recommended a small desktop lattice reading-plane refinement to make the cursor response less obscured: 70% fill and 4px blur. The stronger header/illustration frost and quieter phone treatment remain unchanged. Long reading sections retain their editorial layout. The final review found no remaining must-fix concerns and recommended keeping these restrained values.
+The initial comparison completed functional and visual review. Its lattice reading plane used 70% fill and 4px blur. The user-requested refinement above supersedes those values to reveal the grid through the reading pane. The stronger header/illustration frost and quieter phone treatment remain unchanged. Long reading sections retain their editorial layout.
 
 Idle points are batched into one canvas fill, with individual styles only for nearby points. Paint frequency is capped near 30 per second; focused checks observed 30.0 paints/sec with 630 points at 1440×1000. This measures canvas paint frequency, not GPU cost or overall device frame rate. At large DPR/viewport sizes the renderer stays below 1,000 points and a roughly 5-megapixel backing store.
 
 Astra's accessibility refinement uses the stable name **Background motion** and an explicit on/off pressed state. Narrow desktops reserve footer space for the floating control, and smaller viewports show a compact icon. Reduced motion, coarse input, data saving, and hidden-document state stop animation. A genuine mouse event can establish fine input on hybrid browsers that initially report no pointer capability. Continuous motion is optional; pause persists when storage is available.
 
-Selected compressed viewport previews are retained below for remote review. Full QA artifacts and recordings stay outside source control. Screenshots capture an interaction state; use the local site or local recordings to assess motion. The preview images share a 1440×1000 viewport and the same cursor position near the exposed right edge of the glass plane.
+Selected compressed viewport previews are retained below for remote review. Full QA artifacts and recordings stay outside source control; optional `SITE_QA_SCREENSHOTS` can capture a fresh matrix into an ignored local directory. Screenshots capture an interaction state; use the local site or local recordings to assess motion. The preview images share a 1440×1000 viewport and the same cursor position near the exposed right edge of the glass plane.
 
 ### Matched previews
 
@@ -82,8 +94,8 @@ Selected compressed viewport previews are retained below for remote review. Full
 
 Motion recordings are **local only**, ignored by Git. Paths are relative to the repository root:
 
-- `.local/visual-previews/lattice-motion.mp4`
-- `.local/visual-previews/field-motion.mp4`
+- `.local/visual-previews/lattice-motion.mp4` — idle hovering, cursor response, and reset.
+- `.local/visual-previews/field-motion.mp4` — the original field alternative and reading navigation.
 
 Only screenshots are included in the branches. Recordings have been removed from both experiment branches' history.
 
@@ -93,7 +105,7 @@ Only screenshots are included in the branches. Recordings have been removed from
 - [Recommended anchored-lattice branch](https://github.com/emadg/emadg.github.io/tree/experiment/glass-lattice)
 - [Alternative soft-field branch](https://github.com/emadg/emadg.github.io/tree/experiment/glass-field)
 
-Both experiments derive from the completed content redesign. `src/data/visual.ts` selects the art direction. The field branch retains the initial alternative snapshot; the lattice branch contains the selected direction's subsequent refinements. These are review branches. Nothing has been merged into `main` or deployed to the production website.
+Both experiments derive from the completed content redesign. `src/data/visual.ts` selects the art direction. The lattice branch has the selected direction's subsequent refinements; the field branch retains the initial comparison snapshot. These are review branches. Nothing has been merged into `main` or deployed to the production website.
 
 ### Trying a branch
 

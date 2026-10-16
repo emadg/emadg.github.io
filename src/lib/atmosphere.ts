@@ -46,9 +46,12 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
   let frame = 0,
     elapsed = 0,
     lastTick = 0,
-    lastPaint = 0;
+    lastPaint = 0,
+    motionStrength = 0;
   let pointerX = -1000,
     pointerY = -1000,
+    pointerTargetX = -1000,
+    pointerTargetY = -1000,
     pointerStrength = 0,
     pointerInside = false;
   let disposed = false;
@@ -65,10 +68,11 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
 
   function paint() {
     ctx.clearRect(0, 0, width, height);
-    const still = reduced.matches || !hasFinePointer() || connection?.saveData;
+    const still =
+      paused || reduced.matches || !hasFinePointer() || connection?.saveData;
     const time = still ? 0 : elapsed / 1000;
     const strength = still ? 0 : pointerStrength;
-    const radius = field ? 210 : 145;
+    const radius = field ? 210 : 180;
     if (field && strength > 0.005) {
       const halo = ctx.createRadialGradient(
         pointerX,
@@ -84,7 +88,8 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
       ctx.fillRect(0, 0, width, height);
     }
     const nearby: Point[] = [];
-    const baseOpacity = (dark ? 0.27 : 0.23) * (field ? 0.7 : 1);
+    const baseOpacity = field ? (dark ? 0.27 : 0.23) * 0.7 : dark ? 0.38 : 0.34;
+    const dotRadius = field ? 0.9 : 1.25;
     // Batch idle points into one fill; only cursor-local points need individual styles.
     ctx.beginPath();
     for (const point of points) {
@@ -93,28 +98,46 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
           ? Math.hypot(point.x - pointerX, point.y - pointerY)
           : radius;
       point.influence = Math.max(0, 1 - distance / radius) ** 2 * strength;
-      const drift = field ? 1.2 : 1.8;
+      const drift = field ? 1.2 : 2.2 + point.influence * 0.8;
       const phase = field ? point.x * 0.003 + point.y * 0.002 : point.phase;
-      point.dx =
-        point.x +
-        (still ? 0 : Math.sin(time * (field ? 0.25 : 0.35) + phase) * drift);
-      point.dy =
-        point.y +
-        (still
-          ? 0
-          : Math.cos(time * (field ? 0.21 : 0.29) + phase * 1.3) * drift);
+      // Each point hovers around its own anchor, even without a nearby cursor.
+      let offsetX = Math.sin(time * (field ? 0.25 : 0.62) + phase) * drift;
+      let offsetY =
+        Math.cos(time * (field ? 0.21 : 0.48) + phase * 1.3) *
+        drift *
+        (field ? 1 : 0.8);
+      if (!field && point.influence > 0.005) {
+        const normalX = (point.x - pointerX) / Math.max(distance, 1);
+        const normalY = (point.y - pointerY) / Math.max(distance, 1);
+        const sway = Math.sin(time * 0.9 + phase) * 1.1;
+        // A small outward nudge and sideways sway; points never leave their cell.
+        offsetX += (normalX * 2.2 - normalY * sway) * point.influence;
+        offsetY += (normalY * 2.2 + normalX * sway) * point.influence;
+      }
+      const scale = still
+        ? 0
+        : motionStrength *
+          Math.min(1, 6 / Math.max(1, Math.hypot(offsetX, offsetY)));
+      point.dx = point.x + offsetX * scale;
+      point.dy = point.y + offsetY * scale;
       if (point.influence > 0.005) nearby.push(point);
       else {
-        ctx.moveTo(point.dx + 0.9, point.dy);
-        ctx.arc(point.dx, point.dy, 0.9, 0, Math.PI * 2);
+        ctx.moveTo(point.dx + dotRadius, point.dy);
+        ctx.arc(point.dx, point.dy, dotRadius, 0, Math.PI * 2);
       }
     }
     ctx.fillStyle = `rgba(${rgb}, ${baseOpacity})`;
     ctx.fill();
     for (const point of nearby) {
       ctx.beginPath();
-      ctx.arc(point.dx, point.dy, 0.9 + point.influence * 1.2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(${rgb}, ${baseOpacity + point.influence * 0.4})`;
+      ctx.arc(
+        point.dx,
+        point.dy,
+        dotRadius + point.influence * 1.05,
+        0,
+        Math.PI * 2,
+      );
+      ctx.fillStyle = `rgba(${rgb}, ${baseOpacity + point.influence * 0.42})`;
       ctx.fill();
     }
     // Only immediate grid neighbors can connect: bounded O(n), never all pairs.
@@ -131,8 +154,8 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
           ctx.beginPath();
           ctx.moveTo(point.dx, point.dy);
           ctx.lineTo(neighbor.dx, neighbor.dy);
-          ctx.strokeStyle = `rgba(${rgb}, ${Math.min(point.influence, neighbor.influence) * 0.18})`;
-          ctx.lineWidth = 0.8;
+          ctx.strokeStyle = `rgba(${rgb}, ${Math.min(point.influence, neighbor.influence) * 0.36})`;
+          ctx.lineWidth = 1;
           ctx.stroke();
         }
       }
@@ -145,7 +168,11 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
     elapsed += Math.min(now - lastTick, 80);
     lastTick = now;
     if (now - lastPaint >= 1000 / 30 - 0.5) {
-      pointerStrength += ((pointerInside ? 1 : 0) - pointerStrength) * 0.12;
+      const ease = 1 - Math.exp(-Math.min(now - lastPaint, 100) / 160);
+      motionStrength += (1 - motionStrength) * ease;
+      pointerStrength += ((pointerInside ? 1 : 0) - pointerStrength) * ease;
+      pointerX += (pointerTargetX - pointerX) * ease;
+      pointerY += (pointerTargetY - pointerY) * ease;
       if (pointerStrength < 0.001) pointerStrength = 0;
       paint();
       lastPaint = now;
@@ -159,9 +186,13 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
     frame = 0;
     const staticPreference =
       reduced.matches || !hasFinePointer() || !!connection?.saveData;
-    if (staticPreference) {
+    if (staticPreference || paused) {
+      elapsed = 0;
+      motionStrength = 0;
       pointerStrength = 0;
       pointerInside = false;
+      pointerX = pointerTargetX = -1000;
+      pointerY = pointerTargetY = -1000;
     }
     scene.dataset.state = document.hidden
       ? "hidden"
@@ -188,7 +219,7 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
     if (label) label.textContent = paused ? "Motion off" : "Motion on";
     if (!document.hidden) paint();
     if (canAnimate()) {
-      lastTick = performance.now();
+      lastTick = lastPaint = performance.now();
       frame = requestAnimationFrame(tick);
     }
   }
@@ -255,8 +286,12 @@ export function initAtmosphere(scene: HTMLElement, toggle: HTMLButtonElement) {
         refresh();
       }
       if (!canAnimate() || event.pointerType === "touch") return;
-      pointerX = event.clientX;
-      pointerY = event.clientY;
+      if (!pointerInside && pointerStrength < 0.001) {
+        pointerX = event.clientX;
+        pointerY = event.clientY;
+      }
+      pointerTargetX = event.clientX;
+      pointerTargetY = event.clientY;
       pointerInside = true;
     },
     options,

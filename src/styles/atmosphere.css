@@ -2,7 +2,7 @@
 :root {
   --field-rgb: 35, 114, 142;
   --glass-panel: rgb(250 253 255 / 76%);
-  --reading-glass: rgb(250 253 255 / 70%);
+  --reading-glass: rgb(250 253 255 / 62%);
   --glass-header: rgb(247 251 253 / 86%);
   --glass-tint: rgb(233 246 249 / 68%);
   --glass-edge: rgb(150 185 200 / 34%);
@@ -14,7 +14,7 @@
 :root.dark {
   --field-rgb: 111, 201, 222;
   --glass-panel: rgb(12 26 38 / 76%);
-  --reading-glass: rgb(12 26 38 / 70%);
+  --reading-glass: rgb(12 26 38 / 62%);
   --glass-header: rgb(12 25 36 / 88%);
   --glass-tint: rgb(19 42 55 / 64%);
   --glass-edge: rgb(112 173 196 / 20%);
@@ -35,8 +35,8 @@ body {
   overflow: hidden;
   background-image: radial-gradient(
     circle,
-    rgba(var(--field-rgb), 0.19) 0.8px,
-    transparent 1.2px
+    rgba(var(--field-rgb), 0.3) 1.1px,
+    transparent 1.6px
   );
   background-size: 50px 50px;
 }
@@ -195,8 +195,8 @@ html {
 ) {
   .glass-backplane {
     background: var(--reading-glass);
-    backdrop-filter: blur(4px) saturate(1.08);
-    -webkit-backdrop-filter: blur(4px) saturate(1.08);
+    backdrop-filter: blur(1.1px) saturate(1.08);
+    -webkit-backdrop-filter: blur(1.1px) saturate(1.08);
   }
   .site-header,
   .section-nav {

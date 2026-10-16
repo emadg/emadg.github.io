@@ -11,7 +11,14 @@ export async function checkVisuals({
 }) {
   const delay = (ms) => new Promise((done) => setTimeout(done, ms));
   const instrument = await page.evaluateOnNewDocument(() => {
-    const stats = { paints: 0, arcs: 0, strokes: 0, maxArcs: 0, maxStrokes: 0 };
+    const stats = {
+      paints: 0,
+      arcs: 0,
+      strokes: 0,
+      maxArcs: 0,
+      maxStrokes: 0,
+      points: [],
+    };
     window.__visualStats = stats;
     const prototype = CanvasRenderingContext2D.prototype;
     for (const method of ["clearRect", "arc", "stroke"]) {
@@ -22,10 +29,12 @@ export async function checkVisuals({
             stats.paints++;
             stats.arcs = 0;
             stats.strokes = 0;
+            stats.points = [];
           }
           if (method === "arc") {
             stats.arcs++;
             stats.maxArcs = Math.max(stats.maxArcs, stats.arcs);
+            stats.points.push(args.slice(0, 3));
           }
           if (method === "stroke") {
             stats.strokes++;
@@ -75,11 +84,34 @@ export async function checkVisuals({
     ),
     "Motion toggle has a stable accessible name and an explicit on/off state",
   );
+  await page.$eval(".motion-toggle", (button) => button.click());
+  const restingGrid = await pixels();
+  const anchors = await page.evaluate(() => window.__visualStats.points);
+  check(
+    anchors[0][1] === anchors[1][1] &&
+      anchors.every((point) => point[2] === anchors[0][2]) &&
+      (await page.evaluate(() => window.__visualStats.strokes)) === 0,
+    "Motion off renders aligned anchors with uniform dots and no links",
+  );
+  await page.$eval(".motion-toggle", (button) => button.click());
+  await page.mouse.move(1370, 310);
+  await delay(600);
+  const idleBefore = await page.evaluate(() => window.__visualStats.points);
   const before = await pixels();
-  await delay(240);
+  await delay(500);
   check(
     before !== (await pixels()),
-    "Anchored canvas really moves when motion is enabled",
+    "Points keep hovering with the cursor held still",
+  );
+  const hovering = await page.evaluate(() => window.__visualStats.points);
+  const anchorDistance = ([x, y]) =>
+    Math.min(...anchors.map(([ax, ay]) => Math.hypot(x - ax, y - ay)));
+  check(
+    Math.hypot(
+      hovering[0][0] - idleBefore[0][0],
+      hovering[0][1] - idleBefore[0][1],
+    ) > 0.05 && hovering.every((point) => anchorDistance(point) <= 6.01),
+    "Points away from the cursor hover independently and stay within 6px of their anchors",
   );
   await page.mouse.move(1370, 310);
   await delay(550);
@@ -100,16 +132,19 @@ export async function checkVisuals({
     `Visuals (${variant}): ${paintsPerSecond.toFixed(1)} paints/sec; at most ${stats.maxArcs} points/frame in this viewport.`,
   );
   if (screenshots) {
-    await page.$eval(".motion-toggle", (button) => button.click());
     await page.screenshot({
       path: resolve(screenshots, "interaction-desktop-dark.png"),
     });
-    await page.$eval(".motion-toggle", (button) => button.click());
   }
-  await page.click(".motion-toggle");
+  await page.$eval(".motion-toggle", (button) => button.click());
   check(
     (await state()) === "paused",
-    "Pause control freezes background motion",
+    "Motion off returns to a static background",
+  );
+  check(
+    restingGrid === (await pixels()) &&
+      (await page.evaluate(() => window.__visualStats.strokes)) === 0,
+    "Motion off clears displacement, cursor highlights, and links back to the same clean grid",
   );
   check(
     await page.$eval(
@@ -133,6 +168,10 @@ export async function checkVisuals({
   check(
     (await state()) === "paused",
     "Pause preference survives navigation/reload",
+  );
+  check(
+    restingGrid === (await pixels()),
+    "Reload restores the same neutral grid when motion is off",
   );
   await page.focus(".motion-toggle");
   await page.keyboard.press("Space");
