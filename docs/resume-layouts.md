@@ -54,7 +54,7 @@ Styles live in [resume-default.css](../src/styles/resume-default.css) and [resum
 
 ## Final TD and DoorDash results
 
-The results below record the reviewed local exports. Application sources, notes, job postings, and PDFs live in `applications/`, which is ignored by Git and is not included in the repository. The matching JSON content was preserved during layout changes. `resume.json` is the editable source of truth; generate a Markdown resume copy only on explicit request. Application notes follow [the common notes structure](../.agents/skills/tailor-resume/references/application-notes-template.md).
+The results below record the reviewed local exports. Application sources, notes, job postings, and PDFs live in `applications/`, which is ignored by Git and is not included in the repository. The matching JSON content was preserved during layout changes. `resume.json` is the editable source of truth; generate a Markdown resume copy only on explicit request. The common application-notes template is maintained with the shared tailoring skill in `apply-assist-dash`; see [local skill setup](../README.md#resume-tailoring).
 
 | Application | Settings and positioning | Default result | ATS result |
 | --- | --- | --- | --- |
