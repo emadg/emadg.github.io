@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # local job application materials
 /applications/
+
+# local assistant configuration and shared tailoring skill link
+.claude/
+/.agents/skills/tailor-resume

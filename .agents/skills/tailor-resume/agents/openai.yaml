@@ -1,4 +1,0 @@
-interface:
-  display_name: "Tailor Resume"
-  short_description: "Grounded resumes with adjustable fit and framing"
-  default_prompt: "Use $tailor-resume to tailor my resume for this job, ask about material claim decisions, then plan and create the finished resume."
