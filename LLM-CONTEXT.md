@@ -17,7 +17,7 @@ A personal website and portfolio for Emad Gohari, a Senior Research Engineer spe
 - Education entries on the timeline (single-sided, no flip) below experience entries
 - Skills, projects, and publications sections below the timeline
 - Resume data externalized to JSON (`src/data/resume.json`) — single source of truth for the site and PDF; validated by `src/data/schemas/resume.schema.json`
-- Master evidence inventory (`src/data/master-resume.json`, schema in `src/data/schemas/`) with per-project key facts (claim, strong/weak points, status, metric); used by the `tailor-resume` skill, not rendered
+- Master evidence inventory (`src/data/master-resume.json`, schema in `src/data/schemas/`) with per-project key facts (claim, strong/weak points, status, metric); not rendered. The shared `tailor-resume` skill is maintained in the sibling `apply-assist-dash` repository; see [local skill setup](README.md#resume-tailoring).
 - Print-optimized resume page (`src/pages/resume.astro`) for PDF generation
 - PDF generation script using `puppeteer-core` + system Chrome (`scripts/generate-pdf.mjs`, `npm run pdf`)
 - Downloadable PDF resume button (downloads as `EmadGohari_MLE_CV_2026.pdf`)

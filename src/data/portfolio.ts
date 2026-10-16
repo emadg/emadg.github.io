@@ -12,7 +12,8 @@ const projectIds: Record<string, string> = {
   "Semantic Search Improvement: Checkpoint Tax Research": "semantic-search",
   "Automated Question Generation from Documents": "question-generation",
   "Domain-Specific Language Understanding": "language-understanding",
-  "Conversational Question Answering": "conversational-qa",
+  "Conversational Question Answering with NLP & LSTM Models":
+    "conversational-qa",
 };
 export const identity = resume.basics;
 export const contactLinks = {
@@ -102,11 +103,11 @@ export const featuredWork = [
 ];
 export const expertise = [
   {
-    category: "LLM & Agentic AI",
+    category: "LLMs & Agents",
     featured: [
-      "PydanticAI",
-      "Prompt Engineering",
-      "LLM Evaluation (LLM-as-Judge)",
+      "Agentic Frameworks (PydanticAI)",
+      "Prompt & Context Engineering",
+      "LLM Evaluation (LLM-as-Judge, SME Review)",
       "OpenAI API",
     ],
     description:
@@ -118,7 +119,7 @@ export const expertise = [
     category: "Machine Learning & NLP",
     featured: [
       "PyTorch",
-      "Transformers (Hugging Face)",
+      "Hugging Face Transformers",
       "Sentence Embeddings",
       "Semantic Search",
     ],

@@ -2,7 +2,7 @@
   "$schema": "./schemas/master-resume.schema.json",
   "meta": {
     "purpose": "Comprehensive evidence source for tailoring applications. Intentionally longer than an application resume. Key facts are referenceable claims; strong_points say how far a claim can be pushed for fit, weak_points say what makes it hard to defend. Never paste notes, weak points, or claim checks into an application.",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-10-14",
     "tailoring_rule": "Lead with three or four projects most relevant to a role and choose the strongest defensible bullets. Keep role title, dates, model stage, metrics, team contribution, and personally implemented work consistent across the resume and interview.",
     "status_legend": {
       "supported": "Established from Emad's own account; usable in applications at the chosen framing level.",
@@ -12,7 +12,7 @@
   },
   "basics": {
     "name": "Emad Gohari",
-    "headline": "Senior Machine Learning Engineer · LLM Systems, Agentic AI, NLP",
+    "headline": "Senior Machine Learning Engineer · ML Systems, NLP, LLMs",
     "focus_areas": [
       "Applied ML",
       "LLM systems",
@@ -28,8 +28,8 @@
   "summaries": [
     {
       "id": "base",
-      "focus": "general ML/LLM (current resume.json summary)",
-      "text": "Senior machine learning engineer with **8 years of experience** taking NLP and LLM systems from research to production. At Thomson Reuters Labs, shipped **production GenAI summarization** and semantic search, contributed to a **commercially launched agentic AI product**, and built the model-retraining pipelines and **PII-secure data infrastructure** behind CLEAR's entity resolution. Turns research code into reliable, reproducible pipelines and works closely with researchers, subject matter experts, and product teams in regulated domains."
+      "focus": "general ML engineering, NLP, and LLM systems (current resume.json summary)",
+      "text": "Senior machine learning engineer with **8 years of experience** building ML, NLP, and LLM systems from research to production. At Thomson Reuters Labs, shipped **production GenAI summarization and semantic search**, contributed agent configuration and evaluation tooling to a **commercially launched agentic AI product**, and built **model-retraining pipelines and PII-secure data infrastructure** for CLEAR entity resolution. Combines hands-on model development with reproducible experimentation and evaluation, working with researchers, domain experts, and product teams."
     },
     {
       "id": "detailed",
@@ -55,7 +55,9 @@
         }
       ],
       "notes": "Work done at TR Labs, Thomson Reuters' applied research division. Selected work spans multiple products and project phases. Dates are approximate where noted. Resume title format chosen by Emad: \"Senior Machine Learning Engineer II (Research)\"; Senior Research Engineer II is believed to be the official title.",
-      "role_bullets": [],
+      "role_bullets": [
+        "Used SQL/PostgreSQL extensively for data selection and grouped/category analysis in entity-resolution data and training workflows, and used name/address blocking queries against the person-authority database to retrieve candidate entities for downstream ML matching and ranking."
+      ],
       "projects": [
         {
           "id": "tr-er-retraining",
@@ -65,9 +67,9 @@
           "period_approximate": true,
           "stage": "internal",
           "stage_note": "Retraining workflow used by researchers for parallel experiments (Emad estimates ~40% faster experiment turnaround). Snowflake work is proof of concept. The XGBoost model was in early testing; no production-serving claim.",
-          "personal_scope": "Designed, proposed, implemented, and tested the SageMaker Pipelines retraining workflow; extended reusable processing components; implemented Snowflake processing and training proofs of concept and assessed migration gaps. Worked specifically on the Snowflake processing pipeline.",
+          "personal_scope": "Designed, proposed, implemented, and tested the SageMaker Pipelines retraining workflow; extended reusable processing components; implemented Snowflake processing and training proofs of concept and assessed migration gaps. Worked specifically on the Snowflake processing pipeline. Used SQL/PostgreSQL extensively for data selection and grouped/category analysis in entity-resolution data/training workflows; used SQL-based blocking for candidate discovery in the person-authority database (Emad, 2026-10-14).",
           "team_context": "The team trained a new XGBoost entity-matching model to replace a long-running legacy model that was difficult to retrain and had accumulated rule-based workarounds. The team maintained a held-out set, used training and validation splits, addressed the gap between positive-heavy annotations and largely negative candidate pairs, and compared model versions with the legacy system using precision, recall, F1, and SME reviews. Emad recalled roughly eight to ten experimentation rounds and positive SME feedback.",
-          "notes": "Personal ownership of sampling, feature engineering, and evaluation, along with numerical model results, remains to be pinned down; these are team context, not individual achievement bullets. Worked with model researchers, a lead engineer, and CLEAR product engineering.",
+          "notes": "Personal ownership of sampling, feature engineering, and evaluation, along with numerical model results, remains to be pinned down; these are team context, not individual achievement bullets. Worked with model researchers, a lead engineer, and CLEAR product engineering. SQL clarification 2026-10-14: Emad described extensive PostgreSQL querying/analysis for entity-resolution data and training workflows, plus candidate discovery called blocking. Roughly 10-15 SQL strategies used name, address, and combinations to aim for high candidate recall; searches narrowed a database of roughly 800M entities to hundreds or a few thousand candidates before ML matching/ranking. These are approximate corpus and candidate-set sizes, not a measured recall score, latency, query throughput, or evidence that Emad authored all strategies. Exact project years, internal pipeline spelling (spoken as nuclear), SQL optimization/indexing scope, and blocking deployment stage were not separately established; application wording places this at job level without assigning it to the dated 2026 pipeline.",
           "bullets": [
             "Designed, proposed, implemented, and tested an on-demand retraining workflow using SageMaker Pipelines, bringing researchers' feature-generation, model-training, and metric-calculation code into reusable processing steps.",
             "Enabled researchers to run multiple training experiments in parallel and track experiments through MLflow, reducing manual orchestration and making hypothesis testing more reproducible.",
@@ -83,11 +85,11 @@
             "MLflow",
             "Snowflake",
             "XGBoost",
-            "Poetry"
+            "Poetry",
+            "SQL",
+            "PostgreSQL"
           ],
-          "stack_unconfirmed": [
-            "PostgreSQL (earlier AWS research workflows)"
-          ],
+          "stack_unconfirmed": [],
           "key_facts": [
             {
               "id": "kf-er-sagemaker-retraining",
@@ -225,6 +227,56 @@
                 "Cross-functional collaboration",
                 "Research-to-production"
               ]
+            },
+            {
+              "id": "kf-er-postgresql-analysis",
+              "claim": "Used SQL/PostgreSQL extensively to select, query, and analyze groups/categories of data in entity-resolution data and training workflows, using the PostgreSQL person-authority database. Confirmed by Emad on 2026-10-14.",
+              "strong_points": [
+                "Direct, concrete SQL experience tied to ML data and training work, rather than a database name in a skills list.",
+                "Supports SQL/PostgreSQL, data analysis, and ML pipeline keywords."
+              ],
+              "weak_points": [
+                "Specific SQL constructs, query-performance tuning, indexing, execution plans, and individual pipeline dates are not recorded.",
+                "This confirmation does not establish SQL use in the Snowflake PoCs."
+              ],
+              "status": "supported",
+              "skills": [
+                "SQL",
+                "PostgreSQL",
+                "Data analysis",
+                "ML data pipelines",
+                "Entity resolution"
+              ]
+            },
+            {
+              "id": "kf-er-sql-candidate-blocking",
+              "claim": "Used SQL-based candidate discovery, called blocking, in the PostgreSQL person-authority database for entity resolution. Name/address query strategies and combinations narrowed searches over roughly 800M entities to hundreds or a few thousand candidates for downstream ML matching and ranking, with candidate recall as a design priority. Emad described roughly 10-15 strategies (2026-10-14).",
+              "strong_points": [
+                "Concrete SQL retrieval work on a large entity database, connecting candidate generation to downstream ML matching/ranking.",
+                "Can describe approximate corpus-to-candidate-set reduction while explicitly preserving scale context and recall as a goal."
+              ],
+              "weak_points": [
+                "Use of the strategies is established; personal design or implementation of all 10-15 strategies is not.",
+                "No numerical recall score, before/after recall gain, query latency, throughput, or measured compute-cost saving was supplied.",
+                "Approximate corpus size and typical candidate-set size do not mean each query scanned every one of the 800M records.",
+                "Blocking dates and deployment stage are not separately established; use job-level wording until clarified.",
+                "Candidate blocking is distinct from owning the downstream matching/ranking model, sampling decisions, or model evaluation."
+              ],
+              "status": "supported",
+              "metric": {
+                "value": "Roughly 800M entities in the person-authority database; hundreds or a few thousand candidates per blocking search",
+                "basis": "Emad's factual account on 2026-10-14: candidate discovery uses SQL name/address/combinations to narrow the large person-authority database before ML-based matching/ranking. Approximate operational scale; no formal benchmark or recall measurement supplied.",
+                "verified": true
+              },
+              "skills": [
+                "SQL",
+                "PostgreSQL",
+                "Candidate generation",
+                "Entity resolution",
+                "Blocking",
+                "Information retrieval",
+                "Large-scale data"
+              ]
             }
           ]
         },
@@ -238,7 +290,7 @@
           "stage_note": "Product is commercially launched (team outcome). Resume uses contributor framing plus Emad's specific parts (config layer, LLM-as-judge migration). Decided 2026-10-09.",
           "personal_scope": "After the team selected PydanticAI, implemented a central configuration file for agent system prompts, tool descriptions and availability, and agent/subagent connections. Migrated an existing LLM-as-judge evaluation capability into a more organized repository. Explored Claude prompt caching without completing an integration.",
           "team_context": "Framework selection (PydanticAI) and the wider product architecture were team decisions. As definitions stabilized, the team began separating agents and tools into standalone components.",
-          "notes": "Design story: centralizing frequently changed prompts, tool metadata, and agent wiring reduced friction during prototype iteration. The setup was intended to explore single-agent and manager/subagent approaches for entity identification, report extraction, and web research; confirm which configurations were actually run. Separating stable definitions later is a concrete speed-of-experimentation versus maintainability tradeoff.",
+          "notes": "Design story: centralizing frequently changed prompts, tool metadata, and agent wiring reduced friction during prototype iteration. The setup was intended to explore single-agent and manager/subagent approaches for entity identification, report extraction, and web research; confirm which configurations were actually run. Separating stable definitions later is a concrete speed-of-experimentation versus maintainability tradeoff. Skill label clarification 2026-10-13: Agent Harness Engineering describes the established configuration/tool/agent-wiring implementation; do not infer ownership of the whole runtime, guardrails, tracing, or original evaluation-method design.",
           "bullets": [
             "After the team selected PydanticAI, implemented a central configuration file for agent system prompts, tool descriptions and availability, and agent/subagent connections, allowing experimenters to change investigation setups without editing definitions scattered across multiple files.",
             "Migrated an existing LLM-as-judge evaluation capability into a more organized repository to support reuse and prepare it for possible CI/CD integration."
@@ -273,7 +325,8 @@
                 "PydanticAI",
                 "Multi-agent systems",
                 "Prompt engineering",
-                "LLM orchestration"
+                "LLM orchestration",
+                "Agent harness engineering (configuration, tools, agent wiring)"
               ]
             },
             {
@@ -350,14 +403,18 @@
           "period_approximate": false,
           "stage": "production",
           "stage_note": "Entered production.",
-          "personal_scope": "Built the LLM summarization workflow; implemented selective XML extraction and targeted LLM calls; implemented extraction-logic and prompt revisions after SME feedback; integrated Bing Search with an LLM verification step; linked summary claims to report source locations.",
+          "personal_scope": "Built the LLM summarization workflow; implemented selective XML extraction and targeted LLM calls; implemented extraction-logic and prompt revisions after SME feedback; integrated Bing Search with an LLM verification step; linked summary claims to report source locations. Compared GPT-4 and Claude Sonnet outputs on quality, latency, and cost to inform model selection.",
           "team_context": "A product manager supplied sample target summaries for approximately 10–15 companies of different sizes and types. A project researcher led much of the prompt definition for ambiguous free-text extraction; Emad supplied input.",
-          "notes": "This was a small set of targeted LLM calls, not a chatbot. Used explicit instructions and examples in prompts when information was embedded in report text rather than structured XML fields. Specific evaluation scores and an individual SME comment are not currently recalled; do not invent one.",
+          "notes": "This was a small set of targeted LLM calls, not a chatbot. Used explicit instructions and examples in prompts when information was embedded in report text rather than structured XML fields. Specific evaluation scores and an individual SME comment are not currently recalled; do not invent one. Presentation clarification 2026-10-13: focused context is a design purpose, not a measured quality gain. The hosted-model comparison informs selection; no winner or numerical benefit is established.",
           "bullets": [
             "Built an LLM summarization workflow for structured business-entity reports that entered production.",
             "Implemented selective XML extraction for specific fields and report sections, supplying relevant context to targeted LLM calls that generated components such as business overview, key personnel, adverse media/records, liens and lawsuits.",
             "Iterated on extraction logic and system prompts after SME annotation rounds, addressing feedback on individual summary sections against product requirements. Used explicit instructions and examples in prompts when needed information was embedded in report text rather than easily extracted from structured XML fields.",
-            "Integrated Bing Search with an LLM verification step to reduce false matches between people or businesses sharing names; linked summary claims to report source locations."
+            "Integrated Bing Search with an LLM verification step to reduce false matches between people or businesses sharing names; linked summary claims to report source locations.",
+            "Context engineering: designed selective XML extraction to feed each targeted LLM call only the relevant report fields and sections, covering business overview, key personnel, adverse media, liens, and lawsuits. Kept context focused to limit long-context degradation without truncating reports.",
+            "Tool use and verification: integrated Bing Search with an LLM verification step to reduce false matches between same-named people and businesses. Linked summary claims to their source locations in the report.",
+            "Evaluation-driven iteration: refined extraction logic and system prompts across SME annotation rounds, using product-manager exemplar summaries for 10-15 companies. Translated section-level feedback into extraction and prompt changes, including examples for facts embedded in free text.",
+            "Quality, latency, and cost: compared summary outputs from GPT-4 and Claude Sonnet on quality, latency, and cost to inform model selection."
           ],
           "stack": [
             "Python",
@@ -448,6 +505,25 @@
                 "Citations",
                 "Bing Search API",
                 "LLM verification"
+              ]
+            },
+            {
+              "id": "kf-bai-model-comparison",
+              "claim": "Ran the summarization sections on both GPT-4 and Claude Sonnet and compared outputs (SME review or side-by-side) together with latency and cost to inform which model was used.",
+              "strong_points": [
+                "Direct evidence of quality/latency/cost trade-off judgment in model selection.",
+                "Confirmed by Emad on 2026-10-09 (DoorDash tailoring)."
+              ],
+              "weak_points": [
+                "Which model won, the exact criteria, and any numbers are not recorded; do not state a winner or savings.",
+                "Comparison of hosted LLMs, not open-weights or SLM deployment."
+              ],
+              "status": "supported",
+              "skills": [
+                "Model selection",
+                "Quality/latency/cost trade-offs",
+                "GPT-4",
+                "Claude"
               ]
             }
           ]
@@ -567,16 +643,17 @@
           "period_approximate": true,
           "stage": "production",
           "stage_note": "Shipped.",
-          "personal_scope": "Designed and shipped the sentence-embedding query-intent classifier; worked with SMEs and customer feedback to identify the retrieval gap; integrated within search latency constraints.",
+          "personal_scope": "Designed and shipped the sentence-embedding query-intent classifier; worked with SMEs and customer feedback to identify the retrieval gap; integrated within search latency constraints. Also used clustering algorithms in this sentence-embedding/re-ranking project (confirmed 2026-10-13).",
           "team_context": "",
-          "notes": "Confirm individual component use for the stack.",
+          "notes": "Confirm individual component use for the stack. Clustering use confirmed 2026-10-13; algorithm names, component stage, and clustering-specific outcomes remain unspecified. Emad requested a standalone skill rather than expanding the public project narrative.",
           "bullets": [
             "Designed and shipped a sentence-embedding query-intent classifier that distinguished broad conceptual queries from specific tax lookups and promoted higher-level documents for users unfamiliar with specialist terminology.",
             "Worked with SMEs and customer feedback to identify the retrieval gap and integrate the change within search latency constraints."
           ],
           "stack": [
             "Python",
-            "Sentence embeddings"
+            "Sentence embeddings",
+            "Clustering models"
           ],
           "stack_unconfirmed": [
             "NLTK",
@@ -638,6 +715,25 @@
               },
               "skills": [
                 "Search relevance"
+              ]
+            },
+            {
+              "id": "kf-cp-clustering",
+              "claim": "Used clustering algorithms in the Checkpoint sentence-embedding and re-ranking project. Confirmed by Emad during the 2026-10-13 resume discussion.",
+              "strong_points": [
+                "Direct clustering experience tied to a concrete semantic-search project."
+              ],
+              "weak_points": [
+                "Specific algorithms, integration details, and clustering evaluation scores are not recorded.",
+                "No separate production status or numerical benefit is established for the clustering component.",
+                "Emad requested Clustering Models as a standalone resume skill; do not merge it with Sentence Embeddings or attribute the existing 95% outcome specifically to clustering."
+              ],
+              "status": "supported",
+              "skills": [
+                "Clustering models",
+                "Semantic search",
+                "Sentence embeddings",
+                "Re-ranking"
               ]
             }
           ]
@@ -757,7 +853,7 @@
         },
         {
           "id": "inago-conversational-qa",
-          "name": "Conversational Question Answering",
+          "name": "Conversational Question Answering with NLP & LSTM Models",
           "product": "",
           "period": "2018",
           "period_approximate": true,
@@ -843,6 +939,7 @@
       "category": "Languages and data",
       "items": [
         "Python",
+        "SQL",
         "Java",
         "Scala",
         "Bash",
@@ -871,9 +968,22 @@
         "language understanding",
         "supervised learning",
         "evaluation and dataset preparation",
-        "knowledge graphs"
+        "knowledge graphs",
+        "knowledge representation",
+        "LSTM",
+        "text tagging",
+        "semi-automatic ontology generation",
+        "clustering models",
+        "model training and evaluation",
+        "F1 score",
+        "ROC-AUC",
+        "MRR",
+        "MAP",
+        "Recall@k",
+        "transformer fine-tuning (T5)",
+        "knowledge extraction and representation (knowledge graphs, ontologies)"
       ],
-      "caveats": ""
+      "caveats": "Evaluation metrics F1 score, ROC-AUC, MRR, MAP, and Recall@k were selected by Emad for skills on 2026-10-13. Treat them as working-knowledge claims; project-specific use and measured results are not established by that selection. Emad said he is unfamiliar with NDCG; exclude it. Do not add silhouette score or unconfirmed clustering algorithm names."
     },
     {
       "category": "LLM systems",
@@ -883,9 +993,15 @@
         "LLM-as-judge evaluation migration",
         "citation checking",
         "source-grounded summarization",
-        "OpenAI API"
+        "OpenAI API",
+        "Agent harness engineering (configuration, tools, agent wiring)",
+        "Agentic frameworks (PydanticAI)",
+        "Prompt and context engineering",
+        "LLM evaluation (LLM-as-judge, SME review)",
+        "Grounding and source citations",
+        "Model selection (quality, latency, cost)"
       ],
-      "caveats": "RAG appears in prior skills lists but needs a specific defensible project example before it is highlighted."
+      "caveats": "RAG appears in prior skills lists but needs a specific defensible project example before it is highlighted. LangGraph was suggested but personal use/familiarity has not been established; exclude it. Agent Harness Engineering is a broad skill label supported by configuration and orchestration contributions, not proof of complete agent-runtime ownership."
     },
     {
       "category": "Cloud and delivery",
@@ -1070,6 +1186,21 @@
       "topic": "Position-specific skills",
       "detail": "Keep Kubernetes, production model-hosting services, direct RAG implementation, and unverified platform/leadership claims out of tailored applications until supported by examples.",
       "project_refs": []
+    },
+    {
+      "topic": "Evaluation metric skills and exclusions",
+      "detail": "Resolved 2026-10-13: Emad selected F1 score, ROC-AUC, MRR, MAP, and Recall@k for the Model Training & Evaluation skill. No specific project use, metric values, or evaluation-method ownership is established by this selection. Exclude NDCG (Emad is unfamiliar), silhouette score, and other unselected metrics. Keep outstanding entity-resolution evaluation ownership checks intact.",
+      "project_refs": [
+        "tr-er-retraining",
+        "tr-checkpoint-search"
+      ]
+    },
+    {
+      "topic": "SQL and candidate blocking",
+      "detail": "Resolved 2026-10-14: extensive SQL/PostgreSQL data selection and grouped/category analysis in entity-resolution data/training workflows, plus name/address-based candidate blocking on the person-authority database. Roughly 800M corpus entities narrowed to hundreds or a few thousand candidates; roughly 10-15 strategies recalled. Keep numbers approximate and recall as a goal. Do not infer authorship of every strategy, indexing/query-plan optimization, measured recall or performance gains, downstream model ownership, or an exact blocking deployment stage/year. SQL is now supported; Snowflake-specific SQL scope remains unestablished.",
+      "project_refs": [
+        "tr-er-retraining"
+      ]
     }
   ]
 }

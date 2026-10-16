@@ -41,6 +41,10 @@ The original content redesign is documented in [Portfolio improvements](docs/por
 
 Edit shared facts in `resume.json`. Use `**bold**` in summaries, descriptions, and highlights for inline emphasis. When adding or renaming a project, update its stable website ID/reference in `portfolio.ts`. Home links, selected stories, and expertise links must point to an existing work entry.
 
+The homepage role, page title, and description use `resume.json`; the landing introduction and project stories use the approved website copy in `portfolio.ts` and `Hero.astro`. After updating the public resume, regenerate both downloads with `npm run pdf` and `npm run pdf -- --ats` before building the site.
+
+Keep the `master-resume-updates` branch and its `.worktrees/master-resume-updates` worktree for ongoing evidence additions. Record confirmed facts there, update the public resume when appropriate, and open a PR into `main` when ready. After each PR merges, fetch and merge `origin/main` into the clean worktree before the next round of changes; retain the branch and worktree rather than deleting them.
+
 For website copy and public personal projects, update `portfolio.ts`. Verify source repositories are public and descriptions reflect their actual capabilities. Do not import local application notes or private project data into website content.
 
 To add writing, create `src/content/blog/my-post.md`:
@@ -55,6 +59,18 @@ tags: ["Machine Learning", "Engineering"]
 
 Article content here.
 ```
+
+### Resume tailoring
+
+The `tailor-resume` skill, agent metadata, and application-notes template are maintained in the sibling `apply-assist-dash` repository at `.agents/skills/tailor-resume`. This website does not track a separate copy. To make the shared skill available from a website checkout or worktree, run these commands from that checkout, substituting the actual dashboard path:
+
+```bash
+mkdir -p .agents/skills .claude/skills
+ln -s /path/to/apply-assist-dash/.agents/skills/tailor-resume .agents/skills/tailor-resume
+ln -s ../../.agents/skills/tailor-resume .claude/skills/tailor-resume
+```
+
+Create a link only when that destination is absent; inspect existing files or links before replacing them. The shared skill resolves its real location before using the dashboard's private profile, schemas, layout reference, and renderer. Website synchronization remains an explicit step using `master-resume-updates`. The local skill link and `.claude/` configuration are ignored by Git; a fresh clone builds without them.
 
 ## Browser verification
 

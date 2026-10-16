@@ -24,6 +24,10 @@ The approved frost/motion work is committed separately as `6739e93`. The owner a
 
 Verification passed: production build, targeted source TypeScript, formatting/whitespace checks, and **418 production browser checks**, including 89 text-size checks. Larger text was checked across all four routes at 320, 390, 768, 1440, and 2560px in both themes, plus keyboard operation, saved/cross-tab/restored-page preferences, blocked storage, no JavaScript, expanded details, and 200% root-font reflow. Astra approved desktop/mobile snapshots and the enlarged illustration labels with no remaining findings.
 
+### Integration for the PR
+
+The branch incorporates the newer public resume update from `main` (`3d9ae4f`), retaining its resume facts, both generated downloads, and shared tailoring-skill ownership. Portfolio project IDs and featured skill references follow the renamed source entries; Home metadata uses the current resume headline and summary while preserving the approved landing copy. The current ATS template and download already have plain section headings without `>` prefixes.
+
 ### Approved frost and motion revision
 
 The owner approved this revision after reviewing the local live preview. It is preserved as a separate commit before adding the text-size preference. No new videos were generated. Snapshots are local only in `.local/visual-previews/frost-review/`, relative to the repository root.

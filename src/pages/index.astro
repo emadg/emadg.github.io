@@ -2,11 +2,19 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Contact from "../components/Contact.astro";
-import { featuredWork, personalProject, identity } from "../data/portfolio";
+import {
+  featuredWork,
+  personalProject,
+  identity,
+  resume,
+} from "../data/portfolio";
 import { STAGE_LABEL } from "../lib/resume";
 ---
 
-<Layout title={`${identity.name} | Machine Learning & Applied AI`}>
+<Layout
+  title={`${identity.name} | ${identity.headline}`}
+  description={resume.summary.replace(/\*\*/g, "")}
+>
   <Hero />
   <section
     class="section-block selected-work"

@@ -2,24 +2,26 @@
   "$schema": "./schemas/resume.schema.json",
   "basics": {
     "name": "Emad Gohari",
-    "headline": "Senior Machine Learning Engineer · LLM Systems, Agentic AI, NLP",
+    "headline": "Senior Machine Learning Engineer · ML Systems, NLP, LLMs",
     "location": "Toronto, ON, Canada",
     "email": "E.Gohari.B@gmail.com",
     "github": "github.com/emadg",
     "linkedin": "linkedin.com/in/emad-gohari",
     "website": "EmadGohari.com"
   },
-  "summary": "Senior machine learning engineer with **8 years of experience** taking NLP and LLM systems from research to production. At Thomson Reuters Labs, shipped **production GenAI summarization** and semantic search, contributed to a **commercially launched agentic AI product**, and built the model-retraining pipelines and **PII-secure data infrastructure** behind CLEAR's entity resolution. Turns research code into reliable, reproducible pipelines and works closely with researchers, subject matter experts, and product teams in regulated domains.",
+  "summary": "Senior machine learning engineer with **8 years of experience** building ML, NLP, and LLM systems from research to production. At Thomson Reuters Labs, shipped **production GenAI summarization and semantic search**, contributed agent configuration and evaluation tooling to a **commercially launched agentic AI product**, and built **model-retraining pipelines and PII-secure data infrastructure** for CLEAR entity resolution. Combines hands-on model development with reproducible experimentation and evaluation, working with researchers, domain experts, and product teams.",
   "skills": [
     {
-      "category": "LLM & Agentic AI",
+      "category": "LLMs & Agents",
       "items": [
-        "Large Language Models (LLMs)",
-        "Agentic AI",
+        "LLM Agents & Tool Use",
+        "Agent Harness Engineering",
+        "Agentic Frameworks (PydanticAI)",
         "Multi-Agent Orchestration",
-        "PydanticAI",
-        "Prompt Engineering",
-        "LLM Evaluation (LLM-as-Judge)",
+        "Prompt & Context Engineering",
+        "LLM Evaluation (LLM-as-Judge, SME Review)",
+        "Grounding & Source Citation",
+        "Model Selection (Quality, Latency, Cost)",
         "GPT-4",
         "Claude",
         "OpenAI API"
@@ -30,15 +32,20 @@
       "items": [
         "Machine Learning",
         "Deep Learning",
-        "Model Evaluation",
         "NLP",
-        "Transformers (Hugging Face)",
         "PyTorch",
-        "scikit-learn",
-        "XGBoost",
+        "Hugging Face Transformers",
+        "Transformer Fine-Tuning (T5)",
+        "Model Training & Evaluation (F1 Score, ROC-AUC, MRR, MAP, Recall@k)",
+        "Text Classification & Text Tagging",
+        "Clustering Models",
         "Sentence Embeddings",
         "Semantic Search",
         "Information Retrieval",
+        "Knowledge Extraction & Representation (Knowledge Graphs, Ontologies)",
+        "LSTM",
+        "scikit-learn",
+        "XGBoost",
         "spaCy",
         "NLTK",
         "pandas",
@@ -57,7 +64,6 @@
         "Snowflake",
         "AWS (S3, EMR)",
         "AWS CloudFormation",
-        "Docker",
         "PostgreSQL",
         "Elasticsearch",
         "OpenSearch"
@@ -67,6 +73,7 @@
       "category": "Languages & Practices",
       "items": [
         "Python",
+        "SQL",
         "Java",
         "Scala",
         "Bash",
@@ -80,7 +87,7 @@
       "location": "Toronto, Canada",
       "role": "Senior Machine Learning Engineer II (Research)",
       "period": "Jul 2021 - Present",
-      "description": "Applied ML at TR Labs for CLEAR, Thomson Reuters' due-diligence platform for KYC/AML screening and investigations, and the Checkpoint tax research platform. Built ML systems across the lifecycle in a regulated environment, including LLM features and agentic workflows, model-training pipelines, and secure data infrastructure.",
+      "description": "Applied ML at TR Labs for CLEAR, Thomson Reuters' due-diligence platform for KYC/AML screening and investigations, and Checkpoint, its tax research platform. Built LLM features and agent workflows, search models, training pipelines, and secure data infrastructure with researchers, subject-matter experts, and product engineering. Used **SQL/PostgreSQL for entity-resolution data analysis and name/address candidate blocking** before downstream ML matching and ranking.",
       "projects": [
         {
           "name": "Entity Resolution Retraining & Snowflake Pipelines: CLEAR",
@@ -101,12 +108,13 @@
           "name": "Agentic Investigation System: CLEAR Investigate",
           "period": "2025 - 2026",
           "stage": "production",
-          "description": "Contributed to **CLEAR Investigate, Thomson Reuters' commercially launched agentic AI product** for investigations. Built a **central configuration layer** in PydanticAI for agent system prompts, tool definitions, and agent/subagent wiring, so the team could **reconfigure investigation agents from one place** instead of editing definitions across many files. Migrated the LLM-as-judge evaluation suite into a reusable repository prepared for CI/CD.",
+          "description": "Contributed to **CLEAR Investigate, Thomson Reuters' commercially launched agentic AI product** for investigations. Built a **central PydanticAI configuration layer** for system prompts, tool descriptions and availability, and agent/subagent wiring, enabling experimenters to **reconfigure agents from one place** instead of editing scattered definitions. Migrated the team's existing **LLM-as-judge evaluation** capability into an organized repository for reuse and future CI/CD integration.",
           "tech": [
             "Python",
             "PydanticAI",
             "Claude",
-            "Agentic AI",
+            "Agent Harness Engineering",
+            "Multi-Agent Orchestration",
             "LLM-as-Judge Evaluation",
             "Prompt Engineering"
           ]
@@ -115,13 +123,14 @@
           "name": "CLEAR Business AI: GenAI Report Summarization",
           "period": "2024",
           "stage": "production",
-          "description": "Built the GenAI summary panel for CLEAR Business entity reports, **live in production processing hundreds of reports daily**. Designed selective XML extraction feeding **targeted per-section LLM calls** (business overview, key personnel, adverse media, liens and lawsuits), plus a Bing Search + LLM verification step that **filters false matches between same-named entities**, with each claim linked to its source in the report. Refined prompts and extraction logic through SME annotation rounds against product-manager exemplars.",
+          "description": "Built the LLM summarization workflow for CLEAR Business entity reports, **live in production processing hundreds of reports daily**. Designed selective XML extraction for **targeted per-section context** covering business overview, personnel, adverse media, and legal records. Integrated Bing Search and LLM verification to **reduce same-name entity mismatches** and linked claims to report sources. Refined extraction and prompts through SME annotation rounds against exemplars for **10-15 companies**, and compared **GPT-4 and Claude Sonnet on quality, latency, and cost** to inform model selection.",
           "tech": [
             "Python",
             "GPT-4",
             "Claude Sonnet",
             "Bing Search API",
-            "Prompt Engineering",
+            "Prompt & Context Engineering",
+            "LLM Evaluation",
             "XML Processing"
           ]
         },
@@ -129,7 +138,7 @@
           "name": "Entity Resolution Data Infrastructure: CLEAR KYC/AML",
           "period": "2022 - 2024",
           "stage": "internal",
-          "description": "Built the research data infrastructure for CLEAR's entity resolution system (~800M entities, billions of documents, 700 idents/second). Designed a **PII-isolated AWS research environment** with SageMaker Studio, CloudFormation, and per-researcher profiles; defined a **versioned schema reconciling two incompatible annotation sources**, with Spark and Python pipelines to merge records and surface label conflicts; and automated the manual workflow into **scheduled, repeatable SageMaker Pipelines**.",
+          "description": "Built research data infrastructure for CLEAR's entity-resolution system spanning **~800M entities and billions of documents**, with a **700 idents/second target**. Designed a **PII-isolated AWS environment** with SageMaker Studio, CloudFormation, and per-researcher profiles; defined a **versioned schema reconciling two incompatible annotation sources**, with Spark and Python pipelines to merge records and surface label conflicts; and replaced manual runs with **scheduled, repeatable SageMaker Pipelines**.",
           "tech": [
             "Python",
             "Apache Spark (PySpark)",
@@ -141,7 +150,7 @@
           "name": "Semantic Search Improvement: Checkpoint Tax Research",
           "period": "2021",
           "stage": "production",
-          "description": "Shipped a **sentence-embedding query-intent classifier** for Checkpoint, Thomson Reuters' tax research platform, separating broad conceptual queries from specific tax lookups to promote higher-level documents. **Improved access to conceptual documents by 95%** within a **~100ms latency budget**. Identified the retrieval gap from SME and customer feedback.",
+          "description": "Shipped a **sentence-embedding query-intent classifier** for Checkpoint tax research, distinguishing broad conceptual queries from specific tax lookups to promote higher-level documents. **Improved access to conceptual documents by 95%** within a **~100ms latency budget**. Identified the retrieval gap through SME and customer feedback.",
           "tech": [
             "Python",
             "Sentence Embeddings",
@@ -156,13 +165,13 @@
       "location": "Toronto, Canada",
       "role": "NLP & Machine Learning Engineer",
       "period": "Jul 2018 - Jun 2021",
-      "description": "Built NLP and language-understanding systems end to end, covering data preparation, model training, evaluation, and application integration. Work included transformer fine-tuning and research collaborations with university and industry partners.",
+      "description": "Built NLP and language-understanding systems end to end, from data preparation and model training to evaluation and application integration, including transformer fine-tuning and research collaborations with university and industry partners.",
       "projects": [
         {
           "name": "Automated Question Generation from Documents",
           "period": "2020",
           "stage": "research",
-          "description": "Fine-tuned **T5** to generate questions from documents, **cutting manual data-curation effort by 40%**. Experimented with input representations and evaluated generated text with BLEURT in a research collaboration with university partners.",
+          "description": "Fine-tuned the open-weights **T5** model to generate questions from documents, **cutting manual data-curation effort by 40%**. Experimented with input representations and evaluated generated text with BLEURT in a research collaboration with university partners.",
           "tech": [
             "Python",
             "PyTorch",
@@ -184,13 +193,17 @@
           ]
         },
         {
-          "name": "Conversational Question Answering",
+          "name": "Conversational Question Answering with NLP & LSTM Models",
           "period": "2018",
           "stage": "research",
-          "description": "Built a **conversational question-answering system** using syntactic and semantic document analysis and automatic ontology generation, in a research collaboration with an industry partner.",
+          "description": "Developed a **conversational question-answering system** combining syntactic and semantic document analysis with **LSTM-based text tagging**. Used **semi-automatically generated ontologies** to interpret user questions and identify intent, and experimented with knowledge graphs for knowledge representation in an industry research collaboration.",
           "tech": [
             "Python",
-            "spaCy"
+            "spaCy",
+            "LSTM",
+            "Text Tagging",
+            "Semi-Automatic Ontology Generation",
+            "Knowledge Graphs"
           ]
         }
       ]
