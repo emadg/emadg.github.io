@@ -1,0 +1,33 @@
+<div class="ambient-scene" aria-hidden="true" data-state="fallback">
+  <div class="ambient-wash"></div>
+  <canvas class="ambient-grid"></canvas>
+</div>
+<div class="glass-backplane" aria-hidden="true"></div>
+<button
+  class="motion-toggle"
+  type="button"
+  aria-label="Background motion"
+  aria-pressed="true"
+  hidden
+>
+  <svg
+    aria-hidden="true"
+    width="13"
+    height="13"
+    viewBox="0 0 16 16"
+    fill="none"
+    stroke="currentColor"
+    stroke-width="1.5"
+  >
+    <path class="motion-pause" d="M5.5 3v10m5-10v10" />
+    <path class="motion-play" d="m5 3 7 5-7 5Z" />
+  </svg>
+  <span>Motion on</span>
+</button>
+
+<script>
+  import { initAtmosphere } from "../lib/atmosphere";
+  const scene = document.querySelector<HTMLElement>(".ambient-scene");
+  const toggle = document.querySelector<HTMLButtonElement>(".motion-toggle");
+  if (scene && toggle) initAtmosphere(scene, toggle);
+</script>

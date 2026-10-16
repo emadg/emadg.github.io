@@ -8,6 +8,7 @@ import { execFileSync } from "node:child_process";
 import { resolve, extname, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import puppeteer from "puppeteer-core";
+import { checkVisuals } from "./check-visuals.mjs";
 
 const dist = fileURLToPath(new URL("../dist/", import.meta.url));
 const screenshots = process.env.SITE_QA_SCREENSHOTS;
@@ -402,6 +403,13 @@ try {
       ),
       `${route}: unavailable theme control is hidden without JavaScript`,
     );
+    check(
+      await noScript.$eval(
+        ".ambient-scene",
+        (scene) => getComputedStyle(scene).backgroundImage !== "none",
+      ),
+      `${route}: static grid remains without JavaScript`,
+    );
   }
   await noScript.goto(base + "/work/", { waitUntil: "networkidle2" });
   await noScript.click(".technical-details > summary");
@@ -430,6 +438,8 @@ try {
     "Page and theme control work with blocked storage",
   );
   await blockedStorage.close();
+
+  await checkVisuals({ page, browser, base, check, screenshots, errors });
 
   check(errors.length === 0, `No browser errors: ${errors.join("; ")}`);
   check(

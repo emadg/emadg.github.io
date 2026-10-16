@@ -31,9 +31,9 @@ Astro serves development at `http://localhost:4321`. Production output is `dist/
 - **`src/content/blog/`** contains Markdown posts.
 - **`src/styles/global.css`** defines shared tokens, responsive layouts, and reading typography. PDF styling stays separate in `resume-default.css` and `resume-ats.css`.
 
-Full project descriptions and technologies remain accessible through native HTML disclosures. Featured projects retain employer, date, and deployment-stage context. Essential content, links, downloads, and disclosures work without JavaScript. A small script handles theme preference and another opens directly linked project disclosures.
+Full project descriptions and technologies remain accessible through native HTML disclosures. Featured projects retain employer, date, and deployment-stage context. Essential content, links, downloads, and disclosures work without JavaScript. Small scripts handle theme preference, directly linked project disclosures, optional background motion, and reading progress. The visual-experiment branches restore restrained frosted surfaces and an anchored point grid; motion can be paused and stays static for reduced-motion preferences and touch input.
 
-The plan, design decisions, and validation record are in [Portfolio improvements](docs/portfolio-improvements.md). See [DEVELOPER.md](DEVELOPER.md) for maintenance details.
+The original content redesign is documented in [Portfolio improvements](docs/portfolio-improvements.md). The new visual directions and their comparison are in [Interactive glass experiments](docs/visual-experiments.md). See [DEVELOPER.md](DEVELOPER.md) for maintenance details.
 
 ## Updating the website
 

@@ -1,6 +1,10 @@
 ---
 import "../styles/global.css";
+import "../styles/atmosphere.css";
 import Nav from "../components/Nav.astro";
+import Atmosphere from "../components/Atmosphere.astro";
+import ReadingProgress from "../components/ReadingProgress.astro";
+import { visualStyle } from "../data/visual";
 import { identity, contactLinks } from "../data/portfolio";
 interface Props {
   title: string;
@@ -39,10 +43,12 @@ const {
       document.documentElement.classList.toggle("dark", dark);
     </script>
   </head>
-  <body>
+  <body data-visual-style={visualStyle}>
     <a class="skip-link" href="#main-content">
       Skip to content
     </a>
+    <Atmosphere />
+    <ReadingProgress />
     <Nav />
     <main id="main-content" class="page-container" tabindex="-1">
       <slot />
