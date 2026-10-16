@@ -2,9 +2,14 @@
 import Layout from '../layouts/Layout.astro';
 import Hero from '../components/Hero.astro';
 import Resume from '../components/Resume.astro';
+import resumeData from '../data/resume.json';
 ---
 
-<Layout title="Emad | Machine Learning Developer" scrollSnap={true}>
+<Layout
+	title={`${resumeData.basics.name} | ${resumeData.basics.headline}`}
+	description={resumeData.summary.replace(/\*\*/g, '')}
+	scrollSnap={true}
+>
 	<Hero />
 	<Resume />
 </Layout>

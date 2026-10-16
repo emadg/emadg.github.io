@@ -66,6 +66,10 @@ Text in `summary`, experience `description`, and project `description`/`highligh
 
 `src/data/master-resume.json` is the longer evidence inventory used to tailor applications (not rendered). Each project there has `key_facts`: claims with `strong_points`, `weak_points`, a `status` (supported / needs-verification / retracted), and an optional `metric`.
 
+The homepage headline, introduction, page title, and description also use `resume.json`, so the website and PDF share the same public profile. After updating it, regenerate both downloads with `npm run pdf` and `npm run pdf -- --ats` before building the site.
+
+Keep the `master-resume-updates` branch and its `.worktrees/master-resume-updates` worktree for ongoing evidence additions. Record confirmed facts there, update the public resume when appropriate, and open a PR into `main` when ready. After each PR merges, fetch and merge `origin/main` into the clean worktree before the next round of changes; retain the branch and worktree rather than deleting them.
+
 ### Basics and summary
 
 Name, headline, and contact details shown at the top of the PDF, followed by a short summary.

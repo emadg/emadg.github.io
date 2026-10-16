@@ -73,6 +73,7 @@
       "category": "Languages & Practices",
       "items": [
         "Python",
+        "SQL",
         "Java",
         "Scala",
         "Bash",
@@ -86,7 +87,7 @@
       "location": "Toronto, Canada",
       "role": "Senior Machine Learning Engineer II (Research)",
       "period": "Jul 2021 - Present",
-      "description": "Applied ML at TR Labs for CLEAR, Thomson Reuters' due-diligence platform for KYC/AML screening and investigations, and Checkpoint, its tax research platform. Built LLM features and agent workflows, search models, training pipelines, and secure data infrastructure, working with researchers, subject-matter experts, and product engineering.",
+      "description": "Applied ML at TR Labs for CLEAR, Thomson Reuters' due-diligence platform for KYC/AML screening and investigations, and Checkpoint, its tax research platform. Built LLM features and agent workflows, search models, training pipelines, and secure data infrastructure with researchers, subject-matter experts, and product engineering. Used **SQL/PostgreSQL for entity-resolution data analysis and name/address candidate blocking** before downstream ML matching and ranking.",
       "projects": [
         {
           "name": "Entity Resolution Retraining & Snowflake Pipelines: CLEAR",
