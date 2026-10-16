@@ -2,7 +2,7 @@
   "$schema": "./schemas/master-resume.schema.json",
   "meta": {
     "purpose": "Comprehensive evidence source for tailoring applications. Intentionally longer than an application resume. Key facts are referenceable claims; strong_points say how far a claim can be pushed for fit, weak_points say what makes it hard to defend. Never paste notes, weak points, or claim checks into an application.",
-    "last_updated": "2026-10-13",
+    "last_updated": "2026-10-14",
     "tailoring_rule": "Lead with three or four projects most relevant to a role and choose the strongest defensible bullets. Keep role title, dates, model stage, metrics, team contribution, and personally implemented work consistent across the resume and interview.",
     "status_legend": {
       "supported": "Established from Emad's own account; usable in applications at the chosen framing level.",
@@ -55,7 +55,9 @@
         }
       ],
       "notes": "Work done at TR Labs, Thomson Reuters' applied research division. Selected work spans multiple products and project phases. Dates are approximate where noted. Resume title format chosen by Emad: \"Senior Machine Learning Engineer II (Research)\"; Senior Research Engineer II is believed to be the official title.",
-      "role_bullets": [],
+      "role_bullets": [
+        "Used SQL/PostgreSQL extensively for data selection and grouped/category analysis in entity-resolution data and training workflows, and used name/address blocking queries against the person-authority database to retrieve candidate entities for downstream ML matching and ranking."
+      ],
       "projects": [
         {
           "id": "tr-er-retraining",
@@ -65,9 +67,9 @@
           "period_approximate": true,
           "stage": "internal",
           "stage_note": "Retraining workflow used by researchers for parallel experiments (Emad estimates ~40% faster experiment turnaround). Snowflake work is proof of concept. The XGBoost model was in early testing; no production-serving claim.",
-          "personal_scope": "Designed, proposed, implemented, and tested the SageMaker Pipelines retraining workflow; extended reusable processing components; implemented Snowflake processing and training proofs of concept and assessed migration gaps. Worked specifically on the Snowflake processing pipeline.",
+          "personal_scope": "Designed, proposed, implemented, and tested the SageMaker Pipelines retraining workflow; extended reusable processing components; implemented Snowflake processing and training proofs of concept and assessed migration gaps. Worked specifically on the Snowflake processing pipeline. Used SQL/PostgreSQL extensively for data selection and grouped/category analysis in entity-resolution data/training workflows; used SQL-based blocking for candidate discovery in the person-authority database (Emad, 2026-10-14).",
           "team_context": "The team trained a new XGBoost entity-matching model to replace a long-running legacy model that was difficult to retrain and had accumulated rule-based workarounds. The team maintained a held-out set, used training and validation splits, addressed the gap between positive-heavy annotations and largely negative candidate pairs, and compared model versions with the legacy system using precision, recall, F1, and SME reviews. Emad recalled roughly eight to ten experimentation rounds and positive SME feedback.",
-          "notes": "Personal ownership of sampling, feature engineering, and evaluation, along with numerical model results, remains to be pinned down; these are team context, not individual achievement bullets. Worked with model researchers, a lead engineer, and CLEAR product engineering.",
+          "notes": "Personal ownership of sampling, feature engineering, and evaluation, along with numerical model results, remains to be pinned down; these are team context, not individual achievement bullets. Worked with model researchers, a lead engineer, and CLEAR product engineering. SQL clarification 2026-10-14: Emad described extensive PostgreSQL querying/analysis for entity-resolution data and training workflows, plus candidate discovery called blocking. Roughly 10-15 SQL strategies used name, address, and combinations to aim for high candidate recall; searches narrowed a database of roughly 800M entities to hundreds or a few thousand candidates before ML matching/ranking. These are approximate corpus and candidate-set sizes, not a measured recall score, latency, query throughput, or evidence that Emad authored all strategies. Exact project years, internal pipeline spelling (spoken as nuclear), SQL optimization/indexing scope, and blocking deployment stage were not separately established; application wording places this at job level without assigning it to the dated 2026 pipeline.",
           "bullets": [
             "Designed, proposed, implemented, and tested an on-demand retraining workflow using SageMaker Pipelines, bringing researchers' feature-generation, model-training, and metric-calculation code into reusable processing steps.",
             "Enabled researchers to run multiple training experiments in parallel and track experiments through MLflow, reducing manual orchestration and making hypothesis testing more reproducible.",
@@ -83,11 +85,11 @@
             "MLflow",
             "Snowflake",
             "XGBoost",
-            "Poetry"
+            "Poetry",
+            "SQL",
+            "PostgreSQL"
           ],
-          "stack_unconfirmed": [
-            "PostgreSQL (earlier AWS research workflows)"
-          ],
+          "stack_unconfirmed": [],
           "key_facts": [
             {
               "id": "kf-er-sagemaker-retraining",
@@ -224,6 +226,56 @@
               "skills": [
                 "Cross-functional collaboration",
                 "Research-to-production"
+              ]
+            },
+            {
+              "id": "kf-er-postgresql-analysis",
+              "claim": "Used SQL/PostgreSQL extensively to select, query, and analyze groups/categories of data in entity-resolution data and training workflows, using the PostgreSQL person-authority database. Confirmed by Emad on 2026-10-14.",
+              "strong_points": [
+                "Direct, concrete SQL experience tied to ML data and training work, rather than a database name in a skills list.",
+                "Supports SQL/PostgreSQL, data analysis, and ML pipeline keywords."
+              ],
+              "weak_points": [
+                "Specific SQL constructs, query-performance tuning, indexing, execution plans, and individual pipeline dates are not recorded.",
+                "This confirmation does not establish SQL use in the Snowflake PoCs."
+              ],
+              "status": "supported",
+              "skills": [
+                "SQL",
+                "PostgreSQL",
+                "Data analysis",
+                "ML data pipelines",
+                "Entity resolution"
+              ]
+            },
+            {
+              "id": "kf-er-sql-candidate-blocking",
+              "claim": "Used SQL-based candidate discovery, called blocking, in the PostgreSQL person-authority database for entity resolution. Name/address query strategies and combinations narrowed searches over roughly 800M entities to hundreds or a few thousand candidates for downstream ML matching and ranking, with candidate recall as a design priority. Emad described roughly 10-15 strategies (2026-10-14).",
+              "strong_points": [
+                "Concrete SQL retrieval work on a large entity database, connecting candidate generation to downstream ML matching/ranking.",
+                "Can describe approximate corpus-to-candidate-set reduction while explicitly preserving scale context and recall as a goal."
+              ],
+              "weak_points": [
+                "Use of the strategies is established; personal design or implementation of all 10-15 strategies is not.",
+                "No numerical recall score, before/after recall gain, query latency, throughput, or measured compute-cost saving was supplied.",
+                "Approximate corpus size and typical candidate-set size do not mean each query scanned every one of the 800M records.",
+                "Blocking dates and deployment stage are not separately established; use job-level wording until clarified.",
+                "Candidate blocking is distinct from owning the downstream matching/ranking model, sampling decisions, or model evaluation."
+              ],
+              "status": "supported",
+              "metric": {
+                "value": "Roughly 800M entities in the person-authority database; hundreds or a few thousand candidates per blocking search",
+                "basis": "Emad's factual account on 2026-10-14: candidate discovery uses SQL name/address/combinations to narrow the large person-authority database before ML-based matching/ranking. Approximate operational scale; no formal benchmark or recall measurement supplied.",
+                "verified": true
+              },
+              "skills": [
+                "SQL",
+                "PostgreSQL",
+                "Candidate generation",
+                "Entity resolution",
+                "Blocking",
+                "Information retrieval",
+                "Large-scale data"
               ]
             }
           ]
@@ -887,6 +939,7 @@
       "category": "Languages and data",
       "items": [
         "Python",
+        "SQL",
         "Java",
         "Scala",
         "Bash",
@@ -1140,6 +1193,13 @@
       "project_refs": [
         "tr-er-retraining",
         "tr-checkpoint-search"
+      ]
+    },
+    {
+      "topic": "SQL and candidate blocking",
+      "detail": "Resolved 2026-10-14: extensive SQL/PostgreSQL data selection and grouped/category analysis in entity-resolution data/training workflows, plus name/address-based candidate blocking on the person-authority database. Roughly 800M corpus entities narrowed to hundreds or a few thousand candidates; roughly 10-15 strategies recalled. Keep numbers approximate and recall as a goal. Do not infer authorship of every strategy, indexing/query-plan optimization, measured recall or performance gains, downstream model ownership, or an exact blocking deployment stage/year. SQL is now supported; Snowflake-specific SQL scope remains unestablished.",
+      "project_refs": [
+        "tr-er-retraining"
       ]
     }
   ]
