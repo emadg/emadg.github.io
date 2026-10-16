@@ -1,245 +1,101 @@
-# Emad Gohari - Personal Website & Portfolio
+# Emad Gohari — Personal Website & Portfolio
 
-A modern, minimal personal website for an ML developer. Built with Astro and TailwindCSS, featuring an animated network particle background, a frosted-glass central panel, a 3D-flipping timeline resume, and **Dark/Light mode support**.
+A static Astro portfolio with a concise landing page, a detailed **My Work** page, writing, and independent print-ready resume exports. The site uses a restrained navy/cyan palette, Inter and monospace typography, accessible native disclosures, and light/dark themes.
 
-## Quick Start
+## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Start dev server (http://localhost:4321)
 npm run dev
-
-# Build for production
 npm run build
-
-# Preview production build
 npm run preview
 ```
 
-## Tech Stack
+Astro serves development at `http://localhost:4321`. Production output is `dist/`.
 
-| Layer | Tool | Version |
-|-------|------|---------|
-| Framework | [Astro](https://astro.build) | 5.x |
-| Styling | [TailwindCSS](https://tailwindcss.com) | 4.x |
-| Fonts | Inter + JetBrains Mono (site); Arial/Liberation Sans (PDF text); Georgia/Liberation Serif (standard PDF sections) | Google Fonts CDN / locally installed fonts |
-| Language | TypeScript (strict) | - |
+## Pages
 
-## Project Structure
+| Route          | Purpose                                                                                                    |
+| -------------- | ---------------------------------------------------------------------------------------------------------- |
+| `/`            | Introduction, selected contributions, public personal project, working approach, and contact               |
+| `/work`        | Project stories, complete career history, grouped expertise, education, publications, and resume downloads |
+| `/blog`        | Writing index                                                                                              |
+| `/blog/<slug>` | Article with a focused reading layout                                                                      |
+| `/resume`      | Independent print source used by the PDF generator                                                         |
 
-```
-src/
-  components/
-    Hero.astro              # Intro / landing section
-    NetworkBackground.astro # Animated particle canvas + noise texture
-    Resume.astro            # Timeline resume with 3D flip cards
-  content/
-    config.ts               # Astro content collection schema (blog)
-    blog/                   # Blog posts go here as .md files
-  data/
-    resume.json             # Resume shown on the site and in the PDF
-    master-resume.json      # Full evidence inventory with key facts (source for tailoring)
-    schemas/                # JSON Schemas for both files (editor validation)
-  lib/
-    resume.ts               # Resume helpers: data loading, **bold** rendering, flattening
-  layouts/
-    Layout.astro            # Shared page shell: head, frosted panel, footer
-  pages/
-    index.astro             # Home page (Hero + Resume)
-    resume.astro            # Print-optimized resume (used for PDF generation)
-  styles/
-    global.css              # Tailwind imports, fonts, animations, utilities
-scripts/
-    generate-pdf.mjs        # Puppeteer script: renders /resume → public/resume.pdf
-public/
-    resume.pdf              # Generated PDF resume (npm run pdf)
-    favicon.svg             # Site favicon
-```
+## Content and architecture
 
-## Updating Content
+- **`src/data/resume.json`** is the public resume source: identity, contacts, experience, projects, skill categories, education, and publications. Its JSON Schema provides editor validation. It supplies both the web portfolio and PDF source.
+- **`src/data/portfolio.ts`** holds website-specific storytelling and explicit references to resume projects. It supplies selected contributions, workflow illustrations, expertise/evidence links, and a verified public personal project. Missing project/skill references fail the build instead of silently dropping content.
+- **`src/data/master-resume.json`** is the full evidence inventory for tailoring applications. It is not imported into the public website.
+- **`src/content/blog/`** contains Markdown posts.
+- **`src/styles/global.css`** defines shared tokens, responsive layouts, and reading typography. PDF styling stays separate in `resume-default.css` and `resume-ats.css`.
 
-All resume content lives in **`src/data/resume.json`**. Edit the JSON and the site rebuilds automatically (no component changes needed). The file declares its schema (`src/data/schemas/resume.schema.json`), so VS Code validates it as you type.
+Full project descriptions and technologies remain accessible through native HTML disclosures. Featured projects retain employer, date, and deployment-stage context. Essential content, links, downloads, and disclosures work without JavaScript. A small script handles theme preference and another opens directly linked project disclosures.
 
-Text in `summary`, experience `description`, and project `description`/`highlights` accepts `**bold**` markup. Use it for the key outcome of each project.
+The plan, design decisions, and validation record are in [Portfolio improvements](docs/portfolio-improvements.md). See [DEVELOPER.md](DEVELOPER.md) for maintenance details.
 
-`src/data/master-resume.json` is the longer evidence inventory used to tailor applications (not rendered). Each project there has `key_facts`: claims with `strong_points`, `weak_points`, a `status` (supported / needs-verification / retracted), and an optional `metric`.
+## Updating the website
 
-### Basics and summary
+Edit shared facts in `resume.json`. Use `**bold**` in summaries, descriptions, and highlights for inline emphasis. When adding or renaming a project, update its stable website ID/reference in `portfolio.ts`. Home links, selected stories, and expertise links must point to an existing work entry.
 
-Name, headline, and contact details shown at the top of the PDF, followed by a short summary.
+For website copy and public personal projects, update `portfolio.ts`. Verify source repositories are public and descriptions reflect their actual capabilities. Do not import local application notes or private project data into website content.
 
-```json
-"basics": {
-  "name": "Your Name",
-  "headline": "Senior Machine Learning Engineer",
-  "location": "Toronto, ON, Canada",
-  "email": "you@example.com",
-  "github": "github.com/you",
-  "linkedin": "linkedin.com/in/you",
-  "website": "example.com"
-},
-"summary": "Two or three sentences tailored to the role, with **bold** highlights."
-```
-
-### Experience
-
-Each entry appears as a flip card on the timeline (front: summary, back: description). In the PDF, each job is followed by its projects.
-
-```json
-{
-  "company": "Company Name",
-  "location": "City, Country",
-  "role": "Your Title",
-  "period": "Jan 2020 - Present",
-  "description": "Short role and team context.",
-  "projects": [ /* see Projects */ ]
-}
-```
-
-### Education
-
-Each entry appears on the timeline below experience (no flip, single-sided card).
-
-```json
-{
-  "institution": "University Name",
-  "location": "City, Country",
-  "degree": "M.Sc. in Computer Science",
-  "grade": "3.9 / 4.0",
-  "period": "2016 - 2020",
-  "note": "Thesis title or other note (set to null to omit)"
-}
-```
-
-### Skills
-
-Grouped by category. The PDF shows one line per category near the top; the site shows all items as tags.
-
-```json
-"skills": [
-  { "category": "LLM & Agentic AI", "items": ["Large Language Models", "PydanticAI"] },
-  { "category": "Data & Cloud", "items": ["AWS", "Apache Spark"] }
-]
-```
-
-### Projects
-
-Nested under the job they belong to. Standard uses indented project titles with bracketed stage labels and right-aligned dates, followed by descriptions, optional bullets, and Tech & Skills lines. ATS puts smaller date/stage metadata inline after an em dash on each unindented title. Both introduce projects with a Work Projects heading. The site also lists all projects together in a grid.
-
-`stage` is one of `production` (used by real customers), `internal`, `prototype`, `poc`, or `research`. `highlights` is optional and renders as bullets.
-
-```json
-{
-  "name": "Project Name",
-  "period": "2024",
-  "stage": "production",
-  "description": "What was built, how, and the **measured impact**.",
-  "highlights": ["Optional bullet"],
-  "tech": ["Python", "AWS"]
-}
-```
-
-### Publications
-
-Each publication appears as a title followed by venue, year, and an optional note in the PDF.
-
-```json
-{
-  "title": "Paper Title",
-  "venue": "Conference or Journal Name",
-  "year": "2020",
-  "note": "co-authored"
-}
-```
-
-### Links (Hero & Footer)
-
-Social links (GitHub, LinkedIn, email) are hardcoded in two files:
-
-- **`src/components/Hero.astro`** — hero section links
-- **`src/layouts/Layout.astro`** — footer links
-
-Search for `href=` to find and update the URLs.
-
-### PDF Resume
-
-The PDF is auto-generated from `resume.json` via a print-optimized Astro page (`src/pages/resume.astro`) and Puppeteer.
-
-**Prerequisite:** Google Chrome (or Chromium) must be installed on your system. The script auto-detects common install locations on macOS, Linux, and Windows.
-
-PDF text uses Arial/Liberation Sans, with Georgia/Liberation Serif section headings in the default layout. ATS uses the sans-serif font throughout.
-
-You can also set `CHROME_PATH` to a custom location:
-
-```bash
-# Balanced default layout: public/resume.pdf
-npm run pdf
-
-# Linear ATS layout: public/resume-ats.pdf
-npm run pdf -- --ats
-
-# Compact ATS for longer content (10 pt body, tighter spacing)
-npm run pdf -- --ats --compact
-
-# Or specify a custom Chrome path
-CHROME_PATH="/path/to/chrome" npm run pdf
-
-# Custom output file or directory (--dir uses resume-ats.pdf with --ats)
-npm run pdf -- --out ./build/my-cv.pdf
-npm run pdf -- --dir ./exports
-npm run pdf -- --ats --dir ./exports
-PDF_OUT=./out.pdf npm run pdf
-
-# Render a different (e.g. tailored) resume JSON without touching src/data/resume.json
-npm run pdf -- --data ./applications/acme/resume.json --out ./applications/acme/resume.pdf
-npm run pdf -- --ats --data ./applications/acme/resume.json --out ./applications/acme/resume-ats.pdf
-npm run pdf -- --help
-
-# Auto-fit is on for the default layout; ATS uses 100% unless --zoom is supplied
-npm run pdf -- --no-fit
-npm run pdf -- --zoom 0.97
-```
-
-**Layouts:** default keeps the original DoorDash sans-serif/serif design. Regular ATS has 15 pt section headings, 11 pt body text, two-column contacts, stacked job dates/full locations, and inline project metadata. `--ats --compact` uses 10 pt body text, 9.5 pt project descriptions/highlights, and tighter spacing for longer content. Compact ATS places the headline/location beside the name, keeps job/education dates and locations inline with their titles, and displays GPA/education notes as bullets. ATS uses the same Arial/Liberation Sans font; no custom fonts are required. Default auto-fit remains 94-103%; ATS stays at 100% unless `--zoom` is specified.
-
-See [Resume PDF layouts](docs/resume-layouts.md) for the complete settings table, TD/DoorDash layout results, and validation/reproduction guidance. Current results: TD default/ATS are two pages; DoorDash default is three pages and compact ATS is two pages, without ATS text cuts. The `applications/` directory holds local editable sources, notes, job postings, and generated PDFs; the entire directory is ignored by Git and is not included in the repository.
-
-This starts its own dev server on port 4399 (`--port` to change; it refuses to run if the port is busy), renders `/resume` to a Letter-size PDF, saves it to `public/resume.pdf` (or `public/resume-ats.pdf` with `--ats`) by default, and shuts down. Explicit `--out`, positional output paths, and `PDF_OUT` keep their existing behavior. The download button on the site serves this file as `EmadGohari_MLE_CV_2026.pdf`. To change the download filename, edit the `download` attribute in `src/components/Resume.astro`.
-
-Preview the default layout at `http://localhost:4321/resume` with `npm run dev`, or start `RESUME_LAYOUT=ats npm run dev` to preview ATS. The PDF command always chooses its layout through `--ats`, regardless of an inherited `RESUME_LAYOUT` value. PDFs contain selectable, tagged text and no browser-generated headers or footers.
-
-## Adding a Blog Post
-
-Create a Markdown file in `src/content/blog/`, e.g. `src/content/blog/my-first-post.md`:
+To add writing, create `src/content/blog/my-post.md`:
 
 ```markdown
 ---
-title: "My First Post"
+title: "My Post"
 description: "A short summary."
-pubDate: 2026-03-01
-tags: ["ml", "python"]
+pubDate: 2026-10-16
+tags: ["Machine Learning", "Engineering"]
 ---
 
-Your content here. Code blocks with syntax highlighting work out of the box.
+Article content here.
 ```
 
-The blog listing page (`/blog`) and post layout are already built. Posts appear automatically.
+## Browser verification
+
+```bash
+npm run check:site
+
+# Optional: retain desktop/mobile light/dark screenshots outside source control
+SITE_QA_SCREENSHOTS=/tmp/portfolio-qa npm run check:site
+
+# Specify a browser if it is not found automatically
+CHROME_PATH=/path/to/chrome npm run check:site
+```
+
+Uses the existing `puppeteer-core` dependency and system Chrome/Chromium. It builds the site, serves `dist/` on an ephemeral local port, and checks the four portfolio/writing routes at 320, 390, 768, and 1440 pixels in both themes. Checks include local links/anchors, PDFs, overflow, keyboard controls, theme persistence, reduced motion, and JavaScript/storage fallbacks. Chrome must support the host sandbox; constrained test containers can explicitly set `CHROME_NO_SANDBOX=1` for their isolated browser process. The owned browser and server close when the checks finish.
+
+## PDF resumes
+
+The website redesign does not change resume content, PDF styles, or generated files. The primary download on My Work serves `public/resume.pdf`; the secondary download serves `public/resume-ats.pdf`.
+
+```bash
+npm run pdf
+npm run pdf -- --ats
+npm run pdf -- --ats --compact
+
+# Tailored input without changing the public resume
+npm run pdf -- --data /path/to/resume.json --out /path/to/resume.pdf
+npm run pdf -- --ats --data /path/to/resume.json --out /path/to/resume-ats.pdf
+
+# Other output and fitting controls
+npm run pdf -- --dir ./exports
+npm run pdf -- --no-fit
+npm run pdf -- --zoom 0.97
+npm run pdf -- --help
+```
+
+Requires installed Chrome/Chromium; `CHROME_PATH` overrides detection. The PDF command starts an isolated dev server (default port 4399, adjustable with `--port`) and closes it after export. `--ats` selects the linear layout; `--compact` requires `--ats`. The default layout auto-fits within 94–103%; ATS stays at 100% unless `--zoom` is supplied. Both use selectable, tagged text and locally installed fonts.
+
+See [Resume PDF layouts](docs/resume-layouts.md) for layout details, settings, application-specific results, and reproduction guidance. Local application materials are excluded from source control.
 
 ## Deployment
 
-The site auto-deploys to **GitHub Pages** and **Cloudflare Pages** on every push to `main`.
-
-| Host | URL | Setup |
-|------|-----|-------|
-| GitHub Pages | `emadg.github.io` | Repo → Settings → Pages → Source: **GitHub Actions** |
-| Cloudflare Pages | `<project>.pages.dev` | Connect repo in Cloudflare dashboard, build cmd: `npm run build`, output: `dist` |
-
-See DEVELOPER.md for detailed setup instructions and custom domain configuration.
+Existing hosting remains GitHub Pages and Cloudflare Pages. The GitHub Actions workflow builds and deploys on pushes to `main`; Cloudflare uses `npm run build` with output `dist`. The redesign branch can be reviewed locally before merging.
 
 ## License
 
-Copyright (c) 2026 Emad Gohari. All rights reserved.
-
-This project is proprietary. Unauthorized copying, modification, distribution, or use is strictly prohibited.
+Copyright © 2026 Emad Gohari. All rights reserved. This project is proprietary; unauthorized copying, modification, distribution, or use is prohibited.
