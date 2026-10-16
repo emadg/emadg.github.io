@@ -28,6 +28,8 @@ Verification passed: production build, targeted source TypeScript, formatting/wh
 
 The branch incorporates the newer public resume update from `main` (`3d9ae4f`), retaining its resume facts, both generated downloads, and shared tailoring-skill ownership. Portfolio project IDs and featured skill references follow the renamed source entries; Home metadata uses the current resume headline and summary while preserving the approved landing copy. The current ATS template and download already have plain section headings without `>` prefixes.
 
+Final integration verification passed the production build, **419 browser checks** (including 44 focused visual checks), targeted source TypeScript, formatting, and whitespace checks. A reduced-motion transition exposed a missed browser preference notification: the animation loop now refreshes the static grid and controls when its guard detects that animation is disallowed. The keyboard-resume check also waits for an actual paint before testing the next preference transition. Astra reviewed the correction with no remaining findings. All three ATS PDF pages were visually inspected, and extracted text confirmed six plain section headings. No videos are reachable in the branch history.
+
 ### Approved frost and motion revision
 
 The owner approved this revision after reviewing the local live preview. It is preserved as a separate commit before adding the text-size preference. No new videos were generated. Snapshots are local only in `.local/visual-previews/frost-review/`, relative to the repository root.

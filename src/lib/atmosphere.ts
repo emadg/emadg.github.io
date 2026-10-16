@@ -217,7 +217,12 @@ export function initAtmosphere(
 
   function tick(now: number) {
     frame = 0;
-    if (disposed || !canAnimate()) return;
+    if (disposed) return;
+    if (!canAnimate()) {
+      // Keep the static grid and controls in sync even if a change event is missed.
+      refresh();
+      return;
+    }
     elapsed += Math.min(now - lastTick, 80);
     lastTick = now;
     if (now - lastPaint >= 1000 / 30 - 0.5) {

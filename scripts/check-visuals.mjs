@@ -263,6 +263,13 @@ export async function checkVisuals({
     (await state()) === "running",
     "Background motion resumes with a keyboard control",
   );
+  const resumedCount = await paintCount();
+  await page.waitForFunction(
+    (count) => window.__visualStats.paints > count,
+    {},
+    resumedCount,
+  );
+  check(true, "Keyboard resume restarts actual canvas paints");
   await page.emulateMediaFeatures([
     { name: "prefers-reduced-motion", value: "reduce" },
   ]);
