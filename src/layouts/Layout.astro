@@ -1,71 +1,64 @@
 ---
-import '../styles/global.css';
-import NetworkBackground from '../components/NetworkBackground.astro';
-import Nav from '../components/Nav.astro';
-
+import "../styles/global.css";
+import Nav from "../components/Nav.astro";
+import { identity, contactLinks } from "../data/portfolio";
 interface Props {
-	title: string;
-	description?: string;
-	scrollSnap?: boolean;
+  title: string;
+  description?: string;
 }
-
-const { title, description = "Machine Learning Developer Portfolio & Resume", scrollSnap = false } = Astro.props;
+const {
+  title,
+  description = `${identity.name} is a senior machine learning engineer in Toronto, working across NLP, LLM systems, and ML infrastructure.`,
+} = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en" class="scroll-smooth" style={scrollSnap ? "scroll-snap-type: y proximity;" : ""}>
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="description" content={description} />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>{title}</title>
-		
-		<!-- Theme Script to prevent flash of wrong theme -->
-		<script is:inline>
-			const theme = (() => {
-				if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
-					return localStorage.getItem('theme');
-				}
-				if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
-					return 'dark';
-				}
-				return 'light';
-			})();
-		
-			if (theme === 'dark') {
-				document.documentElement.classList.add('dark');
-			} else {
-				document.documentElement.classList.remove('dark');
-			}
-		
-			window.localStorage.setItem('theme', theme);
-		</script>
-	</head>
-	<body class="min-h-screen flex flex-col items-center relative overflow-x-hidden">
-		<!-- Animated Canvas Background -->
-		<NetworkBackground />
-		
-		<!-- Central Frosted Glass Panel -->
-		<div class="w-full max-w-5xl min-h-screen flex flex-col items-center bg-bg-panel backdrop-blur-[5px] border-x border-border-subtle shadow-2xl relative z-10 transform-gpu">
-			
-			<Nav scrollSnap={scrollSnap} />
-
-			<main class="w-full px-8 sm:px-12 py-12 md:py-24 flex-grow flex flex-col">
-				<slot />
-			</main>
-
-			<!-- Minimal Footer inside the panel -->
-			<footer class="w-full px-8 sm:px-12 py-8 mt-auto border-t border-border-subtle">
-				<div class="flex justify-between items-center text-sm text-text-muted">
-				<p>&copy; {new Date().getFullYear()} Emad Gohari</p>
-				<div class="flex gap-4">
-						<a href="https://github.com/emadg" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">GitHub</a>
-						<a href="https://www.linkedin.com/in/emad-gohari" target="_blank" rel="noopener noreferrer" class="hover:text-accent transition-colors">LinkedIn</a>
-					</div>
-				</div>
-			</footer>
-		</div>
-	</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="description" content={description} />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="author" content={identity.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{title}</title>
+    <script is:inline>
+      let preference;
+      try {
+        preference = localStorage.getItem("theme");
+      } catch {
+        /* Storage is optional. */
+      }
+      const dark =
+        preference === "dark" ||
+        (preference !== "light" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.classList.toggle("dark", dark);
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">
+      Skip to content
+    </a>
+    <Nav />
+    <main id="main-content" class="page-container" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <p>
+          © {new Date().getFullYear()} {identity.name}
+          <span class="footer-location"> · Toronto, Canada</span>
+        </p>
+        <div class="footer-links">
+          <a href={contactLinks.email}>Email</a>
+          <a href={contactLinks.github}>GitHub</a>
+          <a href={contactLinks.linkedin}>LinkedIn</a>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>

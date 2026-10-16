@@ -1,0 +1,25 @@
+---
+import { contactLinks } from "../data/portfolio";
+---
+
+<section class="contact-section" id="contact" aria-labelledby="contact-title">
+  <div>
+    <p class="eyebrow">Get in touch</p>
+    <h2 id="contact-title">
+      Have a problem worth
+      <br class="desktop-break" /> working through?
+    </h2>
+    <p>
+      I’m interested in useful AI applications, thoughtful engineering, and
+      teams that care about getting the details right.
+    </p>
+  </div>
+  <div class="contact-actions">
+    <a class="button button-primary" href={contactLinks.email}>
+      Let’s talk <span aria-hidden="true">↗</span>
+    </a>
+    <a class="text-link" href={contactLinks.linkedin}>
+      Find me on LinkedIn <span aria-hidden="true">↗</span>
+    </a>
+  </div>
+</section>

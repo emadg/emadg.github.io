@@ -1,0 +1,69 @@
+---
+import Layout from "../layouts/Layout.astro";
+import WorkStories from "../components/WorkStories.astro";
+import Resume from "../components/Resume.astro";
+import Contact from "../components/Contact.astro";
+import { identity } from "../data/portfolio";
+---
+
+<Layout
+  title={`My Work | ${identity.name}`}
+  description="Selected projects and experience across grounded LLM applications, agent tooling, semantic search, and secure ML infrastructure."
+>
+  <header class="work-intro">
+    <p class="eyebrow">My Work</p>
+    <h1>
+      Building the feature.
+      <br />
+      <span class="text-muted">And what supports it.</span>
+    </h1>
+    <div class="work-intro-bottom">
+      <p>
+        My work spans the visible AI feature and the less visible foundations:
+        context, evaluation, data, and repeatable experiments. Here’s a closer
+        look at what I’ve built and contributed to.
+      </p>
+      <div class="resume-actions">
+        <a
+          class="button button-primary"
+          href="/resume.pdf"
+          download="EmadGohari_Resume.pdf"
+        >
+          Download resume <span aria-hidden="true">↓</span>
+        </a>
+        <a
+          class="text-link secondary-download"
+          href="/resume-ats.pdf"
+          download="EmadGohari_Resume_ATS.pdf"
+        >
+          ATS-friendly PDF <span aria-hidden="true">↓</span>
+        </a>
+      </div>
+    </div>
+    <nav class="section-nav" aria-label="On this page">
+      <span>Explore</span>
+      <a href="#selected-projects">Selected projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#expertise">Expertise</a>
+      <a href="#education">Education & research</a>
+    </nav>
+  </header>
+  <WorkStories />
+  <Resume />
+  <Contact />
+</Layout>
+<script>
+  // Open an anchored project disclosure when navigating from its expertise link.
+  function revealProject() {
+    let id: string;
+    try {
+      id = decodeURIComponent(location.hash.slice(1));
+    } catch {
+      return;
+    }
+    const target = document.getElementById(id);
+    if (target instanceof HTMLDetailsElement) target.open = true;
+  }
+  revealProject();
+  window.addEventListener("hashchange", revealProject);
+</script>

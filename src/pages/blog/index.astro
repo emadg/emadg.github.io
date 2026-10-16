@@ -1,61 +1,57 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import { getCollection } from 'astro:content';
-
-const posts = (await getCollection('blog')).sort(
-	(a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
+import Layout from "../../layouts/Layout.astro";
+import { getCollection } from "astro:content";
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime(),
 );
-
-function formatDate(date: Date): string {
-	return date.toLocaleDateString('en-US', {
-		year: 'numeric',
-		month: 'long',
-		day: 'numeric',
-	});
-}
+const formatDate = (date: Date) =>
+  date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    timeZone: "UTC",
+  });
 ---
 
-<Layout title="Blog | Emad Gohari" description="Thoughts on machine learning, AI, and software engineering.">
-	<section class="py-16 fade-in-up w-full">
-		<div class="mb-12">
-			<h1 class="text-3xl sm:text-4xl font-semibold tracking-tight text-text-primary mb-3">Blog</h1>
-			<p class="text-text-secondary text-lg">Thoughts on machine learning, AI, and software engineering.</p>
-		</div>
-
-		{posts.length === 0 ? (
-			<p class="text-text-muted text-center py-20">No posts yet. Check back soon.</p>
-		) : (
-			<div class="space-y-6">
-				{posts.map((post) => (
-					<a
-						href={`/blog/${post.id.replace(/\.md$/, '')}/`}
-						class="group block p-6 rounded-2xl border border-border-subtle bg-bg-card hover:bg-bg-card-hover hover:border-accent/40 backdrop-blur-sm transition-all shadow-lg hover:shadow-[0_0_20px_var(--color-accent-bg)]"
-					>
-						<div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2 mb-3">
-							<h2 class="text-xl font-semibold text-text-primary group-hover:text-accent transition-colors">
-								{post.data.title}
-							</h2>
-							<time class="text-sm font-mono text-accent/70 shrink-0" datetime={post.data.pubDate.toISOString()}>
-								{formatDate(post.data.pubDate)}
-							</time>
-						</div>
-
-						<p class="text-text-muted text-sm leading-relaxed mb-4">
-							{post.data.description}
-						</p>
-
-						{post.data.tags && post.data.tags.length > 0 && (
-							<div class="flex flex-wrap gap-2">
-								{post.data.tags.map((tag: string) => (
-									<span class="px-2.5 py-0.5 text-xs font-medium rounded-md bg-bg-card text-text-muted border border-border-subtle">
-										{tag}
-									</span>
-								))}
-							</div>
-						)}
-					</a>
-				))}
-			</div>
-		)}
-	</section>
+<Layout
+  title="Writing | Emad Gohari"
+  description="Notes on machine learning, AI systems, and the engineering around them."
+>
+  <section class="writing-page" aria-labelledby="writing-title">
+    <header class="writing-heading">
+      <p class="eyebrow">Writing</p>
+      <h1 id="writing-title">Notes from the work.</h1>
+      <p>
+        Thoughts on machine learning, AI systems, and the engineering that helps
+        them hold up in practice.
+      </p>
+    </header>
+    <div class="writing-list">
+      {posts.length ? (
+        posts.map((post) => (
+          <a
+            class="writing-card"
+            href={`/blog/${post.id.replace(/\.md$/, "")}/`}
+          >
+            <time
+              class="quiet-metadata"
+              datetime={post.data.pubDate.toISOString()}
+            >
+              {formatDate(post.data.pubDate)}
+            </time>
+            <h2>{post.data.title}</h2>
+            <p>{post.data.description}</p>
+            {post.data.tags?.length ? (
+              <p class="quiet-metadata">{post.data.tags.join(" · ")}</p>
+            ) : null}
+            <span class="text-link">
+              Read article <span aria-hidden="true">→</span>
+            </span>
+          </a>
+        ))
+      ) : (
+        <p class="quiet-metadata">Notes are on the way.</p>
+      )}
+    </div>
+  </section>
 </Layout>

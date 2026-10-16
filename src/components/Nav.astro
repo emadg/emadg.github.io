@@ -1,83 +1,105 @@
 ---
-import { getCollection } from 'astro:content';
-
-interface Props {
-	scrollSnap?: boolean;
-}
-
-const { scrollSnap = false } = Astro.props;
-const blogPosts = await getCollection('blog');
-const hasBlog = blogPosts.length > 0;
-const currentPath = Astro.url.pathname;
+import { getCollection } from "astro:content";
+import { identity } from "../data/portfolio";
+const hasBlog = (await getCollection("blog")).length > 0;
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/work", label: "My Work" },
+  ...(hasBlog ? [{ href: "/blog", label: "Writing" }] : []),
+];
 ---
 
-<nav class="w-full px-8 sm:px-12 py-4 border-b border-border-subtle flex items-center justify-between" style={scrollSnap ? "scroll-snap-align: start;" : ""}>
-	<a href="/" class="text-lg font-semibold text-text-primary hover:text-accent transition-colors font-mono tracking-tight">
-		EG<span class="text-accent">.</span>
-	</a>
-
-	<div class="flex items-center gap-1">
-		<a
-			href="/"
-			class:list={[
-				'px-4 py-2 text-sm font-medium rounded-lg transition-all',
-				currentPath === '/'
-					? 'text-accent bg-accent-bg'
-					: 'text-text-secondary hover:text-text-primary hover:bg-bg-card-hover',
-			]}
-		>
-			Home
-		</a>
-
-		{hasBlog && (
-			<a
-				href="/blog"
-				class:list={[
-					'px-4 py-2 text-sm font-medium rounded-lg transition-all',
-					currentPath.startsWith('/blog')
-						? 'text-accent bg-accent-bg'
-						: 'text-text-secondary hover:text-text-primary hover:bg-bg-card-hover',
-				]}
-			>
-				Blog
-			</a>
-		)}
-
-		<!-- Theme Toggle Button -->
-		<button
-			id="theme-toggle"
-			type="button"
-			class="ml-2 p-2 rounded-lg text-text-muted hover:text-accent hover:bg-bg-card-hover transition-colors focus:outline-none focus:ring-2 focus:ring-accent/50"
-			aria-label="Toggle theme"
-		>
-			<!-- Sun icon (shown in dark mode) -->
-			<svg class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
-			</svg>
-			<!-- Moon icon (shown in light mode) -->
-			<svg class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-				<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path>
-			</svg>
-		</button>
-	</div>
-</nav>
-
+<header class="site-header">
+  <div class="header-inner">
+    <a href="/" class="wordmark" aria-label={`${identity.name}, home`}>
+      <span class="wordmark-initials">
+        eg<span>.</span>
+      </span>
+      <span class="wordmark-name">{identity.name}</span>
+    </a>
+    <nav aria-label="Main navigation">
+      {links.map(({ href, label }) => {
+        const active =
+          href === "/"
+            ? currentPath === "/"
+            : currentPath === href || currentPath.startsWith(`${href}/`);
+        return (
+          <a href={href} aria-current={active ? "page" : undefined}>
+            {label}
+          </a>
+        );
+      })}
+      <button
+        id="theme-toggle"
+        class="theme-toggle"
+        type="button"
+        aria-label="Switch color theme"
+        hidden
+      >
+        <svg
+          class="theme-sun"
+          aria-hidden="true"
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+        >
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l1.5 1.5m11 11L19 19M5 19l1.5-1.5m11-11L19 5" />
+        </svg>
+        <svg
+          class="theme-moon"
+          aria-hidden="true"
+          width="19"
+          height="19"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.6"
+        >
+          <path d="M20.5 14A8.5 8.5 0 0 1 10 3.5 8.5 8.5 0 1 0 20.5 14Z" />
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
 <script>
-	const themeToggleBtn = document.getElementById('theme-toggle');
-
-	themeToggleBtn?.addEventListener('click', () => {
-		// Add transition class to html to enable smooth transition
-		document.documentElement.classList.add('theme-transition');
-		
-		// Toggle the .dark class
-		const isDark = document.documentElement.classList.toggle('dark');
-		
-		// Save the preference
-		localStorage.setItem('theme', isDark ? 'dark' : 'light');
-		
-		// Remove transition class after animation completes (400ms matches CSS)
-		setTimeout(() => {
-			document.documentElement.classList.remove('theme-transition');
-		}, 400);
-	});
+  const button = document.querySelector<HTMLButtonElement>("#theme-toggle");
+  if (button) {
+    const updateLabel = () =>
+      button.setAttribute(
+        "aria-label",
+        document.documentElement.classList.contains("dark")
+          ? "Switch to light theme"
+          : "Switch to dark theme",
+      );
+    button.hidden = false;
+    updateLabel();
+    button.addEventListener("click", () => {
+      const dark = document.documentElement.classList.toggle("dark");
+      try {
+        localStorage.setItem("theme", dark ? "dark" : "light");
+      } catch {
+        /* Storage is optional. */
+      }
+      updateLabel();
+    });
+    window
+      .matchMedia("(prefers-color-scheme: dark)")
+      .addEventListener("change", (event) => {
+        let saved: string | null = null;
+        try {
+          saved = localStorage.getItem("theme");
+        } catch {
+          /* Follow system preference. */
+        }
+        if (saved !== "light" && saved !== "dark") {
+          document.documentElement.classList.toggle("dark", event.matches);
+          updateLabel();
+        }
+      });
+  }
 </script>

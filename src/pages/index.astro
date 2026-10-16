@@ -1,10 +1,124 @@
 ---
-import Layout from '../layouts/Layout.astro';
-import Hero from '../components/Hero.astro';
-import Resume from '../components/Resume.astro';
+import Layout from "../layouts/Layout.astro";
+import Hero from "../components/Hero.astro";
+import Contact from "../components/Contact.astro";
+import { featuredWork, personalProject, identity } from "../data/portfolio";
+import { STAGE_LABEL } from "../lib/resume";
 ---
 
-<Layout title="Emad | Machine Learning Developer" scrollSnap={true}>
-	<Hero />
-	<Resume />
+<Layout title={`${identity.name} | Machine Learning & Applied AI`}>
+  <Hero />
+  <section
+    class="section-block selected-work"
+    aria-labelledby="selected-work-title"
+  >
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">A few things I’ve worked on</p>
+        <h2 id="selected-work-title">From research to everyday use.</h2>
+      </div>
+      <a class="text-link" href="/work">
+        View all work <span aria-hidden="true">→</span>
+      </a>
+    </div>
+    <div class="work-preview-list">
+      {featuredWork.map((work, index) => (
+        <a class="work-preview" href={`/work#${work.project.id}`}>
+          <span class="work-number" aria-hidden="true">
+            0{index + 1}
+          </span>
+          <div class="work-preview-copy">
+            <div class="metadata">
+              <span>{work.project.employer}</span>
+              <span class="stage-label">{STAGE_LABEL[work.project.stage]}</span>
+            </div>
+            <h3>{work.shortTitle}</h3>
+            <p>{work.overview}</p>
+            <span class="preview-outcome">{work.result}</span>
+          </div>
+          <span class="preview-arrow" aria-hidden="true">
+            ↗
+          </span>
+        </a>
+      ))}
+    </div>
+  </section>
+  <section class="section-block workbench" aria-labelledby="workbench-title">
+    <div class="workbench-copy">
+      <p class="eyebrow">On my workbench</p>
+      <h2 id="workbench-title">
+        Small tools.
+        <br />
+        Practical problems.
+      </h2>
+      <p>{personalProject.description}</p>
+      <p class="quiet-metadata">{personalProject.technologies}</p>
+      <a class="text-link" href={personalProject.url}>
+        Explore {personalProject.name} on GitHub{" "}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="terminal-panel" aria-label="Example PomoCLI commands">
+      <div class="terminal-header">
+        <span class="terminal-dot"></span>
+        <span>pomocli</span>
+        <span>~/projects</span>
+      </div>
+      <div class="terminal-content">
+        <p class="terminal-comment"># Start a focused work session</p>
+        <code>
+          <span>$</span> pomo start "Build something useful"
+        </code>
+        <p class="terminal-comment"># See the day’s work</p>
+        <code>
+          <span>$</span> pomo report today
+        </code>
+        <p class="terminal-comment"># Open the live dashboard</p>
+        <code>
+          <span>$</span> pomo dash
+        </code>
+      </div>
+      <div class="terminal-footer">
+        A timer that lives where the work happens.
+      </div>
+    </div>
+  </section>
+  <section
+    class="section-block approach-section"
+    aria-labelledby="approach-title"
+  >
+    <div class="section-heading">
+      <div>
+        <p class="eyebrow">How I approach the work</p>
+        <h2 id="approach-title">The model is one part of the system.</h2>
+      </div>
+    </div>
+    <div class="approach-grid">
+      <div>
+        <span class="approach-index">01 / Understand</span>
+        <h3>Start with the domain.</h3>
+        <p>
+          Work with subject matter experts to understand the question, the data,
+          and what a useful result looks like.
+        </p>
+      </div>
+      <div>
+        <span class="approach-index">02 / Evaluate</span>
+        <h3>Make the tradeoffs visible.</h3>
+        <p>
+          Compare approaches, inspect failures, and use feedback to improve the
+          system beyond a promising first demo.
+        </p>
+      </div>
+      <div>
+        <span class="approach-index">03 / Build</span>
+        <h3>Make it repeatable.</h3>
+        <p>
+          Put the data, configuration, and experiment workflows in place so the
+          team can keep developing the work.
+        </p>
+      </div>
+    </div>
+  </section>
+  <Contact />
 </Layout>
