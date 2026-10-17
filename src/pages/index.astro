@@ -2,6 +2,7 @@
 import Layout from "../layouts/Layout.astro";
 import Hero from "../components/Hero.astro";
 import Contact from "../components/Contact.astro";
+import ArrowIcon from "../components/ArrowIcon.astro";
 import {
   featuredWork,
   personalProject,
@@ -26,7 +27,7 @@ import { STAGE_LABEL } from "../lib/resume";
         <h2 id="selected-work-title">From research to everyday use.</h2>
       </div>
       <a class="text-link" href="/work">
-        View all work <span aria-hidden="true">→</span>
+        View all work <ArrowIcon kind="external" />
       </a>
     </div>
     <div class="work-preview-list">
@@ -44,9 +45,7 @@ import { STAGE_LABEL } from "../lib/resume";
             <p>{work.overview}</p>
             <span class="preview-outcome">{work.result}</span>
           </div>
-          <span class="preview-arrow" aria-hidden="true">
-            ↗
-          </span>
+          <ArrowIcon kind="external" class="preview-arrow" />
         </a>
       ))}
     </div>
@@ -62,8 +61,7 @@ import { STAGE_LABEL } from "../lib/resume";
       <p>{personalProject.description}</p>
       <p class="quiet-metadata">{personalProject.technologies}</p>
       <a class="text-link" href={personalProject.url}>
-        Explore {personalProject.name} on GitHub{" "}
-        <span aria-hidden="true">↗</span>
+        Explore {personalProject.name} on GitHub <ArrowIcon kind="external" />
       </a>
     </div>
     <div class="terminal-panel" aria-label="Example PomoCLI commands">

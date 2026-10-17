@@ -1,6 +1,7 @@
 ---
 import { identity, contactLinks } from "../data/portfolio";
 import SystemSketch from "./SystemSketch.astro";
+import ArrowIcon from "./ArrowIcon.astro";
 ---
 
 <section class="home-hero" aria-labelledby="hero-title">
@@ -21,10 +22,10 @@ import SystemSketch from "./SystemSketch.astro";
     </p>
     <div class="action-row">
       <a href="/work" class="button button-primary">
-        Explore my work <span aria-hidden="true">↗</span>
+        Explore my work <ArrowIcon kind="external" />
       </a>
       <a href={contactLinks.email} class="text-link">
-        Get in touch <span aria-hidden="true">→</span>
+        Get in touch <ArrowIcon kind="external" />
       </a>
     </div>
     <p class="hero-note">

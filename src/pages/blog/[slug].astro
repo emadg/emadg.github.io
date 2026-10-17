@@ -1,5 +1,6 @@
 ---
 import Layout from "../../layouts/Layout.astro";
+import ArrowIcon from "../../components/ArrowIcon.astro";
 import { getCollection, render } from "astro:content";
 export async function getStaticPaths() {
   return (await getCollection("blog")).map((post) => ({
@@ -23,7 +24,7 @@ const date = post.data.pubDate.toLocaleDateString("en-US", {
 >
   <article class="article-page">
     <a href="/blog" class="text-link">
-      <span aria-hidden="true">←</span> All writing
+      <ArrowIcon kind="back" /> All writing
     </a>
     <header>
       <p class="eyebrow">Notes on engineering</p>

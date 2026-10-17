@@ -1,6 +1,7 @@
 ---
 import { career, featuredWork, expertise, resume } from "../data/portfolio";
 import { STAGE_LABEL, renderInline } from "../lib/resume";
+import ArrowIcon from "./ArrowIcon.astro";
 const featuredIds = new Set(featuredWork.map((work) => work.project.id));
 ---
 
@@ -46,7 +47,7 @@ const featuredIds = new Set(featuredWork.map((work) => work.project.id));
                     </span>
                   </span>
                   <span class="career-project-action">
-                    Read story <span aria-hidden="true">↗</span>
+                    Read story <ArrowIcon />
                   </span>
                 </a>
               ) : (
@@ -114,7 +115,7 @@ const featuredIds = new Set(featuredWork.map((work) => work.project.id));
           </details>
         )}
         <a class="text-link" href={`#${group.evidence}`}>
-          {group.evidenceLabel} <span aria-hidden="true">→</span>
+          {group.evidenceLabel} <ArrowIcon />
         </a>
       </article>
     ))}
