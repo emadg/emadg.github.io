@@ -1,5 +1,6 @@
 ---
 import { contactLinks } from "../data/portfolio";
+import ArrowIcon from "./ArrowIcon.astro";
 ---
 
 <section class="contact-section" id="contact" aria-labelledby="contact-title">
@@ -16,10 +17,10 @@ import { contactLinks } from "../data/portfolio";
   </div>
   <div class="contact-actions">
     <a class="button button-primary" href={contactLinks.email}>
-      Let’s talk <span aria-hidden="true">↗</span>
+      Let’s talk <ArrowIcon kind="external" />
     </a>
     <a class="text-link" href={contactLinks.linkedin}>
-      Find me on LinkedIn <span aria-hidden="true">↗</span>
+      Find me on LinkedIn <ArrowIcon kind="external" />
     </a>
   </div>
 </section>

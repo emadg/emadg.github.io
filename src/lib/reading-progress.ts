@@ -14,9 +14,42 @@ export function initReadingProgress() {
     .map((link) => document.getElementById(link.hash.slice(1)))
     .filter((section): section is HTMLElement => !!section);
   const stories = [...document.querySelectorAll<HTMLElement>(".work-story")];
+  const shell = document.querySelector<HTMLElement>(".section-nav-shell");
+  const intro = document.querySelector<HTMLElement>(".work-intro");
+  const header = document.querySelector<HTMLElement>(".site-header");
+  const desktop = matchMedia("(min-width: 1000px)");
+  const reduced = matchMedia("(prefers-reduced-motion: reduce)");
+  let lastCompact = "";
   let frame = 0;
   function update() {
     frame = 0;
+    if (shell && intro && header) {
+      let compact = 0;
+      let docked = false;
+      if (desktop.matches) {
+        // The intro stays in normal flow, so shrinking a pinned bar cannot move its trigger.
+        const dockingPoint =
+          intro.getBoundingClientRect().bottom +
+          scrollY +
+          parseFloat(getComputedStyle(shell).marginTop) -
+          header.getBoundingClientRect().height;
+        const distance = scrollY - dockingPoint;
+        docked = distance >= -0.5;
+        if (!reduced.matches) {
+          const fraction = Math.min(1, Math.max(0, distance / 160));
+          compact = fraction * fraction * (3 - 2 * fraction);
+        }
+      }
+      const dockingState = String(docked);
+      if (shell.dataset.docked !== dockingState) {
+        shell.dataset.docked = dockingState;
+      }
+      const value = compact.toFixed(4);
+      if (value !== lastCompact) {
+        shell.style.setProperty("--section-nav-compact", value);
+        lastCompact = value;
+      }
+    }
     const maximum = Math.max(
       0,
       document.documentElement.scrollHeight - innerHeight,
@@ -51,6 +84,8 @@ export function initReadingProgress() {
   window.addEventListener("scroll", schedule, { passive: true });
   window.addEventListener("resize", schedule, { passive: true });
   window.addEventListener("pageshow", schedule);
+  desktop.addEventListener("change", schedule);
+  reduced.addEventListener("change", schedule);
   const observer = new ResizeObserver(schedule);
   observer.observe(document.body);
   update();
@@ -62,6 +97,8 @@ export function initReadingProgress() {
       window.removeEventListener("scroll", schedule);
       window.removeEventListener("resize", schedule);
       window.removeEventListener("pageshow", schedule);
+      desktop.removeEventListener("change", schedule);
+      reduced.removeEventListener("change", schedule);
     }
   });
 }

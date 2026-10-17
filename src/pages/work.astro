@@ -3,6 +3,7 @@ import Layout from "../layouts/Layout.astro";
 import WorkStories from "../components/WorkStories.astro";
 import Resume from "../components/Resume.astro";
 import Contact from "../components/Contact.astro";
+import ArrowIcon from "../components/ArrowIcon.astro";
 import { identity } from "../data/portfolio";
 ---
 
@@ -29,25 +30,27 @@ import { identity } from "../data/portfolio";
           href="/resume.pdf"
           download="EmadGohari_Resume.pdf"
         >
-          Download resume <span aria-hidden="true">↓</span>
+          Download resume <ArrowIcon kind="download" />
         </a>
         <a
           class="text-link secondary-download"
           href="/resume-ats.pdf"
           download="EmadGohari_Resume_ATS.pdf"
         >
-          ATS-friendly PDF <span aria-hidden="true">↓</span>
+          ATS-friendly PDF <ArrowIcon kind="download" />
         </a>
       </div>
     </div>
   </header>
-  <nav class="section-nav" aria-label="On this page">
-    <span>Explore</span>
-    <a href="#selected-projects">Selected projects</a>
-    <a href="#experience">Experience</a>
-    <a href="#expertise">Expertise</a>
-    <a href="#education">Education & research</a>
-  </nav>
+  <div class="section-nav-shell">
+    <nav class="section-nav" aria-label="On this page">
+      <span>Explore</span>
+      <a href="#selected-projects">Selected projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#expertise">Expertise</a>
+      <a href="#education">Education & research</a>
+    </nav>
+  </div>
   <WorkStories />
   <Resume />
   <Contact />

@@ -10,6 +10,7 @@ src/data/portfolio.ts      website editorial content + stable project references
 src/lib/resume.ts          PDF helpers, stage labels, safe inline bold rendering
 src/layouts/Layout.astro  metadata, theme initialization, navigation, footer
 src/components/Hero.astro introduction and decorative native SVG
+src/components/ArrowIcon.astro    shared decorative navigation/download icons
 src/components/WorkStories.astro  selected project stories + native details
 src/components/Resume.astro       career, expertise, education, publications
 src/components/Contact.astro      shared contact section
@@ -43,6 +44,10 @@ PomoCLI's public repository README was checked when it was featured. Additional 
 
 Semantic color tokens live in `global.css`, mapped to Tailwind via `@theme`. Light and dark palettes share the same semantic roles. Button hover text retains its theme-specific contrast. The Home illustration is a decorative SVG representing general areas of work, not a proprietary system diagram. It is omitted on small phones to keep the main content close to the introduction.
 
+Use `ArrowIcon` for action hints rather than Unicode arrow glyphs. The forward arrow indicates a destination within the current page; the open-square up-right arrow indicates another page, website, or email application. Back navigation and downloads use matching directional variants. Icons inherit the link color, use rem-based dimensions that follow Aa, and remain decorative to assistive technology. The icon does not change a link's existing target or download behavior.
+
+The Home terminal and article code blocks share opaque `--code-*` surface, text, border, and muted-text tokens. Light mode uses a pale blue-gray panel slightly darker than the page; dark mode uses navy. Markdown highlighting is generated with Shiki's `github-light-high-contrast` and `github-dark-default` palettes in `astro.config.mjs`. `defaultColor: false` leaves token colors in CSS variables, switched by the site's `.dark` class without another client script. When changing the panel tint or syntax theme, check comments and every syntax color against the actual panel background, as a palette designed for white can lose contrast on a tinted surface. Inline code continues to use the theme's accent tokens.
+
 Core content interactions remain small client scripts:
 
 - `Nav.astro`: show the progressive theme button, toggle the `.dark` class, persist explicit preference when storage is available, and follow system changes when no preference is saved.
@@ -68,6 +73,8 @@ The motion button has the stable accessible name **Background motion**, an expli
 
 Reading feedback uses native section anchors and `aria-current="location"`; page navigation continues to use `aria-current="page"`. A throttled scroll handler updates the decorative progress rule and current story marker. A body ResizeObserver includes disclosure and footer-size changes. Feedback does not alter URL fragments, focus, or content visibility. Desktop section navigation is sticky as a main-level sibling, below the sticky header; phones retain the compact ordinary section links.
 
+My Work uses a three-column main grid: the middle column preserves the original reading width, while `.section-nav-shell` spans the same outer width as `.glass-backplane`. The undocked bar is transparent, sharing the pane's existing frost and uninterrupted side edges. When docked, an inset pseudo-element uses the pane's reading-glass tint and blur to soften scrolling content without covering those edges; the links remain aligned with the reading column. Above 999px, the existing reading handler eases the bar's height and type down over the first 160px after docking. With normal text it changes from about 71px/12px to 54px/11.5px; rem-based type continues following the Aa preference. Compensating transparent space keeps the document height and following content stable, and passes pointer input through to that content. The trigger comes from the non-sticky intro, avoiding feedback from the shrinking bar. Reduced motion and no JavaScript retain the full-size bar; narrower layouts keep ordinary, wrapping section links. There is no additional animation loop or dependency.
+
 `src/data/visual.ts` selects the branch's art direction. The `experiment/glass-lattice` branch contains the user-selected direction and subsequent refinements. `experiment/glass-field` retains the initial alternative snapshot. See [the comparison and plan](docs/visual-experiments.md) for review instructions and screenshots.
 
 Writing uses the same shell and a narrower reading column. Existing article text is preserved. Long code samples and tables scroll within their containers.
@@ -79,6 +86,8 @@ Writing uses the same shell and a narrower reading column. Existing article text
 Coverage includes four visible routes, four widths, two themes, internal destinations/fragments, actual PDF responses, unique headings/IDs, first-screen actions, keyboard skip/disclosure/theme controls, persisted theme, hover contrast, reduced motion, no-JavaScript content, and blocked storage. `scripts/check-text-size.mjs` adds all-route text scaling and reflow checks at 320, 390, 768, 1440, and 2560px in both themes, plus keyboard/persistence/cached-page/tab synchronization, blocked storage, no JavaScript, and a 200% root-font reflow check. The visual experiments also run `scripts/check-visuals.mjs`, which checks actual canvas pixels/paint calls, hovering with a stationary cursor, bounded displacement, exact reset to the same clean grid before/after reload, off-state persistence, live preferences, visibility/data-saving gates, touch/static behavior, allocation limits, missing canvas, and reading feedback. Optional `SITE_QA_SCREENSHOTS` retains screenshots in a chosen directory. Full QA artifacts should remain outside the repository; selected compressed review previews live in `docs/visual-previews/`.
 
 A successful automated run complements visual inspection; inspect Home/My Work desktop and mobile screenshots in both themes and an open project disclosure. No browser suite establishes all assistive-technology behavior.
+
+`scripts/check-section-nav.mjs` checks full-pane alignment, reading-column alignment, gradual height/type compaction, unchanged content/scroll geometry, restoration on upward scroll, target sizes, native keyboard anchors, and reduced-motion/no-JavaScript fallbacks across 320–1440px with both text sizes. Optional screenshots include the expanded and compact bar in both themes.
 
 The existing full TypeScript command (`node node_modules/typescript/bin/tsc --noEmit`) can report the pre-existing Astro/Tailwind Vite plugin type mismatch in `astro.config.mjs` when the installed dependency tree includes different Vite versions. This is separate from the website data and production build. Record the actual result rather than masking it with a cast or changing dependency versions during a design change.
 

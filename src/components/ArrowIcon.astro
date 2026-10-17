@@ -1,0 +1,32 @@
+---
+interface Props {
+  kind?: "forward" | "external" | "back" | "download";
+  class?: string;
+}
+
+const { kind = "forward", class: className } = Astro.props;
+const paths = {
+  forward: "M4 12h16m-6-6 6 6-6 6",
+  external:
+    "M14 3h7v7m0-7L10 14M10 5H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-5",
+  back: "M20 12H4m6-6-6 6 6 6",
+  download: "M12 3v12m-5-5 5 5 5-5M4 16v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4",
+};
+---
+
+<svg
+  class:list={["arrow-icon", className]}
+  data-arrow={kind}
+  width="20"
+  height="20"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.8"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  <path d={paths[kind]} />
+</svg>
